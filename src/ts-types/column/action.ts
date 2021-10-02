@@ -1,7 +1,7 @@
-import type { CellAddress } from '../grid';
-import type { ColumnMenuItemOptions } from '../define';
-import type { ListGridAPI } from '../grid-engine';
-import type { MaybePromise } from '../base';
+import type {CellAddress} from '../grid';
+import type {ColumnMenuItemOptions} from '../define';
+import type {ListGridAPI} from '../grid-engine';
+import type {MaybePromise} from '../base';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type RecordBoolean<T = any> = boolean | ((record: T) => boolean);

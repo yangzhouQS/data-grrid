@@ -1,22 +1,22 @@
 import type * as headerAction from '../../header/action';
 import type * as headerType from '../../header/type';
 import type {
-  CellRange,
-  ColumnActionOption,
-  ColumnIconOption,
-  ColumnStyleOption,
-  ColumnTypeOption,
-  FieldDef,
-  HeaderActionOption,
-  HeaderStyleOption,
-  HeaderTypeOption,
-  LayoutObjectId,
-  ListGridAPI,
-  Message
+	CellRange,
+	ColumnActionOption,
+	ColumnIconOption,
+	ColumnStyleOption,
+	ColumnTypeOption,
+	FieldDef,
+	HeaderActionOption,
+	HeaderStyleOption,
+	HeaderTypeOption,
+	LayoutObjectId,
+	ListGridAPI,
+	Message
 } from '../../ts-types';
-import type { BaseAction } from '../../columns/action';
-import type { BaseColumn } from '../../columns/type/BaseColumn';
-import type { BaseStyle as HeaderBaseStyle } from '../../header/style';
+import type {BaseAction} from '../../columns/action';
+import type {BaseColumn} from '../../columns/type/BaseColumn';
+import type {BaseStyle as HeaderBaseStyle} from '../../header/style';
 
 export type OldSortOption<T> = boolean | ((order: 'asc' | 'desc', col: number, grid: ListGridAPI<T>) => void);
 
@@ -117,4 +117,4 @@ interface LayoutMapAPI<T> {
   getRecordStartRowByRecordIndex(index: number): number;
 }
 
-export type { LayoutMapAPI };
+export type {LayoutMapAPI};

@@ -1,8 +1,8 @@
-import type { CellAddress, FieldDef } from '../ts-types/grid';
-import type { CellContext, GridCanvasHelperAPI, ListGridAPI } from '../ts-types/grid-engine';
-import type { ColorPropertyDefine, ColumnIconOption } from '../ts-types/define';
-import type { ColumnStyle, ColumnStyleOption, HeaderStyleOption } from '../ts-types/column';
-import type { Message } from '../ts-types/data';
+import type {CellAddress, FieldDef} from '../ts-types/grid';
+import type {CellContext, GridCanvasHelperAPI, ListGridAPI} from '../ts-types/grid-engine';
+import type {ColorPropertyDefine, ColumnIconOption} from '../ts-types/define';
+import type {ColumnStyle, ColumnStyleOption, HeaderStyleOption} from '../ts-types/column';
+import type {Message} from '../ts-types/data';
 
 export interface MessageHandler<T> {
   drawCellMessage(message: Message, context: CellContext, style: ColumnStyle, helper: GridCanvasHelperAPI, grid: ListGridAPI<T>, info: DrawCellInfo<T>): void;

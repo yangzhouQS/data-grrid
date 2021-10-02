@@ -5,4 +5,4 @@ import * as type from './columns/type';
 /**
  * columns
  */
-export const columns = { action, type, style };
+export const columns = {action, type, style};

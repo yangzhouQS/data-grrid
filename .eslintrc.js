@@ -1,28 +1,185 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
-  rules: {
-    'no-var': 'error', // 不能使用var声明变量
-    'no-extra-semi': 'error',
-    '@typescript-eslint/indent': ['error', 2],
-    'import/extensions': 'off',
-    'linebreak-style': [0, 'error', 'windows'],
-    indent: ['off', 2, { SwitchCase: 1 }], // error类型，缩进2个空格
-    'space-before-function-paren': 0, // 在函数左括号的前面是否有空格
-    'eol-last': 0, // 不检测新文件末尾是否有空行
-    semi: ['error', 'always'], // 在语句后面加分号
-    quotes: ['error', 'single'], // 字符串使用单双引号,double,single
-    'no-console': ['error', { allow: ['log', 'warn', 'error', 'info'] }], // 允许使用console.log()
-    'arrow-parens': 0,
-    'no-new': 0, //允许使用 new 关键字
-    'comma-dangle': [2, 'never'], // 数组和对象键值对最后一个逗号， never参数：不能带末尾的逗号, always参数：必须带末尾的逗号，always-multiline多行模式必须带逗号，单行模式不能带逗号
-    'no-undef': 0
-  },
-  parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'module',
-    ecmaFeatures: {
-      modules: true
-    }
-  }
+	'root': true,
+	'parserOptions': {
+		'ecmaVersion': 2020,
+		'sourceType': 'module'
+	},
+	'parser': '@typescript-eslint/parser',
+	'plugins': ['@typescript-eslint'],
+	'env': {
+		'node': true,
+		'browser': true,
+		'jasmine': true,
+		'es6': true
+	},
+	'rules': {
+		'no-console': 'off',
+		'no-extra-parens': 'off',
+		'no-irregular-whitespace': [
+			'error',
+			{ 'skipRegExps': true }
+		],
+		'no-prototype-builtins': 'off',
+		'no-template-curly-in-string': 'off',
+		'class-methods-use-this': 'off',
+		'consistent-return': 1,
+		'guard-for-in': 'off',
+		'no-case-declarations': 'off',
+		'no-else-return': 'off',
+		'no-empty-function': 'off',
+		'no-implicit-coercion': [
+			'error',
+			{ 'boolean': false, 'number': true, 'string': false }
+		],
+		'no-implicit-globals': 'off',
+		'no-invalid-this': 'off',
+		'no-loop-func': 'off',
+		'no-magic-numbers': 'off',
+		'no-param-reassign': 'off',
+		'no-warning-comments': 'warn',
+		'vars-on-top': 'off',
+		'wrap-iife': ['error', 'any'],
+		'yoda': [
+			'error',
+			'never',
+			{ 'onlyEquality': true }
+		],
+		'init-declarations': 'off',
+		'no-shadow': 'off',
+		'no-undef-init': 'off',
+		'no-undefined': 'off',
+		// 'no-unused-vars': ['error', { 'vars': 'all', 'args': 'none' }],
+		// 'no-use-before-define': ['error', { 'functions': false, 'classes': false }],
+		'callback-return': 'off',
+		'global-require': 'off', //TODO
+		'no-process-env': 'off',
+		'brace-style': [
+			'error',
+			'1tbs',
+			{ 'allowSingleLine': true }
+		],
+		'capitalized-comments': 'off',
+		'comma-dangle': 'off',
+		'comma-spacing': [
+			'error',
+			{ 'before': false, 'after': true }
+		],
+		'consistent-this': [
+			'error',
+			'self'
+		],
+		'eol-last': 'off',
+		'func-names': 'off',
+		'func-style': 'off',
+		'id-length': 'off',
+		'indent': [
+			'error',
+			'tab',
+			{
+				'FunctionDeclaration': { 'parameters': 2 },
+				'FunctionExpression': { 'parameters': 2 },
+				'CallExpression': { 'arguments': 2 },
+				'flatTernaryExpressions': true
+			}
+		],
+		'key-spacing': [
+			'error',
+			{ 'afterColon': true }
+		],
+		'line-comment-position': 'off',
+		'linebreak-style': 'off',
+		'lines-around-comment': 'off',
+		'max-len': [
+			'error',
+			{ 'code': 200, 'tabWidth': 4, 'ignoreComments': true, 'ignoreTrailingComments': true, 'ignoreStrings': true, 'ignoreRegExpLiterals': true, 'ignoreTemplateLiterals': true }
+		],
+		'smart-tabs': 'off',
+		'max-lines': 'off',
+		'max-params': 'off',
+		'max-statements-per-line': 'off',
+		'max-statements': [
+			'error',
+			200
+		],
+		'multiline-ternary': 'off',
+		'newline-per-chained-call': 'off',
+		'no-continue': 'off',
+		'no-inline-comments': 'off',
+		'no-lonely-if': 'off',
+		'no-mixed-operators': 'off',
+		'no-negated-condition': 'off',
+		'no-nested-ternary': 'off',
+		'no-plusplus': 'off',
+		'no-restricted-syntax': [
+			'error',
+			'WithStatement'
+		],
+		'no-tabs': 'off',
+		'no-ternary': 'off',
+		'no-trailing-spaces': 'error',
+		'no-underscore-dangle': 'off',
+		'object-curly-newline': 'off',
+		'object-property-newline': [
+			'error',
+			{ 'allowMultiplePropertiesPerLine': true }
+		],
+		'one-var': 'off',
+		// TODO 'padded-blocks': ['error', 'never'],
+		'padded-blocks': 'off',
+		'quote-props': ['error', 'consistent'],
+		'require-jsdoc': 'off',
+		'sort-keys': 'off',
+		'sort-vars': 'off',
+		'space-before-function-paren': [
+			'error',
+			'never'
+		],
+		'spaced-comment': 'off', // TODO
+		'wrap-regex': 'off',
+		//
+		'multiline-comment-style': [
+			'error',
+			'separate-lines'
+		],
+		'strict': [
+			'error',
+			'global'
+		],
+		'lines-between-class-members': [
+			'error',
+			'always'
+		],
+		'prefer-destructuring': [
+			'error',
+			{
+				'array': false,
+				'object': true
+			},
+			{
+				'enforceForRenamedProperties': false
+			}
+		],
+		'no-multi-assign': 'off',
+		'quotes': [
+			'error',
+			'single'
+		],
+		'array-element-newline': 'off',
+		'function-paren-newline': 'off',
+		'array-bracket-newline': 'off',
+		'no-eq-null': 'off',
+		'eqeqeq': ['error', 'always', { 'null': 'ignore' }],
+		// v5
+		'max-lines-per-function': 'off',
+		'max-classes-per-file': 'off',
+		// v6
+		'function-call-argument-newline': 'off',
+
+		// ECMAScript 6+
+		'no-confusing-arrow': 'off',
+		// 'prefer-template': 'off',
+		'require-unicode-regexp': 'off',
+		'prefer-object-spread': 'off',
+		'prefer-named-capture-group': 'off'
+	}
 };
