@@ -29,7 +29,7 @@ module.exports = {
   entry: './src/main.ts',
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'dist'),
     library: 'MyLibrary',
     libraryTarget: 'umd',
     clean: true
