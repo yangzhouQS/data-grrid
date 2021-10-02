@@ -1,25 +1,25 @@
-import type {BaseActionOption, HeaderActionOption, SortHeaderActionOption, SortOption} from '../ts-types';
-import {BaseAction} from './action/BaseAction';
-import type {BaseHeaderDefine} from '../list-grid/layout-map/api';
-import {CheckHeaderAction} from './action/CheckHeaderAction';
-import {SortHeaderAction} from './action/SortHeaderAction';
+import type { BaseActionOption, HeaderActionOption, SortHeaderActionOption, SortOption } from '../ts-types'
+import { BaseAction } from './action/BaseAction'
+import type { BaseHeaderDefine } from '../list-grid/layout-map/api'
+import { CheckHeaderAction } from './action/CheckHeaderAction'
+import { SortHeaderAction } from './action/SortHeaderAction'
 
 class ImmutableSortHeaderAction<T> extends SortHeaderAction<T> {
 	get disabled(): boolean {
-		return this._disabled;
+		return this._disabled
 	}
 }
 
 class ImmutableCheckHeaderAction<T> extends CheckHeaderAction<T> {
 	get disabled(): boolean {
-		return this._disabled;
+		return this._disabled
 	}
 }
 
 export interface ImmutableHeaderActions {
-  SORT: ImmutableSortHeaderAction<any>;
-  CHECK: ImmutableCheckHeaderAction<any>;
-  // SWITCH: ImmutableSwitchHeaderAction<any>
+    SORT: ImmutableSortHeaderAction<any>;
+    CHECK: ImmutableCheckHeaderAction<any>;
+    // SWITCH: ImmutableSwitchHeaderAction<any>
 }
 
 export const ACTIONS = {
@@ -27,7 +27,7 @@ export const ACTIONS = {
 	SORT: new ImmutableSortHeaderAction<any>(),
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	CHECK: new ImmutableCheckHeaderAction<any>()
-};
+}
 /**
  * column actions
  * @namespace cheetahGrid.columns.action
@@ -40,28 +40,28 @@ export {
 	// types
 	BaseActionOption,
 	SortHeaderActionOption
-};
+}
 
 export function of<T>(headerAction: HeaderActionOption | BaseAction<T> | null | undefined): BaseAction<T> | undefined {
 	if (!headerAction) {
-		return undefined;
+		return undefined
 	} else if (typeof headerAction === 'string') {
-		const key = headerAction.toUpperCase() as keyof typeof ACTIONS;
-		return ACTIONS[key] || of(null);
+		const key = headerAction.toUpperCase() as keyof typeof ACTIONS
+		return ACTIONS[key] || of(null)
 	} else {
-		return headerAction;
+		return headerAction
 	}
 }
 
 export function ofCell<T>(headerCell: BaseHeaderDefine<T>): BaseAction<T> | undefined {
 	if (headerCell.sort) {
 		if (typeof headerCell.sort === 'function') {
-			const sortMethod = headerCell.sort;
+			const sortMethod = headerCell.sort
 			// 0.9.0 Backward compatibility
-			const sort: SortOption<T> = ({order, col, grid}): void => sortMethod.call(headerCell, order, col, grid);
-			return new ImmutableSortHeaderAction({sort});
+			const sort: SortOption<T> = ({ order, col, grid }): void => sortMethod.call(headerCell, order, col, grid)
+			return new ImmutableSortHeaderAction({ sort })
 		}
-		return ACTIONS.SORT;
+		return ACTIONS.SORT
 	}
-	return of(headerCell.headerAction);
+	return of(headerCell.headerAction)
 }

@@ -1,5 +1,3 @@
-
-
 const Thenable = require('../Thenable');
 
 class Loader extends Thenable {

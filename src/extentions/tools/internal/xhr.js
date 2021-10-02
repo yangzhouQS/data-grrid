@@ -1,10 +1,8 @@
-
-
 const Thenable = require('../Thenable');
 
 function get(url, mimeType) {
 	return new Thenable((resolve) => {
-		console.log(`load: ${mimeType ? `mimeType:${mimeType} ` : ''}${url}`);
+		console.log(`load: ${ mimeType ? `mimeType:${ mimeType } ` : '' }${ url }`);
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
 		if (mimeType) {

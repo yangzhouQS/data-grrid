@@ -1,6 +1,5 @@
+const { isPromise } = require('../../internal/utils');
 
-
-const {isPromise} = require('../../internal/utils');
 function toArray(arr) {
 	return Array.prototype.slice.call(arr);
 }

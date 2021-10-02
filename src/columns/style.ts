@@ -10,20 +10,20 @@ import type {
 	NumberStyleOption,
 	PercentCompleteBarStyleOption,
 	StyleOption
-} from '../ts-types';
-import {BaseStyle} from './style/BaseStyle';
-import {ButtonStyle} from './style/ButtonStyle';
-import {CheckStyle} from './style/CheckStyle';
-import {IconStyle} from './style/IconStyle';
-import {ImageStyle} from './style/ImageStyle';
-import {MenuStyle} from './style/MenuStyle';
-import {MultilineTextStyle} from './style/MultilineTextStyle';
-import {NumberStyle} from './style/NumberStyle';
-import {PercentCompleteBarStyle} from './style/PercentCompleteBarStyle';
-import {RadioStyle} from './style/RadioStyle';
-import {Style} from './style/Style';
+} from '../ts-types'
+import { BaseStyle } from './style/BaseStyle'
+import { ButtonStyle } from './style/ButtonStyle'
+import { CheckStyle } from './style/CheckStyle'
+import { IconStyle } from './style/IconStyle'
+import { ImageStyle } from './style/ImageStyle'
+import { MenuStyle } from './style/MenuStyle'
+import { MultilineTextStyle } from './style/MultilineTextStyle'
+import { NumberStyle } from './style/NumberStyle'
+import { PercentCompleteBarStyle } from './style/PercentCompleteBarStyle'
+import { RadioStyle } from './style/RadioStyle'
+import { Style } from './style/Style'
 
-const {EVENT_TYPE} = BaseStyle;
+const { EVENT_TYPE } = BaseStyle
 export {
 	EVENT_TYPE,
 	BaseStyle,
@@ -48,7 +48,8 @@ export {
 	NumberStyleOption,
 	PercentCompleteBarStyleOption,
 	StyleOption
-};
+}
+
 export function of(
 		columnStyle: ColumnStyleOption | null | undefined,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,15 +58,15 @@ export function of(
 ): BaseStyle {
 	if (columnStyle) {
 		if (columnStyle instanceof BaseStyle) {
-			return columnStyle;
+			return columnStyle
 		} else if (typeof columnStyle === 'function') {
-			return of(columnStyle(record), record, StyleClassDef);
+			return of(columnStyle(record), record, StyleClassDef)
 		} else if (record && (columnStyle as symbol) in record) {
-			return of(record[columnStyle as string], record, StyleClassDef);
+			return of(record[columnStyle as string], record, StyleClassDef)
 		}
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		return new StyleClassDef(columnStyle as any);
+		return new StyleClassDef(columnStyle as any)
 	} else {
-		return StyleClassDef.DEFAULT;
+		return StyleClassDef.DEFAULT
 	}
 }

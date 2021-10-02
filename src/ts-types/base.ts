@@ -24,12 +24,12 @@ export type PromiseMaybeCallOrUndef<T, A extends any[]> = Promise<MaybeCallOrUnd
 export type AnyFunction = (...args: any[]) => any;
 
 export interface RectProps {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-  width: number;
-  height: number;
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+    width: number;
+    height: number;
 }
 
 export type ColorDef = CanvasRenderingContext2D['fillStyle'];

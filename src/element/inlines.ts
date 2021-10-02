@@ -1,16 +1,16 @@
-import {svgIcons} from '../icons';
-import * as path2DManager from '../internal/path2DManager';
-import type {IconDefine} from '../ts-types';
-import {Inline} from './Inline';
-import type {InlineDrawOption} from './Inline';
-import {InlineDrawer} from './InlineDrawer';
-import {InlineIcon} from './InlineIcon';
-import {InlineImage} from './InlineImage';
-import {InlinePath2D} from './InlinePath2D';
-import {InlineSvg} from './InlineSvg';
-import type {PaddingOption} from '../internal/canvases';
-import type {SimpleColumnIconOption} from '../ts-types-internal';
-import {calcStartPosition} from '../internal/canvases';
+import { svgIcons } from '../icons'
+import * as path2DManager from '../internal/path2DManager'
+import type { IconDefine } from '../ts-types'
+import { Inline } from './Inline'
+import type { InlineDrawOption } from './Inline'
+import { InlineDrawer } from './InlineDrawer'
+import { InlineIcon } from './InlineIcon'
+import { InlineImage } from './InlineImage'
+import { InlinePath2D } from './InlinePath2D'
+import { InlineSvg } from './InlineSvg'
+import type { PaddingOption } from '../internal/canvases'
+import type { SimpleColumnIconOption } from '../ts-types-internal'
+import { calcStartPosition } from '../internal/canvases'
 
 function drawRegisteredIcon(
 		ctx: CanvasRenderingContext2D,
@@ -21,7 +21,7 @@ function drawRegisteredIcon(
 		top: number,
 		width: number,
 		height: number,
-		{offset = 2, padding}: { offset?: number; padding?: PaddingOption } = {}
+		{ offset = 2, padding }: { offset?: number; padding?: PaddingOption } = {}
 ): void {
 	const rect = {
 		left,
@@ -30,73 +30,73 @@ function drawRegisteredIcon(
 		height,
 		right: left + width,
 		bottom: top + height
-	};
-	ctx.save();
+	}
+	ctx.save()
 	try {
-		ctx.beginPath();
-		ctx.rect(rect.left, rect.top, rect.width, rect.height);
+		ctx.beginPath()
+		ctx.rect(rect.left, rect.top, rect.width, rect.height)
 		//clip
-		ctx.clip();
+		ctx.clip()
 
 		//文字描画
 		const pos = calcStartPosition(ctx, rect, drawWidth, drawHeight, {
 			offset,
 			padding
-		});
-		path2DManager.fill(icon, ctx, pos.x, pos.y, drawWidth, drawHeight);
+		})
+		path2DManager.fill(icon, ctx, pos.x, pos.y, drawWidth, drawHeight)
 	} finally {
-		ctx.restore();
+		ctx.restore()
 	}
 }
 
 function isIconConstructorOption(icon: SimpleColumnIconOption): icon is SimpleColumnIconOption & { font: string; content: string } {
 	if (icon.font && icon.content) {
-		return true;
+		return true
 	}
-	return false;
+	return false
 }
 
 function isInlineImageConstructorOption(icon: SimpleColumnIconOption): icon is SimpleColumnIconOption & { src: string } {
 	if (icon.src) {
-		return true;
+		return true
 	}
-	return false;
+	return false
 }
 
 function isInlineSvgConstructorOption(icon: SimpleColumnIconOption): icon is SimpleColumnIconOption & {
-  path: string;
-  width: number;
-  height: number;
+    path: string;
+    width: number;
+    height: number;
 } {
 	if (icon.path) {
-		return true;
+		return true
 	}
-	return false;
+	return false
 }
 
 export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
 	if (icon instanceof Inline) {
-		return icon;
+		return icon
 	}
 	if (!icon) {
-		return null;
+		return null
 	}
 	if (isIconConstructorOption(icon)) {
-		return new InlineIcon(icon);
+		return new InlineIcon(icon)
 	}
 	if (isInlineImageConstructorOption(icon)) {
 		return new InlineImage({
 			src: icon.src,
 			width: icon.width,
 			height: icon.width
-		});
+		})
 	}
 	if (icon.svg) {
 		return new InlineSvg({
 			svg: icon.svg,
 			width: icon.width,
 			height: icon.width
-		});
+		})
 	}
 	if (isInlineSvgConstructorOption(icon)) {
 		return new InlinePath2D({
@@ -104,14 +104,14 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
 			width: icon.width,
 			height: icon.width,
 			color: icon.color
-		});
+		})
 	}
-	const regedIcons = svgIcons.get();
+	const regedIcons = svgIcons.get()
 	if (icon.name && regedIcons[icon.name]) {
-		const regedIcon = regedIcons[icon.name];
-		const width = icon.width || Math.max(regedIcon.width, regedIcon.height);
+		const regedIcon = regedIcons[icon.name]
+		const width = icon.width || Math.max(regedIcon.width, regedIcon.height)
 		return new InlineDrawer({
-			draw({ctx, rect, offset, offsetLeft, offsetRight, offsetTop, offsetBottom}: InlineDrawOption): void {
+			draw({ ctx, rect, offset, offsetLeft, offsetRight, offsetTop, offsetBottom }: InlineDrawOption): void {
 				drawRegisteredIcon(ctx, regedIcon, width, width, rect.left, rect.top, rect.width, rect.height, {
 					offset: offset + 1,
 					padding: {
@@ -120,47 +120,47 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
 						top: offsetTop,
 						bottom: offsetBottom
 					}
-				});
+				})
 			},
 			width,
 			height: width,
 			color: icon.color
-		});
+		})
 	}
-	return new InlineIcon(icon);
+	return new InlineIcon(icon)
 }
 
 export function of(content: string | Inline): Inline;
 export function of(content?: string | Inline | null): null;
 export function of(content?: string | Inline | null): Inline | null {
 	if (content == null) {
-		return null;
+		return null
 	}
 	if (content instanceof Inline) {
-		return content;
+		return content
 	}
-	return new Inline(content);
+	return new Inline(content)
 }
 
 export function buildInlines(icons: SimpleColumnIconOption[] | null | undefined, inline: Inline | string | (string | Inline)[]): Inline[] {
-	const result: Inline[] = [];
+	const result: Inline[] = []
 	if (icons) {
-		result.push(...icons.map((icon) => iconOf(icon)).filter((i: Inline | null): i is Inline => i != null));
+		result.push(...icons.map((icon) => iconOf(icon)).filter((i: Inline | null): i is Inline => i != null))
 	}
 	if (
 		Array.isArray(inline)
 	// && inline.filter(il => il instanceof Inline).length <- ?
 	) {
-		result.push(...inline.map((il) => of(il)).filter((i) => i != null));
+		result.push(...inline.map((il) => of(il)).filter((i) => i != null))
 	} else {
-		const il = of(inline);
+		const il = of(inline)
 		if (il) {
-			result.push(il);
+			result.push(il)
 		}
 	}
-	return result;
+	return result
 }
 
 export function string(inline: Inline | string | (string | Inline)[]): string {
-	return buildInlines(undefined, inline).join('');
+	return buildInlines(undefined, inline).join('')
 }

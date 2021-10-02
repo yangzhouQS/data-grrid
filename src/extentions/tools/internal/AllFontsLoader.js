@@ -11,9 +11,11 @@ const FONTFACE_REGEX = /(@font-face\s*\{[\s\S]*\})/g;
 function isDataUrl(url) {
 	return url.search(/^(data:)/) !== -1;
 }
+
 function isFileUrl(url) {
 	return url.search(/^(file:)/) !== -1;
 }
+
 function readFontFaces(css) {
 	const result = [];
 	let match;
@@ -22,6 +24,7 @@ function readFontFaces(css) {
 	}
 	return result;
 }
+
 function readUrls(fontCss) {
 	const result = [];
 	let match;
@@ -55,14 +58,15 @@ function getCssRules(styleSheet) {
 		return undefined;
 	}
 }
+
 function toArray(arr) {
 	return Array.prototype.slice.call(arr);
 }
+
 function getFontUrls(css, cssUrl) {
-	return readUrls(css).
-		map((srcUrl) => resolveUrl(srcUrl, cssUrl)).
-		filter((url) => !isFileUrl(url));
+	return readUrls(css).map((srcUrl) => resolveUrl(srcUrl, cssUrl)).filter((url) => !isFileUrl(url));
 }
+
 function getFontFaceInfoFromFontFaceRule(cssRule, styleSheet) {
 	const cssUrl = styleSheet.href;
 	const src = cssRule.style.getPropertyValue('src') || cssRule.cssText;
@@ -71,28 +75,25 @@ function getFontFaceInfoFromFontFaceRule(cssRule, styleSheet) {
 		css: cssRule.cssText
 	};
 }
+
 function getFontFaceInfosFromStyleSheet(styleSheet, xhrCache) {
 	const cssUrl = styleSheet.href;
 	if (isFileUrl(cssUrl)) {
 		return [];
 	}
-	return xhr.
-		getOnCacheOrHttp(cssUrl, xhrCache).
-		then((text) => readFontFaces(text)).
-		then((fontFaces) => fontFaces.map((fontFaceCss) => ({
-			urls: getFontUrls(fontFaceCss, cssUrl),
-			css: fontFaceCss
-		}))
-		);
+	return xhr.getOnCacheOrHttp(cssUrl, xhrCache).then((text) => readFontFaces(text)).then((fontFaces) => fontFaces.map((fontFaceCss) => ({
+		urls: getFontUrls(fontFaceCss, cssUrl),
+		css: fontFaceCss
+	}))
+	);
 }
+
 function getAllFontFaceInfos() {
 	const xhrCache = {};
 	const result = toArray(document.styleSheets).map((styleSheet) => {
 		const cssRules = getCssRules(styleSheet);
 		if (cssRules) {
-			return toArray(cssRules).
-				filter((cssRule) => cssRule.type === CSSRule.FONT_FACE_RULE).
-				map((cssRule) => getFontFaceInfoFromFontFaceRule(cssRule, styleSheet));
+			return toArray(cssRules).filter((cssRule) => cssRule.type === CSSRule.FONT_FACE_RULE).map((cssRule) => getFontFaceInfoFromFontFaceRule(cssRule, styleSheet));
 		} else if (styleSheet.href) {
 			return getFontFaceInfosFromStyleSheet(styleSheet, xhrCache);
 		}

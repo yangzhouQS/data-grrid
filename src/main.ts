@@ -21,17 +21,17 @@
 //
 // export { getInternal as _getInternal } from './get-internal'
 
-import {IconDefine} from './ts-types';
-import {columns as _columns} from './columns';
-import {core as _core} from './core';
-import {tools as _tools} from './tools';
-import {ListGrid as _ListGrid} from './ListGrid';
-import {data as _data} from './data';
-import {headers as _headers} from './headers';
-import {themes as _themes} from './themes';
-import {GridCanvasHelper as _GridCanvasHelper} from './GridCanvasHelper';
-import {register as _register} from './register';
-import {svgIcons} from './icons';
+import { IconDefine } from './ts-types'
+import { columns as _columns } from './columns'
+import { core as _core } from './core'
+import { tools as _tools } from './tools'
+import { ListGrid as _ListGrid } from './ListGrid'
+import { data as _data } from './data'
+import { headers as _headers } from './headers'
+import { themes as _themes } from './themes'
+import { GridCanvasHelper as _GridCanvasHelper } from './GridCanvasHelper'
+import { register as _register } from './register'
+import { svgIcons } from './icons'
 
 const kakaGrid = {
 	version: '1.0.1',
@@ -50,13 +50,13 @@ const kakaGrid = {
 	// helper
 	GridCanvasHelper: _GridCanvasHelper,
 	get icons() {
-		return svgIcons.get();
+		return svgIcons.get()
 	},
 
 	// plugin registers
 	register: _register
-};
-export default kakaGrid;
+}
+export default kakaGrid
 //
 //
 // export {

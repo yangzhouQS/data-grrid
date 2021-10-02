@@ -1,4 +1,4 @@
-import {CanvasHelper, canvasHelper} from './tools/canvashelper';
+import { CanvasHelper, canvasHelper } from './tools/canvashelper'
 
 /**
  * tools
@@ -9,4 +9,4 @@ import {CanvasHelper, canvasHelper} from './tools/canvashelper';
 /**
  * tools
  */
-export const tools: { canvasHelper: CanvasHelper } = {canvasHelper};
+export const tools: { canvasHelper: CanvasHelper } = { canvasHelper }

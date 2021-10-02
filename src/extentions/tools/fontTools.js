@@ -1,5 +1,3 @@
-
-
 const icons = require('../../internal/icons');
 const LRUCache = require('../../internal/LRUCache');
 const FontsCssLoader = require('./internal/FontsCssLoader');
@@ -9,7 +7,7 @@ const Loader = require('./internal/Loader');
 const SVG_NAMESPACE_URI = 'http://www.w3.org/2000/svg';
 
 class SvgInfo {
-	constructor({font, content, color}) {
+	constructor({ font, content, color }) {
 		this.font = font;
 		this.content = content;
 		this.color = color;
@@ -36,14 +34,14 @@ class SvgInfo {
 		if (this.width && this.height) {
 			svg.setAttribute('width', this.width);
 			svg.setAttribute('height', this.height);
-			svg.setAttribute('viewBox', `0 0 ${this.width} ${this.height}`);
+			svg.setAttribute('viewBox', `0 0 ${ this.width } ${ this.height }`);
 
 			// for IE
 			text.setAttribute('y', this.height);
 		}
 
 		if (this.font) {
-			text.setAttribute('style', `font-feature-settings: 'liga';font: ${this.font};`);
+			text.setAttribute('style', `font-feature-settings: 'liga';font: ${ this.font };`);
 		}
 		text.setAttribute('text-anchor', 'start');
 		text.setAttribute('dominant-baseline', 'text-after-edge');
@@ -61,10 +59,10 @@ class SvgInfo {
 
 		document.body.appendChild(svg); //
 
-		text.setAttribute('style', `font-feature-settings:'liga' 0;font: ${this.font};`);
+		text.setAttribute('style', `font-feature-settings:'liga' 0;font: ${ this.font };`);
 		const before1 = svg.getBBox();
 
-		text.setAttribute('style', `font-feature-settings:'liga' 1;font: ${this.font};`);
+		text.setAttribute('style', `font-feature-settings:'liga' 1;font: ${ this.font };`);
 		const before2 = svg.getBBox();
 
 		return new Thenable((resolve) => {
@@ -102,8 +100,8 @@ class SvgInfo {
 const svgInfoCache = new LRUCache(50);
 let fontsCssLoader;
 
-function getSvgInfo({font, content, color}) {
-	const key = `${font}@${content} color=${color}`;
+function getSvgInfo({ font, content, color }) {
+	const key = `${ font }@${ content } color=${ color }`;
 	let infoThenable = svgInfoCache.get(key);
 	if (infoThenable) {
 		return infoThenable;
@@ -111,7 +109,7 @@ function getSvgInfo({font, content, color}) {
 
 	fontsCssLoader = fontsCssLoader || new FontsCssLoader();
 	return (infoThenable = fontsCssLoader.then((css) => {
-		const info = new SvgInfo({font, content, color});
+		const info = new SvgInfo({ font, content, color });
 		return info.calcBBox(css).then(() => {
 			svgInfoCache.put(key, infoThenable);
 			return info;
@@ -119,8 +117,8 @@ function getSvgInfo({font, content, color}) {
 	}));
 }
 
-function fontToSvg({font, content, color}) {
-	return getSvgInfo({font, content, color}).then((info) => {
+function fontToSvg({ font, content, color }) {
+	return getSvgInfo({ font, content, color }).then((info) => {
 		const svg = info.buildSvg(fontsCssLoader.get());
 		return svg;
 	});

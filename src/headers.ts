@@ -2,7 +2,7 @@
 // import * as style from './header/style'
 // import * as type from './header/type'
 
-import {ACTIONS, BaseAction, BaseActionOption, CheckHeaderAction, ImmutableHeaderActions, SortHeaderAction, of as headerActionOf, ofCell as headerActionOfCell} from './header/action';
+import { ACTIONS, BaseAction, BaseActionOption, CheckHeaderAction, ImmutableHeaderActions, SortHeaderAction, of as headerActionOf, ofCell as headerActionOfCell } from './header/action'
 import {
 	BaseStyle,
 	// BaseStdStyle,
@@ -13,7 +13,7 @@ import {
 	// SwitchHeaderStyle,
 	MultilineTextHeaderStyle,
 	of as headerStyleOf
-} from './header/style';
+} from './header/style'
 import {
 	TYPES,
 	BaseHeader,
@@ -25,7 +25,7 @@ import {
 	MultilineTextHeader,
 	of as headerTypeOf,
 	ofCell as headerTypeOfCell
-} from './header/type';
+} from './header/type'
 
 const action = {
 	ACTIONS: ACTIONS as ImmutableHeaderActions,
@@ -36,7 +36,7 @@ const action = {
 	// SwitchHeaderAction,
 	of: headerActionOf,
 	ofCell: headerActionOfCell
-};
+}
 const style = {
 	BaseStyle,
 	// BaseStdStyle,
@@ -47,7 +47,7 @@ const style = {
 	// SwitchHeaderStyle,
 	MultilineTextHeaderStyle,
 	of: headerStyleOf
-};
+}
 const type = {
 	TYPES,
 	BaseHeader,
@@ -59,8 +59,8 @@ const type = {
 	MultilineTextHeader,
 	of: headerTypeOf,
 	ofCell: headerTypeOfCell
-};
+}
 /**
  * header classes
  */
-export const headers = {action, type, style};
+export const headers = { action, type, style }

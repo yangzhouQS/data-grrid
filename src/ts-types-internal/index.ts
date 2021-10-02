@@ -1,2 +1,2 @@
-export * from './grid-engine';
-export * from './data';
+export * from './grid-engine'
+export * from './data'

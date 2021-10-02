@@ -1,10 +1,10 @@
-import type {AnyFunction, ColorDef, InlineAPI, RectProps} from '../ts-types';
-import type {CanvasHelper} from '../tools/canvashelper';
-import type {GenWordsResult} from '../internal/utils';
-import {str} from '../internal/utils';
+import type { AnyFunction, ColorDef, InlineAPI, RectProps } from '../ts-types'
+import type { CanvasHelper } from '../tools/canvashelper'
+import type { GenWordsResult } from '../internal/utils'
+import { str } from '../internal/utils'
 
 function getWidth(ctx: CanvasRenderingContext2D, content: string): number {
-	return ctx.measureText(content).width;
+	return ctx.measureText(content).width
 }
 
 function breakWidth(
@@ -16,140 +16,142 @@ function breakWidth(
 ): {
     before: Inline | null;
     after: Inline | null;
-  } {
-	const chars = [];
-	let ret = itr.next();
+} {
+	const chars = []
+	let ret = itr.next()
 	for (let i = 0; i < candidateIndex && ret !== null; i++, ret = itr.next()) {
-		chars.push(ret);
+		chars.push(ret)
 	}
-	let beforeWidth = getWidth(ctx, chars.join(''));
+	let beforeWidth = getWidth(ctx, chars.join(''))
 	if (beforeWidth > width) {
 		while (chars.length) {
-			const c = chars.pop();
-			beforeWidth -= getWidth(ctx, c || '');
+			const c = chars.pop()
+			beforeWidth -= getWidth(ctx, c || '')
 			if (beforeWidth <= width) {
-				break;
+				break
 			}
 		}
 	} else if (beforeWidth < width) {
 		while (ret !== null) {
-			const charWidth = getWidth(ctx, ret);
+			const charWidth = getWidth(ctx, ret)
 			if (beforeWidth + charWidth > width) {
-				break;
+				break
 			}
-			chars.push(ret);
-			beforeWidth += charWidth;
-			ret = itr.next();
+			chars.push(ret)
+			beforeWidth += charWidth
+			ret = itr.next()
 		}
 	}
-	const beforeContent = chars.join('').replace(/\s+$/, '');
-	const afterContent = content.slice(beforeContent.length).replace(/^\s+/, '');
+	const beforeContent = chars.join('').replace(/\s+$/, '')
+	const afterContent = content.slice(beforeContent.length).replace(/^\s+/, '')
 	return {
 		before: beforeContent ? new Inline(beforeContent) : null,
 		after: afterContent ? new Inline(afterContent) : null
-	};
+	}
 }
 
 export type InlineDrawOption = {
-  ctx: CanvasRenderingContext2D;
-  canvashelper: CanvasHelper;
-  rect: RectProps;
-  offset: number;
-  offsetLeft: number;
-  offsetRight: number;
-  offsetTop: number;
-  offsetBottom: number;
+    ctx: CanvasRenderingContext2D;
+    canvashelper: CanvasHelper;
+    rect: RectProps;
+    offset: number;
+    offsetLeft: number;
+    offsetRight: number;
+    offsetTop: number;
+    offsetBottom: number;
 };
+
 export class Inline implements InlineAPI {
-  private _content: string;
+    private _content: string
 
-  constructor(content?: string) {
-  	this._content = content != null ? content : '';
-  }
+    constructor(content?: string) {
+    	this._content = content != null ? content : ''
+    }
 
-  width({ctx}: { ctx: CanvasRenderingContext2D }): number {
-  	return getWidth(ctx, this._content);
-  }
+    width({ ctx }: { ctx: CanvasRenderingContext2D }): number {
+    	return getWidth(ctx, this._content)
+    }
 
-  font(): string | null {
-  	return null;
-  }
+    font(): string | null {
+    	return null
+    }
 
-  color(): ColorDef | null {
-  	return null;
-  }
+    color(): ColorDef | null {
+    	return null
+    }
 
-  canDraw(): boolean {
-  	return true;
-  }
+    canDraw(): boolean {
+    	return true
+    }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onReady(_callback: AnyFunction): void {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onReady(_callback: AnyFunction): void {
+    }
 
-  draw({ctx, canvashelper, rect, offset, offsetLeft, offsetRight, offsetTop, offsetBottom}: InlineDrawOption): void {
-  	canvashelper.fillTextRect(ctx, this._content, rect.left, rect.top, rect.width, rect.height, {
-  		offset: offset + 1,
-  		padding: {
-  			left: offsetLeft,
-  			right: offsetRight,
-  			top: offsetTop,
-  			bottom: offsetBottom
-  		}
-  	});
-  }
+    draw({ ctx, canvashelper, rect, offset, offsetLeft, offsetRight, offsetTop, offsetBottom }: InlineDrawOption): void {
+    	canvashelper.fillTextRect(ctx, this._content, rect.left, rect.top, rect.width, rect.height, {
+    		offset: offset + 1,
+    		padding: {
+    			left: offsetLeft,
+    			right: offsetRight,
+    			top: offsetTop,
+    			bottom: offsetBottom
+    		}
+    	})
+    }
 
-  canBreak(): boolean {
-  	return !!this._content;
-  }
+    canBreak(): boolean {
+    	return !!this._content
+    }
 
-  splitIndex(index: number): {
-    before: Inline | null;
-    after: Inline | null;
-  } {
-  	const content = this._content;
-  	const itr = str.genChars(content);
-  	const chars = [];
-  	let ret = itr.next();
-  	for (let i = 0; i < index && ret !== null; i++, ret = itr.next()) {
-  		chars.push(ret);
-  	}
-  	const beforeContent = chars.join('');
-  	const afterContent = content.slice(beforeContent.length);
-  	return {
-  		before: beforeContent ? new Inline(beforeContent) : null,
-  		after: afterContent ? new Inline(afterContent) : null
-  	};
-  }
-
-  breakWord(
-  		ctx: CanvasRenderingContext2D,
-  		width: number
-  ): {
-      before: Inline | null;
-      after: Inline | null;
+    splitIndex(index: number): {
+        before: Inline | null;
+        after: Inline | null;
     } {
-  	const content = this._content;
-  	const allWidth = this.width({ctx});
-  	const candidate = Math.floor((this._content.length * width) / allWidth);
-  	const itr = str.genWords(content);
-  	return breakWidth(ctx, content, itr, candidate, width);
-  }
+    	const content = this._content
+    	const itr = str.genChars(content)
+    	const chars = []
+    	let ret = itr.next()
+    	for (let i = 0; i < index && ret !== null; i++, ret = itr.next()) {
+    		chars.push(ret)
+    	}
+    	const beforeContent = chars.join('')
+    	const afterContent = content.slice(beforeContent.length)
+    	return {
+    		before: beforeContent ? new Inline(beforeContent) : null,
+    		after: afterContent ? new Inline(afterContent) : null
+    	}
+    }
 
-  breakAll(
-  		ctx: CanvasRenderingContext2D,
-  		width: number
-  ): {
-      before: Inline | null;
-      after: Inline | null;
+    breakWord(
+    		ctx: CanvasRenderingContext2D,
+    		width: number
+    ): {
+        before: Inline | null;
+        after: Inline | null;
     } {
-  	const content = this._content;
-  	const allWidth = this.width({ctx});
-  	const candidate = Math.floor((this._content.length * width) / allWidth);
-  	const itr = str.genChars(content);
-  	return breakWidth(ctx, content, itr, candidate, width);
-  }
+    	const content = this._content
+    	const allWidth = this.width({ ctx })
+    	const candidate = Math.floor((this._content.length * width) / allWidth)
+    	const itr = str.genWords(content)
+    	return breakWidth(ctx, content, itr, candidate, width)
+    }
 
-  toString(): string {
-  	return this._content;
-  }
+    breakAll(
+    		ctx: CanvasRenderingContext2D,
+    		width: number
+    ): {
+        before: Inline | null;
+        after: Inline | null;
+    } {
+    	const content = this._content
+    	const allWidth = this.width({ ctx })
+    	const candidate = Math.floor((this._content.length * width) / allWidth)
+    	const itr = str.genChars(content)
+    	return breakWidth(ctx, content, itr, candidate, width)
+    }
+
+    toString(): string {
+    	return this._content
+    }
 }

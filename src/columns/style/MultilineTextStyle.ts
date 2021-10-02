@@ -1,54 +1,55 @@
-import type {LineClamp, MultilineTextStyleOption} from '../../ts-types';
-import {Style} from './Style';
-import {defaults} from '../../internal/utils';
+import type { LineClamp, MultilineTextStyleOption } from '../../ts-types'
+import { Style } from './Style'
+import { defaults } from '../../internal/utils'
 
-let defaultStyle: MultilineTextStyle;
+let defaultStyle: MultilineTextStyle
+
 export class MultilineTextStyle extends Style {
-  private _lineHeight: string | number;
+    private _lineHeight: string | number
 
-  private _autoWrapText: boolean;
+    private _autoWrapText: boolean
 
-  private _lineClamp?: LineClamp;
+    private _lineClamp?: LineClamp
 
-  static get DEFAULT(): MultilineTextStyle {
-  	return defaultStyle ? defaultStyle : (defaultStyle = new MultilineTextStyle());
-  }
+    static get DEFAULT(): MultilineTextStyle {
+    	return defaultStyle ? defaultStyle : (defaultStyle = new MultilineTextStyle())
+    }
 
-  constructor(style: MultilineTextStyleOption = {}) {
-  	super(defaults(style, {textBaseline: 'top'}));
-  	this._lineHeight = style.lineHeight || '1em';
-  	this._autoWrapText = style.autoWrapText || false;
-  	this._lineClamp = style.lineClamp;
-  }
+    constructor(style: MultilineTextStyleOption = {}) {
+    	super(defaults(style, { textBaseline: 'top' }))
+    	this._lineHeight = style.lineHeight || '1em'
+    	this._autoWrapText = style.autoWrapText || false
+    	this._lineClamp = style.lineClamp
+    }
 
-  clone(): MultilineTextStyle {
-  	return new MultilineTextStyle(this);
-  }
+    clone(): MultilineTextStyle {
+    	return new MultilineTextStyle(this)
+    }
 
-  get lineHeight(): string | number {
-  	return this._lineHeight;
-  }
+    get lineHeight(): string | number {
+    	return this._lineHeight
+    }
 
-  set lineHeight(lineHeight: string | number) {
-  	this._lineHeight = lineHeight;
-  	this.doChangeStyle();
-  }
+    set lineHeight(lineHeight: string | number) {
+    	this._lineHeight = lineHeight
+    	this.doChangeStyle()
+    }
 
-  get lineClamp(): LineClamp | undefined {
-  	return this._lineClamp;
-  }
+    get lineClamp(): LineClamp | undefined {
+    	return this._lineClamp
+    }
 
-  set lineClamp(lineClamp: LineClamp | undefined) {
-  	this._lineClamp = lineClamp;
-  	this.doChangeStyle();
-  }
+    set lineClamp(lineClamp: LineClamp | undefined) {
+    	this._lineClamp = lineClamp
+    	this.doChangeStyle()
+    }
 
-  get autoWrapText(): boolean {
-  	return this._autoWrapText;
-  }
+    get autoWrapText(): boolean {
+    	return this._autoWrapText
+    }
 
-  set autoWrapText(autoWrapText: boolean) {
-  	this._autoWrapText = autoWrapText;
-  	this.doChangeStyle();
-  }
+    set autoWrapText(autoWrapText: boolean) {
+    	this._autoWrapText = autoWrapText
+    	this.doChangeStyle()
+    }
 }

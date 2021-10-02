@@ -1,3 +1,3 @@
-export * from './type';
-export * from './style';
-export * from './action';
+export * from './type'
+export * from './style'
+export * from './action'

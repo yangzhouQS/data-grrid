@@ -177,7 +177,6 @@ export class InlineMenuElement<T> {
   	const menu = this._menu;
   	this.detach();
   	this._handler.dispose();
-  	// @ts-expect-error -- ignore
   	delete this._menu;
   	this._beforePropEditor = null;
   	menu.parentElement?.removeChild(menu);

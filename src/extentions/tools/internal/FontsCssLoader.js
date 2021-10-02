@@ -20,6 +20,7 @@ function parseExtension(url) {
 		return '';
 	}
 }
+
 function mimes() {
 	// Only WOFF and EOT mime types for fonts are 'real'
 	// see http://www.iana.org/assignments/media-types/media-types.xhtml
@@ -39,8 +40,9 @@ function mimes() {
 		svg: 'image/svg+xml'
 	};
 }
+
 function dataAsUrl(content, type) {
-	return `data:${type};base64,${content}`;
+	return `data:${ type };base64,${ content }`;
 }
 
 function mimeType(url) {
@@ -51,12 +53,13 @@ function mimeType(url) {
 	const extension = parseExtension(url).toLowerCase();
 	return mimes()[extension] || '';
 }
+
 function urlAsRegex(url) {
 	return new RegExp(`(url\\(['"]?)(${escape(url)})(['"]?\\))`, 'g');
 }
 
 function replaceUrl(fontCss, srcUrl, dataUrl) {
-	return fontCss.replace(urlAsRegex(srcUrl), `$1'${dataUrl}'$3`);
+	return fontCss.replace(urlAsRegex(srcUrl), `$1'${ dataUrl }'$3`);
 }
 
 function buildDataUrl(data, srcUrl) {

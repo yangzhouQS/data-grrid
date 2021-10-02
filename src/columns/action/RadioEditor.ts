@@ -1,242 +1,243 @@
-import type {ActionListener, CellAddress, EventListenerId, GetRadioEditorGroup, LayoutObjectId, RadioEditorOption} from '../../ts-types';
-import {bindCellClickAction, bindCellKeyAction} from './actionBind';
-import {cellEquals, event, extend, isPromise, obj, then} from '../../internal/utils';
-import {isDisabledRecord, isReadOnlyRecord, toggleValue} from './action-utils';
-import {DG_EVENT_TYPE} from '../../core/DG_EVENT_TYPE';
-import {Editor} from './Editor';
-import type {GridInternal} from '../../ts-types-internal';
-import {animate} from '../../internal/animate';
-import {getRadioColumnStateId} from '../../internal/symbolManager';
-import {toBoolean} from '../utils';
+import type { ActionListener, CellAddress, EventListenerId, GetRadioEditorGroup, LayoutObjectId, RadioEditorOption } from '../../ts-types'
+import { bindCellClickAction, bindCellKeyAction } from './actionBind'
+import { cellEquals, event, extend, isPromise, obj, then } from '../../internal/utils'
+import { isDisabledRecord, isReadOnlyRecord, toggleValue } from './action-utils'
+import { DG_EVENT_TYPE } from '../../core/DG_EVENT_TYPE'
+import { Editor } from './Editor'
+import type { GridInternal } from '../../ts-types-internal'
+import { animate } from '../../internal/animate'
+import { getRadioColumnStateId } from '../../internal/symbolManager'
+import { toBoolean } from '../utils'
 
-const RADIO_COLUMN_STATE_ID = getRadioColumnStateId();
+const RADIO_COLUMN_STATE_ID = getRadioColumnStateId()
 
 export class RadioEditor<T> extends Editor<T> {
-  protected _group: GetRadioEditorGroup<T> | undefined;
+    protected _group: GetRadioEditorGroup<T> | undefined
 
-  private _checkAction: ActionListener | undefined;
+    private _checkAction: ActionListener | undefined
 
-  constructor(option: RadioEditorOption<T> = {}) {
-  	super(option);
-  	this._group = option.group;
-  	this._checkAction = option.checkAction;
-  }
+    constructor(option: RadioEditorOption<T> = {}) {
+    	super(option)
+    	this._group = option.group
+    	this._checkAction = option.checkAction
+    }
 
-  clone(): RadioEditor<T> {
-  	return new RadioEditor(this);
-  }
+    clone(): RadioEditor<T> {
+    	return new RadioEditor(this)
+    }
 
-  /** @deprecated Use checkAction instead. */
-  get group(): GetRadioEditorGroup<T> | undefined {
-  	return this._group;
-  }
+    /** @deprecated Use checkAction instead. */
+    get group(): GetRadioEditorGroup<T> | undefined {
+    	return this._group
+    }
 
-  /** @deprecated Use checkAction instead. */
-  set group(group: GetRadioEditorGroup<T> | undefined) {
-  	this._group = group;
-  }
+    /** @deprecated Use checkAction instead. */
+    set group(group: GetRadioEditorGroup<T> | undefined) {
+    	this._group = group
+    }
 
-  get checkAction(): ActionListener | undefined {
-  	return this._checkAction;
-  }
+    get checkAction(): ActionListener | undefined {
+    	return this._checkAction
+    }
 
-  set checkAction(checkAction: ActionListener | undefined) {
-  	this._checkAction = checkAction;
-  }
+    set checkAction(checkAction: ActionListener | undefined) {
+    	this._checkAction = checkAction
+    }
 
-  bindGridEvent(grid: GridInternal<T>, cellId: LayoutObjectId): EventListenerId[] {
-  	let _state = grid[RADIO_COLUMN_STATE_ID];
-  	if (!_state) {
-  		_state = {block: {}, elapsed: {}};
-  		obj.setReadonly(grid, RADIO_COLUMN_STATE_ID, _state);
-  	}
-  	const state = _state;
+    bindGridEvent(grid: GridInternal<T>, cellId: LayoutObjectId): EventListenerId[] {
+    	let _state = grid[RADIO_COLUMN_STATE_ID]
+    	if (!_state) {
+    		_state = { block: {}, elapsed: {} }
+    		obj.setReadonly(grid, RADIO_COLUMN_STATE_ID, _state)
+    	}
+    	const state = _state
 
-  	const action = (cell: CellAddress): void => {
-  		this._action(grid, cell);
-  	};
+    	const action = (cell: CellAddress): void => {
+    		this._action(grid, cell)
+    	}
 
-  	function isTarget(col: number, row: number): boolean {
-  		return grid.getLayoutCellId(col, row) === cellId;
-  	}
-  	return [
-  		...bindCellClickAction(grid, cellId, {
-  			action,
-  			mouseOver: (e) => {
-  				if (isDisabledRecord(this.disabled, grid, e.row)) {
-  					return false;
-  				}
-  				state.mouseActiveCell = {
-  					col: e.col,
-  					row: e.row
-  				};
-  				const range = grid.getCellRange(e.col, e.row);
-  				grid.invalidateCellRange(range);
-  				return true;
-  			},
-  			mouseOut: (e) => {
-  				delete state.mouseActiveCell;
-  				const range = grid.getCellRange(e.col, e.row);
-  				grid.invalidateCellRange(range);
-  			}
-  		}),
-  		...bindCellKeyAction(grid, cellId, {
-  			action
-  		}),
+    	function isTarget(col: number, row: number): boolean {
+    		return grid.getLayoutCellId(col, row) === cellId
+    	}
 
-  		// paste value
-  		grid.listen(DG_EVENT_TYPE.PASTE_CELL, (e) => {
-  			if (e.multi) {
-  				// ignore multi cell values
-  				return;
-  			}
-  			const selectionRange = grid.selection.range;
-  			if (!cellEquals(selectionRange.start, selectionRange.end)) {
-  				// ignore multi paste values
-  				return;
-  			}
-  			if (!isTarget(e.col, e.row)) {
-  				return;
-  			}
+    	return [
+    		...bindCellClickAction(grid, cellId, {
+    			action,
+    			mouseOver: (e) => {
+    				if (isDisabledRecord(this.disabled, grid, e.row)) {
+    					return false
+    				}
+    				state.mouseActiveCell = {
+    					col: e.col,
+    					row: e.row
+    				}
+    				const range = grid.getCellRange(e.col, e.row)
+    				grid.invalidateCellRange(range)
+    				return true
+    			},
+    			mouseOut: (e) => {
+    				delete state.mouseActiveCell
+    				const range = grid.getCellRange(e.col, e.row)
+    				grid.invalidateCellRange(range)
+    			}
+    		}),
+    		...bindCellKeyAction(grid, cellId, {
+    			action
+    		}),
 
-  			const pasteValue = e.normalizeValue.trim();
-  			if (!toBoolean(pasteValue)) {
-  				return;
-  			}
-  			event.cancel(e.event);
+    		// paste value
+    		grid.listen(DG_EVENT_TYPE.PASTE_CELL, (e) => {
+    			if (e.multi) {
+    				// ignore multi cell values
+    				return
+    			}
+    			const selectionRange = grid.selection.range
+    			if (!cellEquals(selectionRange.start, selectionRange.end)) {
+    				// ignore multi paste values
+    				return
+    			}
+    			if (!isTarget(e.col, e.row)) {
+    				return
+    			}
 
-  			action({
-  				col: e.col,
-  				row: e.row
-  			});
-  		})
-  	];
-  }
+    			const pasteValue = e.normalizeValue.trim()
+    			if (!toBoolean(pasteValue)) {
+    				return
+    			}
+    			event.cancel(e.event)
 
-  onPasteCellRangeBox(grid: GridInternal<T>, cell: CellAddress, value: string): void {
-  	if (isReadOnlyRecord(this.readOnly, grid, cell.row) || isDisabledRecord(this.disabled, grid, cell.row)) {
-  		return;
-  	}
-  	const pasteValue = value.trim();
-  	if (!toBoolean(pasteValue)) {
-  		return;
-  	}
-  	this._action(grid, {
-  		col: cell.col,
-  		row: cell.row
-  	});
-  }
+    			action({
+    				col: e.col,
+    				row: e.row
+    			})
+    		})
+    	]
+    }
 
-  onDeleteCellRangeBox(): void {
-  	// noop
-  }
+    onPasteCellRangeBox(grid: GridInternal<T>, cell: CellAddress, value: string): void {
+    	if (isReadOnlyRecord(this.readOnly, grid, cell.row) || isDisabledRecord(this.disabled, grid, cell.row)) {
+    		return
+    	}
+    	const pasteValue = value.trim()
+    	if (!toBoolean(pasteValue)) {
+    		return
+    	}
+    	this._action(grid, {
+    		col: cell.col,
+    		row: cell.row
+    	})
+    }
 
-  private _action(grid: GridInternal<T>, cell: CellAddress): void {
-  	const state = grid[RADIO_COLUMN_STATE_ID]!;
-  	const range = grid.getCellRange(cell.col, cell.row);
-  	const cellKey = `${range.start.col}:${range.start.row}`;
+    onDeleteCellRangeBox(): void {
+    	// noop
+    }
 
-  	if (isReadOnlyRecord(this.readOnly, grid, cell.row) || isDisabledRecord(this.disabled, grid, cell.row) || state.block[cellKey]) {
-  		return;
-  	}
+    private _action(grid: GridInternal<T>, cell: CellAddress): void {
+    	const state = grid[RADIO_COLUMN_STATE_ID]!
+    	const range = grid.getCellRange(cell.col, cell.row)
+    	const cellKey = `${ range.start.col }:${ range.start.row }`
 
-  	grid.doGetCellValue(cell.col, cell.row, (value) => {
-  		if (toBoolean(value)) {
-  			return;
-  		}
-  		if (this._checkAction) {
-  			// User behavior
-  			const record = grid.getRowRecord(cell.row);
-  			this._checkAction(record, extend(cell, {grid}));
-  			return;
-  		}
-  		if (this._group) {
-  			// Backward compatibility
-  			const state = grid[RADIO_COLUMN_STATE_ID]!;
+    	if (isReadOnlyRecord(this.readOnly, grid, cell.row) || isDisabledRecord(this.disabled, grid, cell.row) || state.block[cellKey]) {
+    		return
+    	}
 
-  			const targets = this._group({grid, col: cell.col, row: cell.row});
-  			targets.forEach(({col, row}) => {
-  				const range = grid.getCellRange(col, row);
-  				const cellKey = `${range.start.col}:${range.start.row}`;
+    	grid.doGetCellValue(cell.col, cell.row, (value) => {
+    		if (toBoolean(value)) {
+    			return
+    		}
+    		if (this._checkAction) {
+    			// User behavior
+    			const record = grid.getRowRecord(cell.row)
+    			this._checkAction(record, extend(cell, { grid }))
+    			return
+    		}
+    		if (this._group) {
+    			// Backward compatibility
+    			const state = grid[RADIO_COLUMN_STATE_ID]!
 
-  				if (isReadOnlyRecord(this.readOnly, grid, cell.row) || isDisabledRecord(this.disabled, grid, cell.row) || state.block[cellKey]) {
-  					return;
-  				}
+    			const targets = this._group({ grid, col: cell.col, row: cell.row })
+    			targets.forEach(({ col, row }) => {
+    				const range = grid.getCellRange(col, row)
+    				const cellKey = `${ range.start.col }:${ range.start.row }`
 
-  				actionCell(grid, col, row, col === cell.col && row === cell.row);
-  			});
-  			return;
-  		}
+    				if (isReadOnlyRecord(this.readOnly, grid, cell.row) || isDisabledRecord(this.disabled, grid, cell.row) || state.block[cellKey]) {
+    					return
+    				}
 
-  		// default behavior
-  		const field = grid.getField(cell.col, cell.row)!;
-  		const recordStartRow = grid.getRecordStartRowByRecordIndex(grid.getRecordIndexByRow(cell.row));
+    				actionCell(grid, col, row, col === cell.col && row === cell.row)
+    			})
+    			return
+    		}
 
-  		/** Original DataSource */
-  		const {dataSource} = grid.dataSource;
+    		// default behavior
+    		const field = grid.getField(cell.col, cell.row)!
+    		const recordStartRow = grid.getRecordStartRowByRecordIndex(grid.getRecordIndexByRow(cell.row))
 
-  		const girdRecords = getAllRecordsFromGrid(grid);
+    		/** Original DataSource */
+    		const { dataSource } = grid.dataSource
 
-  		for (let index = 0; index < dataSource.length; index++) {
-  			const record = dataSource.get(index);
-  			const showData = girdRecords.find((d) => d.record === record);
-  			if (showData) {
-  				actionCell(grid, cell.col, showData.row, showData.row === recordStartRow);
-  			} else {
-  				// Hidden record
-  				then(dataSource.getField(index, field), (value) => {
-  					if (!toBoolean(value)) {
-  						return;
-  					}
-  					dataSource.setField(index, field, toggleValue(value));
-  				});
-  			}
-  		}
-  	});
-  }
+    		const girdRecords = getAllRecordsFromGrid(grid)
+
+    		for (let index = 0; index < dataSource.length; index++) {
+    			const record = dataSource.get(index)
+    			const showData = girdRecords.find((d) => d.record === record)
+    			if (showData) {
+    				actionCell(grid, cell.col, showData.row, showData.row === recordStartRow)
+    			} else {
+    				// Hidden record
+    				then(dataSource.getField(index, field), (value) => {
+    					if (!toBoolean(value)) {
+    						return
+    					}
+    					dataSource.setField(index, field, toggleValue(value))
+    				})
+    			}
+    		}
+    	})
+    }
 }
 
 function getAllRecordsFromGrid<T>(grid: GridInternal<T>) {
-	const result = [];
-	const {rowCount, recordRowCount} = grid;
+	const result = []
+	const { rowCount, recordRowCount } = grid
 	for (let targetRow = grid.frozenRowCount; targetRow < rowCount; targetRow += recordRowCount) {
-		const record = grid.getRowRecord(targetRow);
-		result.push({row: targetRow, record});
+		const record = grid.getRowRecord(targetRow)
+		result.push({ row: targetRow, record })
 	}
-	return result;
+	return result
 }
 
 function actionCell<T>(grid: GridInternal<T>, col: number, row: number, flag: boolean): void {
 	grid.doGetCellValue(col, row, (value) => {
 		if (toBoolean(value) === flag) {
-			return;
+			return
 		}
 
-		const state = grid[RADIO_COLUMN_STATE_ID]!;
-		const range = grid.getCellRange(col, row);
-		const cellKey = `${range.start.col}:${range.start.row}`;
-		const ret = grid.doChangeValue(col, row, toggleValue);
+		const state = grid[RADIO_COLUMN_STATE_ID]!
+		const range = grid.getCellRange(col, row)
+		const cellKey = `${ range.start.col }:${ range.start.row }`
+		const ret = grid.doChangeValue(col, row, toggleValue)
 		if (ret) {
 			const onChange = (): void => {
 				// checkbox animation
 				animate(200, (point) => {
 					if (point === 1) {
-						delete state.elapsed[cellKey];
+						delete state.elapsed[cellKey]
 					} else {
-						state.elapsed[cellKey] = point;
+						state.elapsed[cellKey] = point
 					}
-					grid.invalidateCellRange(range);
-				});
-			};
+					grid.invalidateCellRange(range)
+				})
+			}
 			if (isPromise(ret)) {
-				state.block[cellKey] = true;
+				state.block[cellKey] = true
 				ret.then(() => {
-					delete state.block[cellKey];
-					onChange();
-				});
+					delete state.block[cellKey]
+					onChange()
+				})
 			} else {
-				onChange();
+				onChange()
 			}
 		}
-	});
+	})
 }

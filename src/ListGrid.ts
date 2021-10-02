@@ -1248,7 +1248,8 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     }
 
     doSetPasteValue(text: string, test?: (data: SetPasteValueTestData<T>) => boolean): void {
-    	_onRangePaste.call<ListGrid<T>, [ string, (data: SetPasteValueTestData<T>) => boolean ], void>(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
+    	// _onRangePaste.call<ListGrid<T>, [ string, (data: SetPasteValueTestData<T>) => boolean ], void>(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
+    	_onRangePaste.call(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1303,7 +1304,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     			return
     		}
     		event.cancel(e.event)
-    		_onRangePaste.call<ListGrid<T>, [ string ], void>(this, e.normalizeValue)
+    		_onRangePaste.call(this, e.normalizeValue)
     	})
     	grid.listen(LG_EVENT_TYPE.DELETE_CELL, (e) => {
     		const { start } = this.selection.range
@@ -1313,7 +1314,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     			return
     		}
     		event.cancel(e.event)
-    		_onRangeDelete.call<ListGrid<T>, [], void>(this)
+    		_onRangeDelete.call(this)
     	})
     }
 

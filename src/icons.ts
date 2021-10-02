@@ -39,17 +39,17 @@
 //     }
 // }
 //
-import type {IconDefine} from './ts-types';
-import {extend} from './internal/utils';
-import {icons as plugins} from './plugins/icons';
-import add from './icons/ic_add_48px.svg';
-import edit from './icons/ic_edit_48px.svg';
-import arrowDownward from './icons/ic_arrow_downward_48px.svg';
-import arrowUpward from './icons/ic_arrow_upward_48px.svg';
-import star from './icons/ic_star_24px.svg';
-import starBorder from './icons/ic_star_border_24px.svg';
-import starHalf from './icons/ic_star_half_24px.svg';
-import svgToIcon from './tools/svgToIcon';
+import type { IconDefine } from './ts-types'
+import { extend } from './internal/utils'
+import { icons as plugins } from './plugins/icons'
+import add from './icons/ic_add_48px.svg'
+import edit from './icons/ic_edit_48px.svg'
+import arrowDownward from './icons/ic_arrow_downward_48px.svg'
+import arrowUpward from './icons/ic_arrow_upward_48px.svg'
+import star from './icons/ic_star_24px.svg'
+import starBorder from './icons/ic_star_border_24px.svg'
+import starHalf from './icons/ic_star_half_24px.svg'
+import svgToIcon from './tools/svgToIcon'
 
 const builtins = {
 	add: svgToIcon(add),
@@ -59,9 +59,9 @@ const builtins = {
 	star: svgToIcon(star),
 	starBorder: svgToIcon(starBorder),
 	starHalf: svgToIcon(starHalf)
-};
+}
 export const svgIcons = {
 	get(): { [key: string]: IconDefine } {
-		return extend(builtins, plugins);
+		return extend(builtins, plugins)
 	}
-};
+}
