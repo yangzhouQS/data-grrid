@@ -166,8 +166,10 @@ function normarize(iconProps: SimpleColumnIconOption): SimpleColumnIconOption {
 export function toNormarizeArray(iconProps: ColumnIconOption<unknown> | ColumnIconOption<unknown>[]): SimpleColumnIconOption[] {
 	const icons = toSimpleArray(iconProps)
 	if (!icons) {
+		// @ts-ignore
 		return icons
 	}
+	// @ts-ignore
 	return icons.map((icon) => normarize(icon))
 }
 
