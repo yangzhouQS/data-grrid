@@ -140,9 +140,8 @@ module.exports = {
 			'error',
 			'never'
 		],
-		'spaced-comment': 'off', // TODO
+		'spaced-comment': 'off',
 		'wrap-regex': 'off',
-		//
 		'multiline-comment-style': [
 			'error',
 			'separate-lines'

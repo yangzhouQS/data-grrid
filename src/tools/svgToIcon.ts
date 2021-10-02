@@ -121,7 +121,7 @@ function glyphToJSON(
 ) {
 	const svg = new Svg(svgCode)
 
-	function findGlyph(): any {
+	function findGlyph() {
 		if (opt.glyphName) {
 			return svg.findGlyph(opt.glyphName)
 		} else if (opt.unicode) {

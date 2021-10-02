@@ -7,11 +7,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const {
-  version,
-  name,
-  license,
-  repository,
-  author
+	version,
+	name,
+	license,
+	repository,
+	author
 } = getPackageJson('version', 'name', 'license', 'repository', 'author');
 
 const banner = `
@@ -24,78 +24,78 @@ const banner = `
 `;
 
 module.exports = {
-  mode: 'production',
-  devtool: 'source-map',
-  entry: './src/main.ts',
-  output: {
-    filename: 'index.js',
-    path: path.resolve(__dirname, 'dist'),
-    library: 'MyLibrary',
-    libraryTarget: 'umd',
-    clean: true
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({ extractComments: false }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessorOptions: {
-          map: {
-            inline: false
-          }
-        }
-      })
-    ]
-  },
-  devServer: {
-    open: true,
-    hot: true,
-    host: 'localhost',
-    static: path.join(__dirname, 'demo'),
-    port: 9000
-  },
-  module: {
-    rules: [
-      // {
-      //   test: /\.(m|j|t)s$/,
-      //   exclude: /(node_modules|bower_components)/,
-      //   use: {
-      //     loader: 'babel-loader'
-      //   }
-      // },
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true
-            }
-          }
-        ],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.(sa|sc|c)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { sourceMap: true } }
-        ]
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
-        use: ['url-loader']
-      }
-    ]
-  },
-  plugins: [
-    new PrettierPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'css/index.css'
-    }),
-    new webpack.BannerPlugin(banner)
-  ],
-  resolve: {
-    extensions: ['.ts', '.js', '.json']
-  }
+	mode: 'production',
+	devtool: 'source-map',
+	entry: './src/main.ts',
+	output: {
+		filename: 'index.js',
+		path: path.resolve(__dirname, 'dist'),
+		library: 'MyLibrary',
+		libraryTarget: 'umd',
+		clean: true
+	},
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new TerserPlugin({ extractComments: false }),
+			new OptimizeCSSAssetsPlugin({
+				cssProcessorOptions: {
+					map: {
+						inline: false
+					}
+				}
+			})
+		]
+	},
+	devServer: {
+		open: true,
+		hot: true,
+		host: 'localhost',
+		static: path.join(__dirname, 'demo'),
+		port: 9000
+	},
+	module: {
+		rules: [
+			// {
+			//   test: /\.(m|j|t)s$/,
+			//   exclude: /(node_modules|bower_components)/,
+			//   use: {
+			//     loader: 'babel-loader'
+			//   }
+			// },
+			{
+				test: /\.tsx?$/,
+				use: [
+					{
+						loader: 'ts-loader',
+						options: {
+							transpileOnly: true
+						}
+					}
+				],
+				exclude: /node_modules/
+			},
+			{
+				test: /\.(sa|sc|c)ss$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					{ loader: 'css-loader', options: { sourceMap: true } }
+				]
+			},
+			{
+				test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
+				use: ['url-loader']
+			}
+		]
+	},
+	plugins: [
+		new PrettierPlugin(),
+		new MiniCssExtractPlugin({
+			filename: 'css/index.css'
+		}),
+		new webpack.BannerPlugin(banner)
+	],
+	resolve: {
+		extensions: ['.ts', '.js', '.json']
+	}
 };

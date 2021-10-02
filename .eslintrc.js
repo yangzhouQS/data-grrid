@@ -22,7 +22,6 @@ module.exports = {
 		'no-prototype-builtins': 'off',
 		'no-template-curly-in-string': 'off',
 		'class-methods-use-this': 'off',
-		'consistent-return': 1,
 		'guard-for-in': 'off',
 		'no-case-declarations': 'off',
 		'no-else-return': 'off',
@@ -36,7 +35,6 @@ module.exports = {
 		'no-loop-func': 'off',
 		'no-magic-numbers': 'off',
 		'no-param-reassign': 'off',
-		'no-warning-comments': 'warn',
 		'vars-on-top': 'off',
 		'wrap-iife': ['error', 'any'],
 		'yoda': [
