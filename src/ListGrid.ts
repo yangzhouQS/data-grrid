@@ -30,7 +30,7 @@ import type {
 	SortState,
 	ThemeDefine
 } from './ts-types'
-import { ColumnDefine, GroupHeaderDefine, HeaderDefine, HeadersDefine, MultiLayoutMap, SimpleHeaderLayoutMap } from './list-grid/layout-map'
+import { ColumnDefine, HeaderDefine, HeadersDefine, MultiLayoutMap, SimpleHeaderLayoutMap } from './list-grid/layout-map'
 import type { DrawGridConstructorOptions, DrawGridProtected } from './core/DrawGrid'
 import type { LayoutDefine, LayoutMapAPI } from './list-grid/layout-map'
 import { MessageHandler, hasMessage } from './columns/message/MessageHandler'
@@ -269,7 +269,13 @@ function _onDrawValue<T>(
 		style,
 		drawCellBase,
 		drawCellBg,
-		drawCellBorder
+		drawCellBorder,
+		getCell(): CellAddress {
+			return {
+				col,
+				row
+			}
+		}
 	}
 
 	return draw(cellValue, info, context, grid)
@@ -623,6 +629,7 @@ function _onRangeDelete<T>(this: ListGrid<T>): void {
 
 	this.invalidateCellRange(selectionRange)
 }
+
 //end private methods
 
 
@@ -1193,6 +1200,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     		// Depending on the FilterDataSource, the rowCount may be reduced.
     		return undefined
     	}
+
     	return _onDrawValue(this, cellValue, context, { col, row }, style, draw)
     }
 
@@ -1259,7 +1267,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
 
     doSetPasteValue(text: string, test?: (data: SetPasteValueTestData<T>) => boolean): void {
     	// _onRangePaste.call<ListGrid<T>, [ string, (data: SetPasteValueTestData<T>) => boolean ], void>(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
-    	_onRangePaste.call(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
+    	_onRangePaste.call(this as any, text, test as (data: SetPasteValueTestData<T>) => boolean)
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

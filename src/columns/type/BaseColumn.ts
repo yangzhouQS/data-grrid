@@ -25,7 +25,14 @@ function getFadeinState<T>(grid: GridInternal<T>): ColumnFadeinState {
 	return state
 }
 
-function _generateFadeinPointAction<T>(grid: ListGridAPI<T>, col: number, row: number, context: CellContext, drawInternal: () => void, drawCellBase: () => void): (point: number) => void {
+function _generateFadeinPointAction<T>(
+		grid: ListGridAPI<T>,
+		col: number,
+		row: number,
+		context: CellContext,
+		drawInternal: () => void,
+		drawCellBase: () => void
+): (point: number) => void {
 	return (point: number): void => {
 		const state = getFadeinState(grid)
 		const stateKey = `${ row }:${ col }`
@@ -169,6 +176,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     				const actStyle = styleContents.of(style, record, this.StyleClass)
     				// 绘制内容
     				// this.drawInternal(this.convertInternal(val), currentContext, actStyle, helper, grid, info)
+    				debugger
     				this.drawInternal(
     						this.transformRecordBefore(cellValue, getCell(), grid),
     						currentContext,
@@ -195,7 +203,15 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     		})
     	} else {
     		const actStyle = styleContents.of(style, record, this.StyleClass)
-    		this.drawInternal(this.convertInternal(cellValue), context, actStyle, helper, grid, info)
+    		// this.drawInternal(this.convertInternal(cellValue), context, actStyle, helper, grid, info)
+    		this.drawInternal(
+    				this.transformRecordBefore(cellValue, getCell(), grid),
+    				context,
+    				actStyle,
+    				helper,
+    				grid,
+    				info
+    		)
     		this.drawMessageInternal(info.getMessage(), context, actStyle, helper, grid, info)
     		//フェードインの場合透過するため背景を透過で上書き
     		const { col, row } = context

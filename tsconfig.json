@@ -20,7 +20,7 @@
     "strictBindCallApply": true,
     "noImplicitAny": true,
     // 忽略 this 的类型检查, Raise error on this expressions with an implied any type.
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "removeComments": false,

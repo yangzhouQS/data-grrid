@@ -76,6 +76,9 @@ const grid = new dataGrid.ListGrid({
 			caption: '序号',
 			width: 85,
 			columnType: new dataGrid.columns.type.Column({
+				transformRecord: function(value, displayValue, cell, grid,) {
+					return cell.row - grid.frozenRowCount + 1;
+				}
 			})
 		},
 		{ field: 'id', caption: 'ID', width: 100 },
