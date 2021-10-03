@@ -32,6 +32,10 @@ export function get(name?: string): '$$$$private symbol$$$$' {
 	return (name || '_') as any
 }
 
+export function getThemeSymbol(): '$$$$theme_symbol$$$$' {
+	return get('protected.theme') as any
+}
+
 export function getDrawGridSymbol(): '$$$$draw_grid_symbol$$$$' {
 	return get('protected.draw_grid') as any
 }
