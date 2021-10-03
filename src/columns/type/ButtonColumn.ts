@@ -31,7 +31,7 @@ export class ButtonColumn<T> extends Column<T> {
     }
 
     clone(): ButtonColumn<T> {
-    	return new ButtonColumn(this)
+    	return new ButtonColumn(this as any)
     }
 
     convertInternal(value: unknown): string {

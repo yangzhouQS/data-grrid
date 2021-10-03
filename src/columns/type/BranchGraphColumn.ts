@@ -611,7 +611,7 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
     }
 
     clone(): BranchGraphColumn<T> {
-    	return new BranchGraphColumn(this)
+    	return new BranchGraphColumn(this as any)
     }
 
     drawInternal(

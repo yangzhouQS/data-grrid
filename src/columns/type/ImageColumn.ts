@@ -46,7 +46,7 @@ export class ImageColumn<T> extends BaseColumn<T, HTMLImageElement> {
 	}
 
 	clone(): ImageColumn<T> {
-		return new ImageColumn(this)
+		return new ImageColumn(this as any)
 	}
 
 	drawInternal(value: HTMLImageElement, context: CellContext, style: ImageStyle, helper: GridCanvasHelperAPI, _grid: ListGridAPI<T>, { drawCellBase }: DrawCellInfo<T>): void {

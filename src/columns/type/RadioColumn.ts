@@ -13,7 +13,7 @@ export class RadioColumn<T> extends BaseColumn<T, boolean> {
 	}
 
 	clone(): RadioColumn<T> {
-		return new RadioColumn(this)
+		return new RadioColumn(this as any)
 	}
 
 	convertInternal(value: unknown): boolean {

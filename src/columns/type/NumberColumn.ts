@@ -25,7 +25,7 @@ export class NumberColumn<T> extends Column<T> {
     }
 
     clone(): NumberColumn<T> {
-    	return new NumberColumn(this)
+    	return new NumberColumn(this as any)
     }
 
     get format(): Intl.NumberFormat | undefined {

@@ -13,7 +13,7 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
 	}
 
 	clone(): CheckColumn<T> {
-		return new CheckColumn(this)
+		return new CheckColumn(this as any)
 	}
 
 	convertInternal(value: unknown): boolean {

@@ -40,7 +40,7 @@ export class IconColumn<T> extends Column<T> {
     }
 
     clone(): IconColumn<T> {
-    	return new IconColumn(this)
+    	return new IconColumn(this as IconColumnOption)
     }
 
     drawInternal(value: string, context: CellContext, style: IconStyle, helper: GridCanvasHelperAPI, grid: ListGridAPI<T>, info: DrawCellInfo<T>): void {

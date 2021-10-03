@@ -18,7 +18,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
     }
 
     clone(): MenuColumn<T> {
-    	return new MenuColumn(this)
+    	return new MenuColumn(this as MenuColumnOption)
     }
 
     get options(): SimpleColumnMenuItemOption[] {

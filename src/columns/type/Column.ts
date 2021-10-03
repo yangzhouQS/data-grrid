@@ -6,7 +6,7 @@ import { Style } from '../style/Style'
 
 export class Column<T> extends BaseColumn<T, string> {
 
-	constructor(options: BaseColumnOption) {
+	constructor(options: BaseColumnOption = {}) {
 		super(options)
 	}
 
@@ -15,10 +15,17 @@ export class Column<T> extends BaseColumn<T, string> {
 	}
 
 	public clone(): Column<T> {
-		return new Column(this)
+		return new Column(this as BaseColumnOption)
 	}
 
-	drawInternal(value: string, context: CellContext, style: Style, helper: GridCanvasHelperAPI, _grid: ListGridAPI<T>, { drawCellBase, getIcon }: DrawCellInfo<T>): void {
+	drawInternal(
+			value: string,
+			context: CellContext,
+			style: Style,
+			helper: GridCanvasHelperAPI,
+			_grid: ListGridAPI<T>,
+			{ drawCellBase, getIcon }: DrawCellInfo<T>
+	): void {
 		const { textAlign, textBaseline, color, font, bgColor, padding, textOverflow } = style
 		if (bgColor) {
 			drawCellBase({

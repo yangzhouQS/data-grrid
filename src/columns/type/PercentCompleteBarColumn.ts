@@ -25,7 +25,7 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     }
 
     clone(): PercentCompleteBarColumn<T> {
-    	return new PercentCompleteBarColumn(this)
+    	return new PercentCompleteBarColumn(this  as any)
     }
 
     drawInternal(value: string, context: CellContext, style: PercentCompleteBarStyle, helper: GridCanvasHelperAPI, grid: ListGridAPI<T>, info: DrawCellInfo<T>): void {
