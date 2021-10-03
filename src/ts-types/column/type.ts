@@ -1,7 +1,9 @@
 import type { ColumnMenuItemOptions } from '../define'
+import { TransformRecord } from '../grid-engine'
 
 export interface BaseColumnOption {
     fadeinWhenCallbackInPromise?: boolean | null;
+    transformRecord?:TransformRecord
 }
 
 export interface NumberColumnOption extends BaseColumnOption {

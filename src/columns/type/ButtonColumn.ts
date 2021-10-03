@@ -38,7 +38,11 @@ export class ButtonColumn<T> extends Column<T> {
     	return this._caption || super.convertInternal(value)
     }
 
-    drawInternal(value: string, context: CellContext, style: ButtonStyle, helper: GridCanvasHelperAPI, grid: GridInternal<T>, { drawCellBase, getIcon }: DrawCellInfo<T>): void {
+    drawInternal(
+    		value: string, context: CellContext,
+    		style: ButtonStyle, helper: GridCanvasHelperAPI,
+    		grid: GridInternal<T>, { drawCellBase, getIcon }: DrawCellInfo<T>
+    ): void {
     	const { textAlign, textBaseline, bgColor, color, buttonBgColor, font, padding, textOverflow } = style
     	if (bgColor) {
     		drawCellBase({

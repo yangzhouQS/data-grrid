@@ -23,6 +23,8 @@ export interface DrawCellInfo<T> {
     drawCellBg(arg?: { bgColor?: ColorPropertyDefine }): void;
 
     drawCellBorder(): void;
+
+    getCell(): CellAddress
 }
 
 export type ColumnFadeinState = {

@@ -1,5 +1,5 @@
 import * as styleContents from '../style'
-import type { BaseColumnOption, CellAddress, CellContext, ColumnTypeAPI, EventListenerId, GridCanvasHelperAPI, LayoutObjectId, ListGridAPI, MaybePromise, Message } from '../../ts-types'
+import type { BaseColumnOption, CellAddress, CellContext, ColumnTypeAPI, EventListenerId, GridCanvasHelperAPI, LayoutObjectId, ListGridAPI, MaybePromise, Message, TransformRecord } from '../../ts-types'
 import type { ColumnFadeinState, DrawCellInfo, GridInternal } from '../../ts-types-internal'
 import { isPromise, obj } from '../../internal/utils'
 import { BaseStyle } from '../style/BaseStyle'
@@ -79,14 +79,24 @@ const fadeinMgr = {
 	}
 }
 
+/**
+ * 所有columnType基类
+ */
 export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     private _fadeinWhenCallbackInPromise: boolean | null
+
+    private _transformRecord?: TransformRecord
 
 
     constructor(option: BaseColumnOption = {}) {
     	this.onDrawCell = this.onDrawCell.bind(this) //スコープを固定させる
+    	this._transformRecord = option.transformRecord
     	//Promiseのcallbackでフェードイン表示する
     	this._fadeinWhenCallbackInPromise = option.fadeinWhenCallbackInPromise || false
+    }
+
+    public get transformRecord(): TransformRecord | unknown {
+    	return this._transformRecord
     }
 
     get fadeinWhenCallbackInPromise(): boolean | undefined | null {
@@ -97,8 +107,32 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     	return BaseStyle
     }
 
+    /**
+     * 数据格式转换
+     * @param value
+     * @param cell
+     * @param grid
+     * @protected
+     */
+    protected transformRecordBefore(value: unknown, cell: CellAddress, grid: ListGridAPI<T>): V {
+    	let displayValue = this.convertInternal(value)
+    	if (this.transformRecord) {
+    		// @ts-ignore
+    		displayValue = this.transformRecord(value, displayValue, cell, grid)
+    	}
+    	return displayValue
+    }
+
+    /**
+     * 单元格绘制内容
+     * @param cellValue
+     * @param info
+     * @param context
+     * @param grid
+     */
     onDrawCell(cellValue: MaybePromise<unknown>, info: DrawCellInfo<T>, context: CellContext, grid: ListGridAPI<T>): void | Promise<void> {
-    	const { style, getRecord, drawCellBase } = info
+    	// 单元格绘制相关信息
+    	const { style, getRecord, drawCellBase, getCell } = info
     	const helper = grid.getGridCanvasHelper()
     	drawCellBase()
 
@@ -133,7 +167,16 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     				}
 
     				const actStyle = styleContents.of(style, record, this.StyleClass)
-    				this.drawInternal(this.convertInternal(val), currentContext, actStyle, helper, grid, info)
+    				// 绘制内容
+    				// this.drawInternal(this.convertInternal(val), currentContext, actStyle, helper, grid, info)
+    				this.drawInternal(
+    						this.transformRecordBefore(cellValue, getCell(), grid),
+    						currentContext,
+    						actStyle,
+    						helper,
+    						grid,
+    						info
+    				)
     				this.drawMessageInternal(message, currentContext, actStyle, helper, grid, info)
     			}
 
@@ -188,7 +231,6 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     }
 
     getCopyCellValue(value: V, _grid: ListGridAPI<T>, _cell: CellAddress): string {
-    	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     	return value as any
     }
 }
