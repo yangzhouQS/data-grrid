@@ -27,6 +27,15 @@ import {
 import {
 	TYPES,
 	ButtonColumn,
+	NumberColumn,
+	CheckColumn,
+	MenuColumn,
+	ImageColumn,
+	PercentCompleteBarColumn,
+	IconColumn,
+	MultilineTextColumn,
+	BranchGraphColumn,
+	RadioColumn,
 	of as typeOf
 } from './columns/type'
 
@@ -36,6 +45,15 @@ const style = {
 const type = {
 	TYPES,
 	ButtonColumn,
+	NumberColumn,
+	CheckColumn,
+	MenuColumn,
+	ImageColumn,
+	PercentCompleteBarColumn,
+	IconColumn,
+	MultilineTextColumn,
+	BranchGraphColumn,
+	RadioColumn,
 	of: typeOf
 }
 const action = {
