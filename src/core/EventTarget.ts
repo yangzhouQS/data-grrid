@@ -3,10 +3,10 @@ import { each } from '../internal/utils'
 import { get as getSymbol } from '../internal/symbolManager'
 
 //private symbol
-/** @private */
+
 const _ = getSymbol()
 
-/** @private */
+
 let nextId = 1
 
 /**

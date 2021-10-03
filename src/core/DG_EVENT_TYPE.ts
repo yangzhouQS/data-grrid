@@ -55,8 +55,6 @@ export interface DrawGridEvents {
 
 /**
  * DrawGrid event types
- * @classdesc cheetahGrid.core.EVENT_TYPE
- * @memberof cheetahGrid.core
  */
 export const DG_EVENT_TYPE: DrawGridEvents = {
 	CLICK_CELL: 'click_cell',

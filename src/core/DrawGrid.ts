@@ -28,65 +28,63 @@ import { Rect } from '../internal/Rect'
 import { Scrollable } from '../internal/Scrollable'
 import { getFontSize } from '../internal/canvases'
 //protected symbol
-import { getProtectedSymbol } from '../internal/symbolManager'
+import { getDrawGridSymbol, getProtectedSymbol } from '../internal/symbolManager'
 import { parsePasteRangeBoxValues } from '../internal/paste-utils'
 
 const {
-	/** @private */
+
 	isTouchEvent,
-	/** @private */
+
 	getMouseButtons,
-	/** @private */
+
 	getKeyCode,
-	/** @private */
+
 	cancel: cancelEvent
 } = event
-/** @private */
-const _ = getProtectedSymbol()
 
-/** @private */
+const _ = getDrawGridSymbol()
+
+
 function createRootElement(): HTMLElement {
 	const element = document.createElement('div')
 	element.classList.add('cheetah-grid')
 	return element
 }
 
-/** @private */
+
 const KEY_BS = 8
-/** @private */
+
 const KEY_TAB = 9
-/** @private */
+
 const KEY_ENTER = 13
-/** @private */
+
 const KEY_END = 35
-/** @private */
+
 const KEY_HOME = 36
-/** @private */
+
 const KEY_LEFT = 37
-/** @private */
+
 const KEY_UP = 38
-/** @private */
+
 const KEY_RIGHT = 39
-/** @private */
+
 const KEY_DOWN = 40
-/** @private */
+
 const KEY_DEL = 46
-/** @private */
+
 const KEY_ALPHA_A = 65
-/** @private */
+
 const KEY_ALPHA_C = 67
-/** @private */
+
 const KEY_ALPHA_V = 86
 
-//private methods
-/** @private */
 function _vibrate(e: TouchEvent | MouseEvent): void {
 	if (navigator.vibrate && isTouchEvent(e)) {
 		navigator.vibrate(50)
 	}
 }
 
-/** @private */
+
 function _getTargetRowAt(this: DrawGrid, absoluteY: number): { row: number; top: number } | null {
 	const internal = this.getTargetRowAtInternal(absoluteY)
 	// if (internal != null) {
@@ -147,7 +145,7 @@ function _getTargetRowAt(this: DrawGrid, absoluteY: number): { row: number; top:
 	}
 }
 
-/** @private */
+
 function _getTargetColAt(
 		grid: DrawGrid,
 		absoluteX: number
@@ -171,7 +169,7 @@ function _getTargetColAt(
 	return null
 }
 
-/** @private */
+
 function _getTargetFrozenRowAt(
 		grid: DrawGrid,
 		absoluteY: number
@@ -198,7 +196,7 @@ function _getTargetFrozenRowAt(
 	return null
 }
 
-/** @private */
+
 function _getTargetFrozenColAt(
 		grid: DrawGrid,
 		absoluteX: number
@@ -225,7 +223,7 @@ function _getTargetFrozenColAt(
 	return null
 }
 
-/** @private */
+
 function _getFrozenRowsRect(grid: DrawGrid): Rect | null {
 	if (!grid[_].frozenRowCount) {
 		return null
@@ -239,7 +237,7 @@ function _getFrozenRowsRect(grid: DrawGrid): Rect | null {
 	return new Rect(grid[_].scroll.left, top, grid[_].canvas.width, height)
 }
 
-/** @private */
+
 function _getFrozenColsRect(grid: DrawGrid): Rect | null {
 	if (!grid[_].frozenColCount) {
 		return null
@@ -253,7 +251,7 @@ function _getFrozenColsRect(grid: DrawGrid): Rect | null {
 	return new Rect(left, grid[_].scroll.top, width, grid[_].canvas.height)
 }
 
-/** @private */
+
 function _getCellDrawing(grid: DrawGrid, col: number, row: number): DrawCellContext | null {
 	if (!grid[_].drawCells[row]) {
 		return null
@@ -261,7 +259,7 @@ function _getCellDrawing(grid: DrawGrid, col: number, row: number): DrawCellCont
 	return grid[_].drawCells[row][col]
 }
 
-/** @private */
+
 function _putCellDrawing(grid: DrawGrid, col: number, row: number, context: DrawCellContext): void {
 	if (!grid[_].drawCells[row]) {
 		grid[_].drawCells[row] = {}
@@ -269,7 +267,7 @@ function _putCellDrawing(grid: DrawGrid, col: number, row: number, context: Draw
 	grid[_].drawCells[row][col] = context
 }
 
-/** @private */
+
 function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
 	if (!grid[_].drawCells[row]) {
 		return
@@ -280,7 +278,7 @@ function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
 	}
 }
 
-/** @private */
+
 function _drawCell(
 		this: DrawGrid,
 		ctx: CanvasRenderingContext2D,
@@ -326,7 +324,7 @@ function _drawCell(
 	}
 }
 
-/** @private */
+
 function _drawRow(
 		grid: DrawGrid,
 		ctx: CanvasRenderingContext2D,
@@ -388,12 +386,12 @@ function _drawRow(
 	drawOuter(colCount - 1, absoluteLeft)
 }
 
-/** @private */
+
 function _getInitContext(this: DrawGrid): CanvasRenderingContext2D {
 	return this._getInitContext()
 }
 
-/** @private */
+
 function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 	const visibleRect = _getVisibleRect(grid)
 	const { rowCount } = grid[_]
@@ -466,18 +464,18 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 	drawLayers.draw(ctx)
 }
 
-/** @private */
+
 function _toPxWidth(grid: DrawGrid, width: string | number): number {
 	return Math.round(calc.toPx(width, grid[_].calcWidthContext))
 }
 
-/** @private */
+
 function _adjustColWidth(grid: DrawGrid, col: number, orgWidth: number): number {
 	const limits = _getColWidthLimits(grid, col)
 	return Math.max(_applyColWidthLimits(limits, orgWidth), 0)
 }
 
-/** @private */
+
 function _applyColWidthLimits(limits: { min?: number; max?: number } | void | null, orgWidth: number): number {
 	if (!limits) {
 		return orgWidth
@@ -661,15 +659,15 @@ function _colWidthDefineToPxWidth(grid: DrawGrid, width: string | number): numbe
 	return _toPxWidth(grid, width)
 }
 
-/** @private */
+
 function _getColWidth(grid: DrawGrid, col: number): number {
 	const width = _getColWidthDefine(grid, col)
 	return _adjustColWidth(grid, col, _colWidthDefineToPxWidth(grid, width))
 }
 
-/** @private */
+
 function _setColWidth(grid: DrawGrid, col: number, width: string | number): void {
-	grid[_].colWidthsMap.put(col, width)
+	this[_].colWidthsMap.put(col, width)
 }
 
 /**
@@ -688,7 +686,7 @@ function _storeAutoColWidthExprs(grid: DrawGrid): void {
 	}
 }
 
-/** @private */
+
 function _getColsWidth(grid: DrawGrid, startCol: number, endCol: number): number {
 	const defaultColPxWidth = _colWidthDefineToPxWidth(grid, grid.defaultColWidth)
 	const colCount = endCol - startCol + 1
@@ -708,7 +706,7 @@ function _getColsWidth(grid: DrawGrid, startCol: number, endCol: number): number
 	return w
 }
 
-/** @private */
+
 function _getRowHeight(this: DrawGrid, row: number): number {
 	const internal = this.getRowHeightInternal(row)
 	if (internal != null) {
@@ -721,12 +719,12 @@ function _getRowHeight(this: DrawGrid, row: number): number {
 	return this[_].defaultRowHeight
 }
 
-/** @private */
+
 function _setRowHeight(grid: DrawGrid, row: number, height: number): void {
 	grid[_].rowHeightsMap.put(row, height)
 }
 
-/** @private */
+
 function _getRowsHeight(this: DrawGrid, startRow: number, endRow: number): number {
 	const internal = this.getRowsHeightInternal(startRow, endRow)
 	if (internal != null) {
@@ -740,12 +738,12 @@ function _getRowsHeight(this: DrawGrid, startRow: number, endRow: number): numbe
 	return h
 }
 
-/** @private */
+
 function _getScrollWidth(grid: DrawGrid): number {
 	return _getColsWidth(grid, 0, grid[_].colCount - 1)
 }
 
-/** @private */
+
 function _getScrollHeight(this: DrawGrid, row?: number): number {
 	const internal = this.getScrollHeightInternal(row)
 	if (internal != null) {
@@ -758,7 +756,7 @@ function _getScrollHeight(this: DrawGrid, row?: number): number {
 	return h
 }
 
-/** @private */
+
 function _onScroll(grid: DrawGrid, _e: Event): void {
 	const lastLeft = grid[_].scroll.left
 	const lastTop = grid[_].scroll.top
@@ -829,7 +827,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
 	}
 }
 
-/** @private */
+
 // eslint-disable-next-line complexity
 function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
 	const { shiftKey } = e
@@ -975,7 +973,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
 	}
 }
 
-/** @private */
+
 function _moveFocusCell(this: DrawGrid, col: number, row: number, shiftKey: boolean): void {
 	const offset = this.getOffsetInvalidateCells()
 
@@ -1008,7 +1006,7 @@ function _moveFocusCell(this: DrawGrid, col: number, row: number, shiftKey: bool
 	}
 }
 
-/** @private */
+
 function _updatedSelection(this: DrawGrid): void {
 	const { focusControl } = this[_]
 	const { col: selCol, row: selRow } = this[_].selection.select
@@ -1031,7 +1029,7 @@ function _updatedSelection(this: DrawGrid): void {
 	}
 }
 
-/** @private */
+
 function _getMouseAbstractPoint(grid: DrawGrid, evt: TouchEvent | MouseEvent): { x: number; y: number } | null {
 	let e: MouseEvent | Touch
 	if (isTouchEvent(evt)) {
@@ -1053,7 +1051,7 @@ function _getMouseAbstractPoint(grid: DrawGrid, evt: TouchEvent | MouseEvent): {
 	return { x, y }
 }
 
-/** @private */
+
 function _bindEvents(this: DrawGrid): void {
 	// eslint-disable-next-line consistent-this, @typescript-eslint/no-this-alias
 	const grid = this
@@ -1423,7 +1421,7 @@ function _bindEvents(this: DrawGrid): void {
 	})
 }
 
-/** @private */
+
 function _getResizeColAt(grid: DrawGrid, abstractX: number, abstractY: number, offset = 5): number {
 	if (grid[_].frozenRowCount <= 0) {
 		return -1
@@ -1443,7 +1441,7 @@ function _getResizeColAt(grid: DrawGrid, abstractX: number, abstractY: number, o
 	return -1
 }
 
-/** @private */
+
 function _getVisibleRect(grid: DrawGrid): Rect {
 	const {
 		scroll: { left, top },
@@ -1452,7 +1450,7 @@ function _getVisibleRect(grid: DrawGrid): Rect {
 	return new Rect(left, top, width, height)
 }
 
-/** @private */
+
 function _getScrollableVisibleRect(grid: DrawGrid): Rect {
 	let frozenColsWidth = 0
 	if (grid[_].frozenColCount > 0) {
@@ -1469,7 +1467,7 @@ function _getScrollableVisibleRect(grid: DrawGrid): Rect {
 	return new Rect(grid[_].scrollable.scrollLeft + frozenColsWidth, grid[_].scrollable.scrollTop + frozenRowsHeight, grid[_].canvas.width - frozenColsWidth, grid[_].canvas.height - frozenRowsHeight)
 }
 
-/** @private */
+
 function _toRelativeRect(grid: DrawGrid, absoluteRect: Rect): Rect {
 	const rect = absoluteRect.copy()
 	const visibleRect = _getVisibleRect(grid)
@@ -1755,7 +1753,7 @@ class ColumnResizer extends BaseMouseDownMover {
     }
 }
 
-/** @private */
+
 function setSafeInputValue(input: HTMLInputElement, value: string): void {
 	const { type } = input
 	input.type = ''
@@ -2301,13 +2299,13 @@ class Selection extends EventTarget {
     }
 }
 
-/** @private */
+
 type DrawLayerFunction = (ctx: CanvasRenderingContext2D) => void;
 
 /**
  * This class manages the drawing process for each layer
  */
-/** @private */
+
 class DrawLayers {
     private _layers: { [level: number]: DrawLayer }
 
@@ -2330,7 +2328,7 @@ class DrawLayers {
     }
 }
 
-/** @private */
+
 class DrawLayer {
     private _level: number
 
@@ -2673,16 +2671,14 @@ export interface DrawGridConstructorOptions {
     disableColumnResize?: boolean;
 }
 
-/** @private */
+
 const protectedKey = _
 
 /**
  * DrawGrid
- * @classdesc cheetahGrid.core.DrawGrid
- * @memberof cheetahGrid.core
  */
 export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
-    protected [protectedKey]: DrawGridProtected
+    protected [_]: DrawGridProtected
 
     static get EVENT_TYPE(): typeof DG_EVENT_TYPE {
     	return DG_EVENT_TYPE
@@ -2731,8 +2727,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	protectedSpace.disableColumnResize = disableColumnResize
 
     	/////
-    	protectedSpace.rowHeightsMap = new NumberMap()
-    	protectedSpace.colWidthsMap = new NumberMap()
+    	protectedSpace.rowHeightsMap = new NumberMap<number>()
+    	protectedSpace.colWidthsMap = new NumberMap<number | string>()
     	protectedSpace.colWidthsLimit = {}
     	protectedSpace.calcWidthContext = {
     		_: protectedSpace,
@@ -3023,8 +3019,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
      * @param  {number} width The column width
      * @return {void}
      */
-    setColWidth(col: number, width: string | number): void {
-    	_setColWidth(this, col, width)
+    public setColWidth(col: number, width: string | number): void {
+    	_setColWidth.call(this, this, col, width)
     }
 
     /**

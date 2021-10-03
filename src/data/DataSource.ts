@@ -4,7 +4,7 @@ import { applyChainSafe, array, emptyFn, getOrApply, isPromise, obj } from '../i
 import { EventTarget } from '../core/EventTarget'
 import type { PromiseCacheValue } from './internal/types'
 
-/** @private */
+
 function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
 	if (obj.isObject(field)) {
 		if ((field as FieldAssessor<T>).get && (field as FieldAssessor<T>).set) {
@@ -14,17 +14,17 @@ function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
 	return false
 }
 
-/** @private */
+
 const EVENT_TYPE = {
 	UPDATE_LENGTH: 'update_length',
 	UPDATED_LENGTH: 'updated_length',
 	UPDATED_ORDER: 'updated_order'
 } as const
 
-/** @private */
+
 type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
 
-/** @private */
+
 function getValue<V>(value: MaybePromiseOrCallOrUndef<V, []>, setPromiseBack: PromiseBack<V>): MaybePromiseOrUndef<V> {
 	const maybePromiseValue = getOrApply(value)
 	if (isPromise(maybePromiseValue)) {
@@ -40,7 +40,7 @@ function getValue<V>(value: MaybePromiseOrCallOrUndef<V, []>, setPromiseBack: Pr
 	}
 }
 
-/** @private */
+
 function getField<T, F extends FieldDef<T>>(
 		record: MaybePromiseOrUndef<T>,
 		field: F,
@@ -82,7 +82,7 @@ function getField<T, F extends FieldDef<T>>(
 	return getValue(fieldResult, setPromiseBack)
 }
 
-/** @private */
+
 function setField<T, F extends FieldDef<T>>(
 		record: T | undefined,
 		field: F,
@@ -120,7 +120,7 @@ function setField<T, F extends FieldDef<T>>(
 	return true
 }
 
-/** @private */
+
 function _getIndex(sortedIndexMap: null | number[], index: number): number {
 	if (!sortedIndexMap) {
 		return index
@@ -138,9 +138,6 @@ export interface DataSourceParam<T> {
 
 /**
  * grid data source
- *
- * @classdesc cheetahGrid.data.DataSource
- * @memberof cheetahGrid.data
  */
 export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     private _get: (index: number) => MaybePromiseOrCall<T, []>

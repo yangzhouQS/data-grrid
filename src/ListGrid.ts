@@ -49,17 +49,17 @@ import { TooltipHandler } from './tooltip/TooltipHandler'
 //protected symbol
 import { getProtectedSymbol } from './internal/symbolManager'
 import { parsePasteRangeBoxValues } from './internal/paste-utils'
+import { EventHandler } from './internal/EventHandler'
 
-/** @private */
+
 const _ = getProtectedSymbol()
 
-//private methods
-/** @private */
+
 function _getCellRange<T>(grid: ListGrid<T>, col: number, row: number): CellRange {
 	return grid[_].layoutMap.getCellRange(col, row)
 }
 
-/** @private */
+
 function _updateRect<T>(grid: ListGrid<T>, col: number, row: number, context: CellContext): void {
 	context.setRectFilter((rect) => {
 		let { left, right, top, bottom } = rect
@@ -83,7 +83,7 @@ function _updateRect<T>(grid: ListGrid<T>, col: number, row: number, context: Ce
 	})
 }
 
-/** @private */
+
 function _getCellValue<T>(grid: ListGrid<T>, col: number, row: number): FieldData {
 	if (row < grid[_].layoutMap.headerRowCount) {
 		const { caption } = grid[_].layoutMap.getHeader(col, row)
@@ -94,7 +94,7 @@ function _getCellValue<T>(grid: ListGrid<T>, col: number, row: number): FieldDat
 	}
 }
 
-/** @private */
+
 function _setCellValue<T>(
 		grid: ListGrid<T>,
 		col: number,
@@ -115,7 +115,7 @@ function _setCellValue<T>(
 	}
 }
 
-/** @private */
+
 function _getCellMessage<T>(grid: ListGrid<T>, col: number, row: number): FieldData {
 	if (row < grid[_].layoutMap.headerRowCount) {
 		return null
@@ -151,7 +151,7 @@ function _getCellMessage<T>(grid: ListGrid<T>, col: number, row: number): FieldD
 	}
 }
 
-/** @private */
+
 function _getCellIcon0<T>(grid: ListGrid<T>, icon: ColumnIconOption<T>, row: number): ColumnIconOption<T>;
 function _getCellIcon0<T>(grid: ListGrid<T>, icon: ColumnIconOption<T>[], row: number): ColumnIconOption<T>[];
 function _getCellIcon0<T>(grid: ListGrid<T>, icon: ColumnIconOption<T> | ColumnIconOption<T>[], row: number): ColumnIconOption<T> | ColumnIconOption<T>[];
@@ -181,7 +181,7 @@ function _getCellIcon0<T>(grid: ListGrid<T>, icon: ColumnIconOption<T> | ColumnI
 	return retIcon
 }
 
-/** @private */
+
 function _getCellIcon<T>(grid: ListGrid<T>, col: number, row: number): ColumnIconOption<T> | ColumnIconOption<T>[] | null {
 	const { icon } = grid[_].layoutMap.getBody(col, row)
 	if (icon == null) {
@@ -190,7 +190,7 @@ function _getCellIcon<T>(grid: ListGrid<T>, col: number, row: number): ColumnIco
 	return _getCellIcon0(grid, icon, row)
 }
 
-/** @private */
+
 function _getField<T>(grid: ListGrid<T>, field: FieldDef<T> | undefined, row: number): FieldData {
 	if (field == null) {
 		return null
@@ -203,7 +203,7 @@ function _getField<T>(grid: ListGrid<T>, field: FieldDef<T> | undefined, row: nu
 	}
 }
 
-/** @private */
+
 function _hasField<T>(grid: ListGrid<T>, field: FieldDef<T>, row: number): boolean {
 	if (field == null) {
 		return false
@@ -216,7 +216,7 @@ function _hasField<T>(grid: ListGrid<T>, field: FieldDef<T>, row: number): boole
 	}
 }
 
-/** @private */
+
 function _onDrawValue<T>(
 		grid: ListGrid<T>,
 		cellValue: MaybePromise<unknown>,
@@ -275,7 +275,7 @@ function _onDrawValue<T>(
 	return draw(cellValue, info, context, grid)
 }
 
-/** @private */
+
 function _borderWithState<T>(grid: ListGrid<T>, helper: GridCanvasHelper<T>, context: CellContext): void {
 	const { col, row } = context
 	const sel = grid.selection.select
@@ -339,7 +339,10 @@ function _borderWithState<T>(grid: ListGrid<T>, helper: GridCanvasHelper<T>, con
 	}
 }
 
-/** @private */
+/**
+ * 刷新表格头部
+ * @param grid
+ */
 function _refreshHeader<T>(grid: ListGrid<T>): void {
 	const protectedSpace = grid[_]
 	if (protectedSpace.headerEvents) {
@@ -414,34 +417,37 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
 	grid.frozenRowCount = layoutMap.headerRowCount
 }
 
-/** @private */
+
 function _refreshRowCount<T>(grid: ListGrid<T>): void {
 	const { layoutMap } = grid[_]
 	grid.rowCount = grid[_].dataSource.length * layoutMap.bodyRowCount + layoutMap.headerRowCount
 }
 
-/** @private */
+
 function _tryWithUpdateDataSource<T>(grid: ListGrid<T>, fn: (grid: ListGrid<T>) => void): void {
 	const { dataSourceEventIds } = grid[_]
-
 	if (dataSourceEventIds) {
 		dataSourceEventIds.forEach((id) => grid[_].handler.off(id))
 	}
-
 	fn(grid)
-
 	grid[_].dataSourceEventIds = [
-		grid[_].handler.on(grid[_].dataSource, DataSource.EVENT_TYPE.UPDATED_LENGTH, () => {
-			_refreshRowCount(grid)
-			grid.invalidate()
-		}),
-		grid[_].handler.on(grid[_].dataSource, DataSource.EVENT_TYPE.UPDATED_ORDER, () => {
-			grid.invalidate()
-		})
+		grid[_].handler.on(
+				grid[_].dataSource,
+				DataSource.EVENT_TYPE.UPDATED_LENGTH,
+				() => {
+					_refreshRowCount(grid)
+					grid.invalidate()
+				}),
+		grid[_].handler.on(
+				grid[_].dataSource,
+				DataSource.EVENT_TYPE.UPDATED_ORDER,
+				() => {
+					grid.invalidate()
+				})
 	]
 }
 
-/** @private */
+
 function _setRecords<T>(grid: ListGrid<T>, records: T[] = []): void {
 	_tryWithUpdateDataSource(grid, () => {
 		grid[_].records = records
@@ -450,7 +456,7 @@ function _setRecords<T>(grid: ListGrid<T>, records: T[] = []): void {
 	})
 }
 
-/** @private */
+
 function _setDataSource<T>(grid: ListGrid<T>, dataSource: DataSource<T>): void {
 	_tryWithUpdateDataSource(grid, () => {
 		if (dataSource) {
@@ -467,13 +473,13 @@ function _setDataSource<T>(grid: ListGrid<T>, dataSource: DataSource<T>): void {
 	})
 }
 
-/** @private */
+
 function _getRecordIndexByRow<T>(grid: ListGrid<T>, row: number): number {
 	const { layoutMap } = grid[_]
 	return layoutMap.getRecordIndexByRow(row)
 }
 
-/** @private */
+
 function _onRangePaste<T>(this: ListGrid<T>, text: string, test: (data: SetPasteValueTestData<T>) => boolean = (): boolean => true): void {
 	const { layoutMap } = this[_]
 	const selectionRange = this.selection.range
@@ -561,7 +567,7 @@ function _onRangePaste<T>(this: ListGrid<T>, text: string, test: (data: SetPaste
 	this.invalidateCellRange(this.selection.range)
 }
 
-/** @private */
+
 function _onRangeDelete<T>(this: ListGrid<T>): void {
 	const { layoutMap } = this[_]
 	const selectionRange = this.selection.range
@@ -637,9 +643,14 @@ interface ListGridProtected<T> extends DrawGridProtected {
     layout: LayoutDefine<T>;
     gridCanvasHelper: GridCanvasHelper<T>;
     sortState: SortState;
+    hiddenHeader: boolean;
     dataSource: DataSource<T>;
     records?: T[] | null;
     allowRangePaste: boolean;
+    handler: EventHandler;
+    disabled: boolean | ((getValue: T) => boolean);
+    readonly: boolean | ((getValue: T) => boolean);
+    // spanBodyOptions?: ListGridSpanBodyOptions
 }
 
 export { ListGridProtected }
@@ -657,6 +668,7 @@ export interface ListGridConstructorOptions<T> extends DrawGridConstructorOption
      * Header row height(s)
      */
     headerRowHeight?: number[] | number;
+    hiddenHeader?: boolean
     /**
      * Records data source
      */
@@ -688,14 +700,16 @@ export interface ListGridConstructorOptions<T> extends DrawGridConstructorOption
      * @override
      */
     frozenRowCount?: undefined;
+    disabled?: boolean;
+    readonly?: boolean
+    // spanBodyOptions?: ListGridSpanBodyOptions // 合并单元格相关
+    monitorResize?: boolean
 }
 
 // export { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine }
 
 /**
  * ListGrid
- * @classdesc cheetahGrid.ListGrid
- * @memberof cheetahGrid
  */
 export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     protected [_]: ListGridProtected<T>
@@ -708,28 +722,17 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     	return LG_EVENT_TYPE
     }
 
-    /**
-     * constructor
-     *
-     * @constructor
-     * @param options Constructor options
-     */
     constructor(options: ListGridConstructorOptions<T> = {}) {
     	super(omit(options, [ 'colCount', 'rowCount', 'frozenRowCount' ]))
-    	console.log(_)
-    	console.log(this)
-    	debugger
+    	this[_] = {} as any
     	const protectedSpace = this[_]
+    	protectedSpace.disabled = options.disabled || false
+    	protectedSpace.readonly = options.readonly || false
     	protectedSpace.header = options.header || []
     	protectedSpace.layout = options.layout || []
     	protectedSpace.headerRowHeight = options.headerRowHeight || []
-    	if (options.dataSource) {
-    		_setDataSource(this, options.dataSource)
-    	} else {
-    		_setRecords(this, options.records)
-    	}
-    	protectedSpace.allowRangePaste = options.allowRangePaste ?? false
-    	_refreshHeader(this)
+    	protectedSpace.hiddenHeader = !!options.hiddenHeader
+    	protectedSpace.handler = new EventHandler()
     	protectedSpace.sortState = {
     		col: -1,
     		row: -1,
@@ -739,6 +742,14 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     	protectedSpace.theme = themes.of(options.theme)
     	protectedSpace.messageHandler = new MessageHandler(this, (col: number, row: number): Message => _getCellMessage(this, col, row))
     	protectedSpace.tooltipHandler = new TooltipHandler(this)
+    	if (options.dataSource) {
+    		_setDataSource(this, options.dataSource)
+    	} else {
+    		_setRecords(this, options.records)
+    	}
+    	protectedSpace.allowRangePaste = options.allowRangePaste ?? false
+    	_refreshHeader(this)
+
     	this.invalidate()
     	protectedSpace.handler.on(window, 'resize', () => {
     		this.updateSize()

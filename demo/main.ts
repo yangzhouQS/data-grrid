@@ -1,7 +1,5 @@
 import dataGrid from '../src/main'
-
-console.log(dataGrid)
-//
+import './styles/index.css'
 const records = [
 	{ id: 1, name: 'liuMing', age: 26 },
 	{ id: 2, name: 'tom', age: 18 },

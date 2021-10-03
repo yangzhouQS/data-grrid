@@ -3,10 +3,10 @@ import { each, isPromise } from '../internal/utils'
 import { DataSource } from './DataSource'
 import { EventHandler } from '../internal/EventHandler'
 
-/** @private */
+
 type Filter<T> = (record: T | undefined) => boolean;
 
-/** @private */
+
 class DataSourceIterator<T> {
     _dataSource: DataSource<T>
 
@@ -62,7 +62,7 @@ class DataSourceIterator<T> {
     }
 }
 
-/** @private */
+
 class FilterData<T> {
     _owner: FilterDataSource<T>
 
@@ -169,9 +169,6 @@ class FilterData<T> {
 
 /**
  * grid data source for filter
- *
- * @classdesc cheetahGrid.data.FilterDataSource
- * @memberof cheetahGrid.data
  */
 export class FilterDataSource<T> extends DataSource<T> {
     private _dataSource: DataSource<T>
