@@ -50,6 +50,9 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
     //   tooltipType?: TooltipOption<T>
 }
 
+/**
+ * 表格列配置约束
+ */
 export interface HeaderData<T> {
     id: LayoutObjectId;
     caption?: string | (() => string);

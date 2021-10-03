@@ -38,13 +38,17 @@ export interface NamedIcon<T> {
     height?: number;
 }
 
-export type ColumnIconOption<T> = FontIcon<T> | ImageIcon<T> | PathIcon<T> | SvgIcon<T> | NamedIcon<T>;
+export type ColumnIconOption<T> =
+    FontIcon<T> |
+    ImageIcon<T> |
+    PathIcon<T> |
+    SvgIcon<T> |
+    NamedIcon<T>;
 
 // ****** Column Menu Items Options *******
 export type ColumnMenuItemOptions = ColumnMenuItemOption[] | SimpleColumnMenuItemOption[] | OldSimpleColumnMenuItemOption[] | string | ColumnMenuItemObjectOptions;
 
 export interface ColumnMenuItemOption {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any;
     label: string;
     classList?: string[];

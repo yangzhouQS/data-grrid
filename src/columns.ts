@@ -9,6 +9,7 @@ import {
 	RadioEditor,
 	InlineInputEditor,
 	InlineMenuEditor,
+	ButtonAction,
 	ImmutableCheckEditor,
 	ImmutableInputEditor,
 	ImmutableRadioEditor,
@@ -40,6 +41,7 @@ const type = {
 const action = {
 	ACTIONS: ACTIONS,
 	BaseAction,
+	ButtonAction,
 	ImmutableCheckEditor,
 	ImmutableInputEditor,
 	ImmutableRadioEditor,

@@ -35,6 +35,9 @@ const grid = new dataGrid.ListGrid({
 			width: 200,
 			columnType: new dataGrid.columns.type.ButtonColumn({
 				caption: '点击'
+			}),
+			action: new dataGrid.columns.action.ButtonAction({
+				disabled: false
 			})
 		}
 		// {
