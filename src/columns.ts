@@ -25,6 +25,7 @@ import {
 
 import {
 	TYPES,
+	ButtonColumn,
 	of as typeOf
 } from './columns/type'
 
@@ -33,6 +34,7 @@ const style = {
 }
 const type = {
 	TYPES,
+	ButtonColumn,
 	of: typeOf
 }
 const action = {
