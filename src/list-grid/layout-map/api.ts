@@ -34,7 +34,7 @@ export interface HeaderDefine<T> extends BaseHeaderDefine<T> {
 }
 
 export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
-    field?: FieldDef<T>;
+    field?: FieldDef<T> | string;
     width?: number | string;
     minWidth?: number | string;
     maxWidth?: number | string;

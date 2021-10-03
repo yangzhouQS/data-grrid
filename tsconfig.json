@@ -13,6 +13,7 @@
     "checkJs": false,
     /* 用于检查是否有定义了但是没有使用的变量，对于这一点的检测，使用eslint可以在你书写代码的时候做提示，你可以配合使用。它的默认值为false */
     "noUnusedLocals": true,
+    "noUnusedParameters": false,
     /* strictNullChecks为true时，null和undefined值不能赋给非这两种类型的值，别的类型也不能赋给他们，除了any类型。还有个例外就是undefined可以赋值给void类型 */
     "strictNullChecks": true,
     /* 设为true后会对bind、call和apply绑定的方法的参数的检测是严格检测的 */

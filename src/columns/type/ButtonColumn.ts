@@ -11,7 +11,7 @@ const BUTTON_COLUMN_STATE_ID = getButtonColumnStateId()
 export class ButtonColumn<T> extends Column<T> {
     private _caption?: string
 
-    constructor(option: ButtonColumnOption = {}) {
+    public constructor(option: ButtonColumnOption = {}) {
     	super(option)
     	this._caption = option.caption
     }
@@ -24,7 +24,7 @@ export class ButtonColumn<T> extends Column<T> {
     	return this._caption
     }
 
-    withCaption(caption: string): ButtonColumn<T> {
+    public withCaption(caption: string): ButtonColumn<T> {
     	const c = this.clone()
     	c._caption = caption
     	return c

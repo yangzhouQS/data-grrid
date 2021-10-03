@@ -129,7 +129,7 @@ const grid = new dataGrid.ListGrid({
 			caption: '操作',
 			width: 200,
 			columnType: new dataGrid.columns.type.ButtonColumn({
-				caption: '点击'
+				caption: '点击',
 			}),
 			action: new dataGrid.columns.action.ButtonAction({
 				disabled: false,

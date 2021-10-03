@@ -1,6 +1,3 @@
-// import * as action from './columns/action'
-// import * as style from './columns/style'
-// import * as type from './columns/type'
 import {
 	ACTIONS,
 	BaseAction,
@@ -40,7 +37,10 @@ import {
 } from './columns/type'
 
 const style = {
-	EVENT_TYPE
+	EVENT_TYPE,
+	BaseStyle,
+	Style,
+	headerStyleOf
 }
 const type = {
 	TYPES,
@@ -60,6 +60,11 @@ const action = {
 	ACTIONS: ACTIONS,
 	BaseAction,
 	ButtonAction,
+	Editor,
+	CheckEditor,
+	RadioEditor,
+	InlineInputEditor,
+	InlineMenuEditor,
 	ImmutableCheckEditor,
 	ImmutableInputEditor,
 	ImmutableRadioEditor,
@@ -68,5 +73,4 @@ const action = {
 /**
  * columns
  */
-// @ts-ignore
 export const columns = { action, type, style }

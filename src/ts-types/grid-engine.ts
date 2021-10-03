@@ -209,9 +209,9 @@ export interface ListGridAPI<T> extends DrawGridAPI {
     getColumnType(col: number, row: number): ColumnTypeAPI;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ColumnTypeAPI {
 }
+
 
 export type SetPasteValueTestData<T> = CellAddress & {
     grid: ListGridAPI<T>;
@@ -376,4 +376,17 @@ export interface CellContext {
 export interface Selection {
     select: CellAddress;
     range: CellRange;
+}
+
+// =============== 新添加
+interface ITransformData<T, V> {
+    value: unknown,
+    displayValue: V,
+    cell: CellAddress,
+    grid: ListGridAPI<T>
+}
+
+// 数据转化
+export interface TransformData<T, V> {
+    (options: ITransformData<T, V>): V
 }
