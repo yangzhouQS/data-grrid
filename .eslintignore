@@ -1,2 +1,5 @@
 build/*
 /**/*.d.ts
+./dist/*
+dist/*
+demo/*
