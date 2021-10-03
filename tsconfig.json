@@ -24,7 +24,7 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "removeComments": false,
-    //    "suppressImplicitAnyIndexErrors": true,
+    "suppressImplicitAnyIndexErrors": true,
     // 给错误和消息设置样式，使用颜色和上下文。
     "pretty": true,
     "jsx": "react",
