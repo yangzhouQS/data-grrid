@@ -72,6 +72,12 @@ const options = [
 const grid = new dataGrid.ListGrid({
 	parentElement: document.getElementById('app'),
 	header: [
+		{
+			caption: '序号',
+			width: 85,
+			columnType: new dataGrid.columns.type.Column({
+			})
+		},
 		{ field: 'id', caption: 'ID', width: 100 },
 		{
 			caption: '基本信息',
@@ -129,7 +135,7 @@ const grid = new dataGrid.ListGrid({
 			caption: '操作',
 			width: 200,
 			columnType: new dataGrid.columns.type.ButtonColumn<any>({
-				caption: '点击',
+				caption: '点击'
 			}),
 			action: new dataGrid.columns.action.ButtonAction({
 				disabled: false,

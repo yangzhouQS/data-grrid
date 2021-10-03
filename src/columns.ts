@@ -23,6 +23,7 @@ import {
 
 import {
 	TYPES,
+	Column,
 	ButtonColumn,
 	NumberColumn,
 	CheckColumn,
@@ -44,6 +45,7 @@ const style = {
 }
 const type = {
 	TYPES,
+	Column,
 	ButtonColumn,
 	NumberColumn,
 	CheckColumn,
