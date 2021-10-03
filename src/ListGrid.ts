@@ -623,13 +623,9 @@ function _onRangeDelete<T>(this: ListGrid<T>): void {
 
 	this.invalidateCellRange(selectionRange)
 }
-
 //end private methods
-//
-//
-//
 
-/** @protected */
+
 interface ListGridProtected<T> extends DrawGridProtected {
     dataSourceEventIds?: EventListenerId[];
     headerEvents?: EventListenerId[];

@@ -2589,7 +2589,7 @@ class DrawCellContext implements CellContext {
     }
 }
 
-/** @protected */
+
 interface DrawGridProtected {
     element: HTMLElement;
     scrollable: Scrollable;

@@ -57,7 +57,7 @@ export interface SimpleColumnMenuItemOption {
     label: string;
 }
 
-/** @internal */
+
 export interface OldSimpleColumnMenuItemOption {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any;
