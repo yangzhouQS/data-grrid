@@ -9,6 +9,9 @@ import {
 	RadioEditor,
 	InlineInputEditor,
 	InlineMenuEditor,
+	ImmutableCheckEditor,
+	ImmutableInputEditor,
+	ImmutableRadioEditor,
 	of as actionOf
 } from './columns/action'
 
@@ -35,9 +38,9 @@ const type = {
 const action = {
 	ACTIONS: ACTIONS,
 	BaseAction,
-	ImmutableInputEditor: {},
-	ImmutableCheckEditor: {},
-	ImmutableRadioEditor: {},
+	ImmutableCheckEditor,
+	ImmutableInputEditor,
+	ImmutableRadioEditor,
 	of: actionOf
 }
 /**

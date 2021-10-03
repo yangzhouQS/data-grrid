@@ -20,7 +20,7 @@ import { RadioEditor } from './action/RadioEditor'
 import { SmallDialogInputEditor } from './action/SmallDialogInputEditor'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class ImmutableCheckEditor extends CheckEditor<any> {
+export class ImmutableCheckEditor extends CheckEditor<any> {
 	get disabled(): RecordBoolean {
 		return this._disabled
 	}
@@ -31,7 +31,7 @@ class ImmutableCheckEditor extends CheckEditor<any> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class ImmutableRadioEditor extends RadioEditor<any> {
+export class ImmutableRadioEditor extends RadioEditor<any> {
 	get disabled(): RecordBoolean {
 		return this._disabled
 	}
@@ -42,7 +42,7 @@ class ImmutableRadioEditor extends RadioEditor<any> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class ImmutableInputEditor extends SmallDialogInputEditor<any> {
+export class ImmutableInputEditor extends SmallDialogInputEditor<any> {
 	get disabled(): RecordBoolean {
 		return this._disabled
 	}
