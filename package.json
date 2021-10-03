@@ -14,6 +14,7 @@
     "prettier": "prettier --write --parser typescript src/**/*.ts",
     "eslint": "eslint . --ext .js,.ts",
     "eslint:fix": "eslint ./src --fix --ext .js,.ts",
+    "eslint-demo:fix": "eslint ./demo --fix --ext .js,.ts",
     "coverage": "npm run test -- --coverage",
     "prepare": "npm run build",
     "trypublish": "npm publish || true"

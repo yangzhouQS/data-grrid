@@ -10,9 +10,19 @@
     "strictPropertyInitialization": false,
     // 允许编译javascript文件
     "allowJs": true,
+    "checkJs": false,
+    /* 用于检查是否有定义了但是没有使用的变量，对于这一点的检测，使用eslint可以在你书写代码的时候做提示，你可以配合使用。它的默认值为false */
+    "noUnusedLocals": true,
+    /* strictNullChecks为true时，null和undefined值不能赋给非这两种类型的值，别的类型也不能赋给他们，除了any类型。还有个例外就是undefined可以赋值给void类型 */
+    "strictNullChecks": true,
+    /* 设为true后会对bind、call和apply绑定的方法的参数的检测是严格检测的 */
+    "strictBindCallApply": true,
     "noImplicitAny": true,
     // 忽略 this 的类型检查, Raise error on this expressions with an implied any type.
-    "noImplicitThis": false,
+    "noImplicitThis": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "removeComments": false,
     "suppressImplicitAnyIndexErrors": true,
     // 给错误和消息设置样式，使用颜色和上下文。
     "pretty": true,

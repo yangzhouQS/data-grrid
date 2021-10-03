@@ -1,6 +1,5 @@
 import dataGrid from '../src/main'
 import './styles/index.css'
-import { style } from '../src/internal/utils'
 
 const records = [
 	{
