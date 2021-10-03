@@ -161,19 +161,6 @@ const grid = new dataGrid.ListGrid({
 				appearance: 'none'
 			}
 		}
-		// {
-		// field: 'aa',
-		// caption: '操作',
-		// width: 200,
-		// columnType: new dataGrid.columns.type.ButtonColumn({
-		// caption: 'show rec'
-		// }),
-		// action: new dataGrid.columns.action.ButtonAction({
-		// action(rec) {
-		// alert(JSON.stringify(rec))
-		// }
-		// })
-		// }
 	],
 	headerRowHeight: 60, // header行高
 	defaultRowHeight: 60,
