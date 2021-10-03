@@ -716,6 +716,9 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
      */
     constructor(options: ListGridConstructorOptions<T> = {}) {
     	super(omit(options, [ 'colCount', 'rowCount', 'frozenRowCount' ]))
+    	console.log(_)
+    	console.log(this)
+    	debugger
     	const protectedSpace = this[_]
     	protectedSpace.header = options.header || []
     	protectedSpace.layout = options.layout || []

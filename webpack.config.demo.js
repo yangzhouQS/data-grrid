@@ -1,4 +1,3 @@
-
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
@@ -11,7 +10,7 @@ module.exports = {
 	mode: 'development',
 	devtool: 'cheap-module-source-map',
 	entry: {
-		dataGrid: './src/main.ts'
+		dataGrid: './demo/main.ts'
 	},
 	output: {
 		filename: 'index.js',
@@ -54,10 +53,11 @@ module.exports = {
 			//    }
 			//  },*/
 			{
-				test: /\.(sa|sc|c)ss$/,
+				test: /\.(sa|sc|c|pcss)ss$/,
 				use: [
 					MiniCssExtractPlugin.loader,
-					{ loader: 'css-loader', options: { sourceMap: true } }
+					{ loader: 'css-loader', options: { sourceMap: true } },
+					{ loader: 'postcss-loader' }
 				]
 			},
 			{
@@ -80,6 +80,9 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: 'css/index.css'
 		}),
-		new HtmlWebpackPlugin()
+		new HtmlWebpackPlugin({
+			template: resolve('./public/index.html'),
+			filename: 'index.html'
+		})
 	]
 };
