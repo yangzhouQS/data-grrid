@@ -37,10 +37,14 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
   maxWidth?: number | string;
   icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
   message?: Message | ((record: T) => Message) | keyof T | (Message | ((record: T) => Message) | keyof T)[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columnType?: ColumnTypeOption | BaseColumn<T, any> | null;
   action?: ColumnActionOption | BaseAction<T> | null;
   style?: ColumnStyleOption | null;
+
+  // contentHidden?: boolean | ((record: T) => boolean)
+  //   disableResize?: boolean
+  //   tooltip?: TooltipOption<T>
+  //   tooltipType?: TooltipOption<T>
 }
 
 export interface HeaderData<T> {

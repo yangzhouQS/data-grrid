@@ -4,7 +4,6 @@ import type {ColumnData, HeaderData} from '../api';
 
 let seqId = -1;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function newEmptyHeaderData(): HeaderData<any> {
 	return {
 		id: seqId--,
@@ -12,7 +11,6 @@ export function newEmptyHeaderData(): HeaderData<any> {
 		headerType: headerType.of(null) // default
 	};
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function newEmptyColumnData(): ColumnData<any> {
 	return {
 		id: seqId--,
@@ -23,10 +21,8 @@ export function newEmptyColumnData(): ColumnData<any> {
 }
 
 export class EmptyDataCache<T> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private headers: HeaderData<T>[][] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private columns: ColumnData<T>[][] = [];
 
   getHeader(col: number, row: number): HeaderData<T> {

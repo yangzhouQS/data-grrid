@@ -21,7 +21,7 @@ import { NumberColumn } from './type/NumberColumn'
 import { PercentCompleteBarColumn } from './type/PercentCompleteBarColumn'
 import { RadioColumn } from './type/RadioColumn'
 
-const TYPES = {
+export const TYPES = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	DEFAULT: new Column<any>(),
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

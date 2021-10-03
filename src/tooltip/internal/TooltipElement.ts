@@ -42,7 +42,6 @@ export class TooltipElement<T> {
   	}
 
   	this._handler.dispose();
-  	// @ts-expect-error -- ignore
   	delete this._rootElement;
   	delete this._messageElement;
   }
