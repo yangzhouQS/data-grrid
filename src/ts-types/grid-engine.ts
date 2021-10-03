@@ -379,14 +379,3 @@ export interface Selection {
 }
 
 // =============== 新添加
-interface ITransformData<T, V> {
-    value: unknown,
-    displayValue: V,
-    cell: CellAddress,
-    grid: ListGridAPI<T>
-}
-
-// 数据转化
-export interface TransformData<T, V> {
-    (options: ITransformData<T, V>): V
-}

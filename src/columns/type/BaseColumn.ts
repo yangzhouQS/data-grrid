@@ -1,5 +1,5 @@
 import * as styleContents from '../style'
-import type { BaseColumnOption, CellAddress, CellContext, ColumnTypeAPI, EventListenerId, GridCanvasHelperAPI, LayoutObjectId, ListGridAPI, MaybePromise, Message, TransformData } from '../../ts-types'
+import type { BaseColumnOption, CellAddress, CellContext, ColumnTypeAPI, EventListenerId, GridCanvasHelperAPI, LayoutObjectId, ListGridAPI, MaybePromise, Message } from '../../ts-types'
 import type { ColumnFadeinState, DrawCellInfo, GridInternal } from '../../ts-types-internal'
 import { isPromise, obj } from '../../internal/utils'
 import { BaseStyle } from '../style/BaseStyle'
@@ -82,21 +82,15 @@ const fadeinMgr = {
 export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     private _fadeinWhenCallbackInPromise: boolean | null
 
-    private _transform?: TransformData<T, V>
 
     constructor(option: BaseColumnOption = {}) {
     	this.onDrawCell = this.onDrawCell.bind(this) //スコープを固定させる
-    	// this._transform = option.transform
     	//Promiseのcallbackでフェードイン表示する
     	this._fadeinWhenCallbackInPromise = option.fadeinWhenCallbackInPromise || false
     }
 
     get fadeinWhenCallbackInPromise(): boolean | undefined | null {
     	return this._fadeinWhenCallbackInPromise
-    }
-
-    public get transform(): TransformData<T, V> | undefined {
-    	return this._transform
     }
 
     get StyleClass(): typeof BaseStyle {
