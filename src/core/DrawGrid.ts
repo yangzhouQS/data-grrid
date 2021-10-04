@@ -61,9 +61,6 @@ function createRootElement(): HTMLElement {
 	return element
 }
 
-
-
-
 function _vibrate(e: TouchEvent | MouseEvent): void {
 	if (navigator.vibrate && isTouchEvent(e)) {
 		navigator.vibrate(50)
@@ -264,7 +261,7 @@ function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
 	}
 }
 
-
+// 绘制列
 function _drawCell(
 		this: DrawGrid,
 		ctx: CanvasRenderingContext2D,
@@ -293,7 +290,7 @@ function _drawCell(
 			const dcContext = new DrawCellContext(col, row, ctx, rect, drawRect, !!cellDrawing, this[_].selection, drawLayers)
 			const p = this.onDrawCell(col, row, dcContext)
 			if (isPromise(p)) {
-				//遅延描画
+				// 延迟绘制
 				_putCellDrawing(this, col, row, dcContext)
 
 				const pCol = col
@@ -310,7 +307,20 @@ function _drawCell(
 	}
 }
 
-
+/**
+ * 绘制行
+ * @param grid
+ * @param ctx
+ * @param initFrozenCol
+ * @param initCol
+ * @param drawRight
+ * @param row
+ * @param absoluteTop
+ * @param height
+ * @param visibleRect
+ * @param skipAbsoluteTop
+ * @param drawLayers
+ */
 function _drawRow(
 		grid: DrawGrid,
 		ctx: CanvasRenderingContext2D,
@@ -326,13 +336,17 @@ function _drawRow(
 ): void {
 	const { colCount } = grid[_]
 	const drawOuter = (col: number, absoluteLeft: number): void => {
-		//データ範囲外の描画
-		if (col >= colCount - 1 && grid[_].canvas.width > absoluteLeft - visibleRect.left) {
-			const outerLeft = absoluteLeft - visibleRect.left
+	    const canvasWidth = grid[_].canvas.width
+		const outerLeft = absoluteLeft - visibleRect.left
+		// 绘制数据区域以外的绘图
+		// 擦除画布计算之外区域
+		if (col >= colCount - 1 && canvasWidth > absoluteLeft - visibleRect.left) {
+			ctx.clearRect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
+		}else {
 			ctx.save()
 			ctx.beginPath()
 			ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6'
-			ctx.rect(outerLeft, absoluteTop - visibleRect.top, grid[_].canvas.width - outerLeft, height)
+			ctx.rect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
 			ctx.fill()
 			ctx.restore()
 		}
@@ -341,15 +355,16 @@ function _drawRow(
 	let skipAbsoluteLeft = 0
 	if (initFrozenCol) {
 		let absoluteLeft = initFrozenCol.left
-		const count = grid[_].frozenColCount
+		const count = grid[_].frozenColCount // 固定列
 		for (let { col } = initFrozenCol; col < count; col++) {
 			const width = _getColWidth(grid, col)
 
+			// 绘制列
 			_drawCell.call(grid, ctx, col, absoluteLeft, width, row, absoluteTop, height, visibleRect, skipAbsoluteTop, 0, drawLayers)
 
 			absoluteLeft += width
 			if (drawRight <= absoluteLeft) {
-				//描画範囲外（終了）
+				// 描画範囲外（終了）
 				drawOuter(col, absoluteLeft)
 				return
 			}
@@ -364,7 +379,7 @@ function _drawRow(
 
 		absoluteLeft += width
 		if (drawRight <= absoluteLeft) {
-			//描画範囲外（終了）
+			// 画布之外
 			drawOuter(col, absoluteLeft)
 			return
 		}
@@ -376,7 +391,6 @@ function _drawRow(
 function _getInitContext(this: DrawGrid): CanvasRenderingContext2D {
 	return this._getInitContext()
 }
-
 
 function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 	const visibleRect = _getVisibleRect(grid)
@@ -450,17 +464,14 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 	drawLayers.draw(ctx)
 }
 
-
 function _toPxWidth(grid: DrawGrid, width: string | number): number {
 	return Math.round(calc.toPx(width, grid[_].calcWidthContext))
 }
-
 
 function _adjustColWidth(grid: DrawGrid, col: number, orgWidth: number): number {
 	const limits = _getColWidthLimits(grid, col)
 	return Math.max(_applyColWidthLimits(limits, orgWidth), 0)
 }
-
 
 function _applyColWidthLimits(limits: { min?: number; max?: number } | void | null, orgWidth: number): number {
 	if (!limits) {
@@ -2291,7 +2302,6 @@ type DrawLayerFunction = (ctx: CanvasRenderingContext2D) => void;
 /**
  * This class manages the drawing process for each layer
  */
-
 class DrawLayers {
     private _layers: { [level: number]: DrawLayer }
 
@@ -2928,11 +2938,11 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     }
 
     /**
-     * Apply the changed size.
+     * 更新画布大小
      * @return {void}
      */
     updateSize(): void {
-    	//スタイルをクリアしてサイズ値を取得
+    	// 清除样式并调整大小
     	const { canvas } = this[_]
     	canvas.style.width = ''
     	canvas.style.height = ''
@@ -2942,11 +2952,12 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	canvas.width = width
     	canvas.height = height
 
-    	//整数で一致させるためstyleをセットして返す
+    	//整数 为使之一致，设定style返回
     	canvas.style.width = `${ width }px`
     	canvas.style.height = `${ height }px`
 
     	const sel = this[_].selection.select
+    	// 重新拾取焦点定位
     	this[_].focusControl.setFocusRect(this.getCellRect(sel.col, sel.row))
     }
 
@@ -3554,7 +3565,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     protected _getInitContext(): CanvasRenderingContext2D {
     	const ctx = this[_].context
-    	//初期化
+    	// 初始化
     	ctx.fillStyle = 'white'
     	ctx.strokeStyle = 'black'
     	ctx.textAlign = 'left'

@@ -162,9 +162,7 @@ function _getCellIcon0<T>(grid: ListGrid<T>, icon: ColumnIconOption<T> | ColumnI
 	if (!obj.isObject(icon) || typeof icon === 'function') {
 		return _getField(grid, icon, row)
 	}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const retIcon: any = {}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const iconOpt: any = icon
 	icons.iconPropKeys.forEach((k) => {
 		if (iconOpt[k]) {
@@ -300,12 +298,14 @@ function _borderWithState<T>(grid: ListGrid<T>, helper: GridCanvasHelper<T>, con
 		return selId != null && layoutMap.getCellId(col, row) === selId && layoutMap.getRecordIndexByRow(row) === selRecordIndex
 	}
 
-	//罫線
+	// line
+	// 选择单个单元格
 	if (isSelectCell(col, row)) {
 		option.borderColor = helper.theme.highlightBorderColor
 		option.lineWidth = 2
 		helper.border(context, option)
 	} else {
+		// 平台单元格
 		option.lineWidth = 1
 		// header color
 		const isFrozenCell = grid.isFrozenCell(col, row)
@@ -314,9 +314,9 @@ function _borderWithState<T>(grid: ListGrid<T>, helper: GridCanvasHelper<T>, con
 		}
 		helper.border(context, option)
 
-		//追加処理
+		// 追加处理
 		if (col > 0 && isSelectCell(col - 1, row)) {
-			//右が選択されている
+			// 单元格右侧
 			helper.drawBorderWithClip(context, (ctx) => {
 				const borderColors = helper.toBoxArray(helper.getColor(helper.theme.highlightBorderColor, sel.col, sel.row, ctx))
 				if (borderColors[1]) {
@@ -329,7 +329,7 @@ function _borderWithState<T>(grid: ListGrid<T>, helper: GridCanvasHelper<T>, con
 				}
 			})
 		} else if (row > 0 && isSelectCell(col, row - 1)) {
-			//上が選択されている
+			//单元格下面
 			helper.drawBorderWithClip(context, (ctx) => {
 				const borderColors = helper.toBoxArray(helper.getColor(helper.theme.highlightBorderColor, sel.col, sel.row, ctx))
 				if (borderColors[0]) {
