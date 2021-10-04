@@ -49,3 +49,7 @@ export function getInlineMenuEditorStateId(): '$$$$inline_menu_editor.stateID sy
 export function getCheckHeaderStateId(): '$$$$check_header.stateID symbol$$$$' {
 	return get('check_header.stateID') as any
 }
+
+export function getEventTargetSymbol(): '$$$$event_target_symbol$$$$' {
+	return get('protected.event_target') as any
+}

@@ -26,7 +26,6 @@ export function empty(dom: HTMLElement): void {
 }
 
 function isNode(arg: HTMLElement | string): arg is HTMLElement {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	return !!((arg as any).nodeType && (arg as any).nodeName)
 }
 
@@ -50,7 +49,10 @@ export function toNodeList(arg: HTMLElement | HTMLElement[] | string): HTMLEleme
 	return Array.isArray(node) ? node : [ node ]
 }
 
-export function appendHtml(dom: HTMLElement, inner: HTMLElement | HTMLElement[] | string): void {
+export function appendHtml(
+		dom: HTMLElement,
+		inner: HTMLElement | HTMLElement[] | string
+): void {
 	toNodeList(inner).forEach((node) => {
 		dom.appendChild(node)
 	})

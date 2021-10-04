@@ -76,10 +76,13 @@ const grid = new dataGrid.ListGrid({
             caption: '序号',
             width: 85,
             columnType: new dataGrid.columns.type.Column<any>({
-                transformRecord ({ value, displayValue, cell, grid }) {
+                transformRecord({ value, displayValue, cell, grid }) {
                     return cell.row - grid.frozenRowCount + 1
                 }
-            })
+            }),
+            style: {
+                textAlign: 'center'
+            }
         },
         { field: 'id', caption: 'ID', width: 100 },
         {
@@ -171,10 +174,19 @@ const grid = new dataGrid.ListGrid({
             }
         }
     ],
-    headerRowHeight: 60, // header行高
+    headerRowHeight: 40, // header行高
     defaultRowHeight: 60,
     hiddenHeader: true,
     readonly: true,
-    frozenColCount: 1
+    frozenColCount: 1,
+    theme: {
+        borderColor: 'red',
+        highlightBorderColor: '#2373c8'
+        // highlightBorderWidth: 2,
+        // tree: {
+        //     linkColor: '#2373c8'
+        // }
+    }
 })
 grid.records = records
+

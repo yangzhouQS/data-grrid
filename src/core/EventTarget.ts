@@ -1,12 +1,8 @@
 import type { AnyListener, EventListenerId } from '../ts-types'
 import { each } from '../internal/utils'
-import { get as getSymbol } from '../internal/symbolManager'
+import { getEventTargetSymbol } from '../internal/symbolManager'
 
-//private symbol
-
-const _ = getSymbol()
-
-
+const _ = getEventTargetSymbol()
 let nextId = 1
 
 /**
@@ -93,7 +89,6 @@ export class EventTarget {
      * @param  {...*} args fire arguments
      * @return {*} the result of the last listener
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fireListeners(type: string, ...args: any[]): any {
     	if (!this[_]) {
     		return []

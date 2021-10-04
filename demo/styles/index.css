@@ -11,6 +11,9 @@
 
 #app {
   width: 1200px;
+  height: 600px;
   box-sizing: border-box;
   margin: 50px auto;
+  border: 1px solid #2196f3;
+  padding: 10px;
 }

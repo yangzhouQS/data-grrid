@@ -28,7 +28,7 @@ export function getFontSize(
 	const bk = ctx.font
 	try {
 		ctx.font = fontName
-		const em = ctx.measureText('あ').width
+		const em = ctx.measureText('帅').width
 		return (fontSizeCache[fontName] = {
 			width: em,
 			height: em
@@ -43,7 +43,12 @@ export function calcBasePosition(
 		rect: RectProps,
 		{
 			offset = 0,
-			padding: { left: paddingLeft = 0, right: paddingRight = 0, top: paddingTop = 0, bottom: paddingBottom = 0 } = {}
+			padding: {
+				left: paddingLeft = 0,
+				right: paddingRight = 0,
+				top: paddingTop = 0,
+				bottom: paddingBottom = 0
+			} = {}
 		}: {
         offset?: number;
         padding?: PaddingOption;

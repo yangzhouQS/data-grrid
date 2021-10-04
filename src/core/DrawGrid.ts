@@ -27,8 +27,7 @@ import { NumberMap } from '../internal/NumberMap'
 import { Rect } from '../internal/Rect'
 import { Scrollable } from '../internal/Scrollable'
 import { getFontSize } from '../internal/canvases'
-//protected symbol
-import { getDrawGridSymbol, getProtectedSymbol } from '../internal/symbolManager'
+import { getDrawGridSymbol } from '../internal/symbolManager'
 import { parsePasteRangeBoxValues } from '../internal/paste-utils'
 
 const {
@@ -667,7 +666,7 @@ function _getColWidth(grid: DrawGrid, col: number): number {
 
 
 function _setColWidth(grid: DrawGrid, col: number, width: string | number): void {
-	this[_].colWidthsMap.put(col, width)
+	grid[_].colWidthsMap.put(col, width)
 }
 
 /**
@@ -2670,9 +2669,6 @@ export interface DrawGridConstructorOptions {
      */
     disableColumnResize?: boolean;
 }
-
-
-const protectedKey = _
 
 /**
  * DrawGrid
