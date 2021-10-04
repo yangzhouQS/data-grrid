@@ -1,4 +1,4 @@
-import { IconDefine } from './ts-types'
+// import { IconDefine } from './ts-types'
 import { columns, columns as _columns } from './columns'
 import { core, core as _core } from './core'
 import { tools, tools as _tools } from './tools'
@@ -21,7 +21,6 @@ export {
 	_GridCanvasHelper,
 	svgIcons,
 	register,
-	IconDefine
 }
 export const _dataGrid = {
 	version: '1.0.1',
