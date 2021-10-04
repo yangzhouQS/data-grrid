@@ -1266,8 +1266,8 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     }
 
     doSetPasteValue(text: string, test?: (data: SetPasteValueTestData<T>) => boolean): void {
-    	_onRangePaste.call<ListGrid<T>, [ string, (data: SetPasteValueTestData<T>) => boolean ], void>(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
-    	// _onRangePaste.call(this as any, text, test as (data: SetPasteValueTestData<T>) => boolean)
+    	// _onRangePaste.call<ListGrid<T>, [ string, (data: SetPasteValueTestData<T>) => boolean ], void>(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
+    	_onRangePaste.call(this, text, test as (data: SetPasteValueTestData<T>) => boolean)
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

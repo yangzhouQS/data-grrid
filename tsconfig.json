@@ -15,10 +15,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     /* strictNullChecks为true时，null和undefined值不能赋给非这两种类型的值，别的类型也不能赋给他们，除了any类型。还有个例外就是undefined可以赋值给void类型 */
-    "strictNullChecks": true,
-    /* 设为true后会对bind、call和apply绑定的方法的参数的检测是严格检测的 */
-    "strictBindCallApply": true,
-    "noImplicitAny": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
     // 忽略 this 的类型检查, Raise error on this expressions with an implied any type.
     "noImplicitThis": true,
     "experimentalDecorators": true,
@@ -36,7 +34,7 @@
     "moduleResolution": "node",
     "outDir": "./dist-ts",
     // 是否启用严格模式
-    //    "strict": true,
+    "strict": false,
     "baseUrl": ".",
     // 指定特殊模块的路径
     "paths": {
