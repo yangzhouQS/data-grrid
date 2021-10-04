@@ -3,4 +3,3 @@ build/*
 ./dist/*
 dist/*
 demo/*
-src/

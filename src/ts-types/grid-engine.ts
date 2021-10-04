@@ -379,18 +379,11 @@ export interface Selection {
 }
 
 // =============== 新添加
-// export type TransformRecord = <T, V> (
-//     value: any,
-//     displayValue: V,
-//     cell: CellAddress,
-//     grid: ListGridAPI<T>
-// ) => V
-
-interface IRecordParams {
-    value: any,
-    displayValue:any,
+interface IRecordParams<T, V> {
+    value: V,
+    displayValue: V,
     cell: CellAddress,
-    grid: ListGridAPI<any>
+    grid: ListGridAPI<T>
 }
 
-export type TransformRecord = (params:IRecordParams) => any
+export type TransformRecord = (params: IRecordParams<any, unknown>) => any
