@@ -1,3 +1,18 @@
+import {
+	KEY_DOWN,
+	KEY_END,
+	KEY_HOME,
+	KEY_LEFT,
+	KEY_RIGHT,
+	KEY_UP,
+	KEY_TAB,
+	KEY_ENTER,
+	KEY_ALPHA_A,
+	KEY_DEL,
+	KEY_ALPHA_C,
+	KEY_BS,
+	KEY_ALPHA_V
+} from './internal/KEY_CODE'
 import * as calc from '../internal/calc'
 import * as hiDPI from '../internal/hiDPI'
 import * as style from '../internal/style'
@@ -31,13 +46,9 @@ import { getDrawGridSymbol } from '../internal/symbolManager'
 import { parsePasteRangeBoxValues } from '../internal/paste-utils'
 
 const {
-
 	isTouchEvent,
-
 	getMouseButtons,
-
 	getKeyCode,
-
 	cancel: cancelEvent
 } = event
 
@@ -46,37 +57,12 @@ const _ = getDrawGridSymbol()
 
 function createRootElement(): HTMLElement {
 	const element = document.createElement('div')
-	// element.classList.add('cheetah-grid')
 	element.classList.add('data-grid')
 	return element
 }
 
 
-const KEY_BS = 8
 
-const KEY_TAB = 9
-
-const KEY_ENTER = 13
-
-const KEY_END = 35
-
-const KEY_HOME = 36
-
-const KEY_LEFT = 37
-
-const KEY_UP = 38
-
-const KEY_RIGHT = 39
-
-const KEY_DOWN = 40
-
-const KEY_DEL = 46
-
-const KEY_ALPHA_A = 65
-
-const KEY_ALPHA_C = 67
-
-const KEY_ALPHA_V = 86
 
 function _vibrate(e: TouchEvent | MouseEvent): void {
 	if (navigator.vibrate && isTouchEvent(e)) {
