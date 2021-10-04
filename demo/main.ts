@@ -175,17 +175,16 @@ const grid = new dataGrid.ListGrid({
         }
     ],
     headerRowHeight: 40, // header行高
-    defaultRowHeight: 60,
+    defaultRowHeight: 50,
     hiddenHeader: true,
     readonly: true,
     frozenColCount: 1,
     theme: {
-        borderColor: 'red',
-        highlightBorderColor: '#2373c8'
-        // highlightBorderWidth: 2,
-        // tree: {
-        //     linkColor: '#2373c8'
-        // }
+        borderColor: 'green',
+        highlightBorderColor: '#2373c8',
+        highlightBgColor: '#84de8e',
+        selectionBgColor: '#c19797',
+        // frozenRowsBorderColor: 'red'
     }
 })
 grid.records = records

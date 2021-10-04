@@ -188,7 +188,6 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     				const actStyle = styleContents.of(style, record, this.StyleClass)
     				// 绘制内容
     				// this.drawInternal(this.convertInternal(val), currentContext, actStyle, helper, grid, info)
-    				debugger
     				this.drawInternal(
     						this.transformRecordBefore(cellValue, getCell(), grid),
     						currentContext,

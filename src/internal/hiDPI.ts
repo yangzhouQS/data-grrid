@@ -35,6 +35,7 @@ export function transform(canvas: HTMLCanvasElement): HTMLCanvasElement {
 		if (name === 'width' || name === 'height') {
 			result = `${ Number(result) / ratio }`
 		}
+		console.log(`${name}=>${result}`)
 		return result
 	}
 	canvas.setAttribute = function(name, val: string): void {

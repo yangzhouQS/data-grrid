@@ -430,9 +430,13 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 		}
 	}
 
-	const drawBorder = () => {
-		let { width } = grid.canvas
-		let { height } = grid.canvas
+	const drawGridBorder = () => {
+		// 所有单元格宽度
+		let w = _getColsWidth(grid, 0, grid[_].colCount - 1)
+		let h = _getRowsHeight.call(grid, 0, rowCount - 1) - visibleRect.top
+		const width = Math.min(grid.canvas.width, w)
+		const height = Math.min(grid.canvas.height, h)
+		console.log(grid.canvas.width, w)
 		ctx.save()
 		try {
 			ctx.beginPath()
@@ -460,7 +464,7 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 			if (drawBottom <= absoluteTop) {
 				//描画範囲外（終了）
 				drawOuter(row, absoluteTop)
-				drawBorder()
+				drawGridBorder()
 				drawLayers.draw(ctx)
 				return
 			}
@@ -479,13 +483,13 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 		if (drawBottom <= absoluteTop) {
 			//描画範囲外（終了）
 			drawOuter(row, absoluteTop)
-			drawBorder()
+			drawGridBorder()
 			drawLayers.draw(ctx)
 			return
 		}
 	}
 	drawOuter(rowCount - 1, absoluteTop)
-	drawBorder()
+	drawGridBorder()
 	drawLayers.draw(ctx)
 }
 
@@ -785,26 +789,26 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
 	const moveX = grid[_].scrollable.scrollLeft - lastLeft
 	const moveY = grid[_].scrollable.scrollTop - lastTop
 
-	//次回計算用情報を保持
+	// 保存下次计算用信息
 	grid[_].scroll = {
 		left: grid[_].scrollable.scrollLeft,
 		top: grid[_].scrollable.scrollTop
 	}
 	const visibleRect = _getVisibleRect(grid)
 	if (Math.abs(moveX) >= visibleRect.width || Math.abs(moveY) >= visibleRect.height) {
-		//全再描画
+		// 全部重新绘制
 		_invalidateRect(grid, visibleRect)
 	} else {
-		//差分再描画
+		// 重新绘制差分
 		grid[_].context.drawImage(grid[_].canvas, -moveX, -moveY)
 
 		if (moveX !== 0) {
-			//横移動の再描画範囲を計算
+			// 计算水平移动的重新绘制区域
 			const redrawRect = visibleRect.copy()
 			if (moveX < 0) {
 				redrawRect.width = -moveX
 				if (grid[_].frozenColCount > 0) {
-					//固定列がある場合固定列分描画
+					// 有固定列时绘制固定列
 					const frozenRect = _getFrozenColsRect(grid)!
 					redrawRect.width += frozenRect.width
 				}
@@ -817,18 +821,18 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
 
 			if (moveX > 0) {
 				if (grid[_].frozenColCount > 0) {
-					//固定列がある場合固定列描画
+					// 有固定列时绘制固定列
 					_invalidateRect(grid, _getFrozenColsRect(grid)!)
 				}
 			}
 		}
 		if (moveY !== 0) {
-			//縦移動の再描画範囲を計算
+			// 计算垂直重绘区域
 			const redrawRect = visibleRect.copy()
 			if (moveY < 0) {
 				redrawRect.height = -moveY
 				if (grid[_].frozenRowCount > 0) {
-					//固定行がある場合固定行分描画
+					// 有固定行时绘制固定行
 					const frozenRect = _getFrozenRowsRect(grid)!
 					redrawRect.height += frozenRect.height
 				}
@@ -841,7 +845,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
 
 			if (moveY > 0) {
 				if (grid[_].frozenRowCount > 0) {
-					//固定行がある場合固定行描画
+					// 有固定行时绘制固定行
 					_invalidateRect(grid, _getFrozenRowsRect(grid)!)
 				}
 			}
@@ -849,8 +853,6 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
 	}
 }
 
-
-// eslint-disable-next-line complexity
 function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
 	const { shiftKey } = e
 	const keyCode = getKeyCode(e)
@@ -1500,10 +1502,7 @@ function _toRelativeRect(grid: DrawGrid, absoluteRect: Rect): Rect {
 }
 
 //end private methods
-//
-//
-//
-//
+
 
 /**
  * managing mouse down moving
@@ -2953,7 +2952,6 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     configure(name: 'fadeinWhenCallbackInPromise', value?: boolean): boolean;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     configure(name: string, value?: any): any {
     	const cfg = this[_].config || (this[_].config = {})
     	if (value != null) {
@@ -2980,6 +2978,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	//整数 为使之一致，设定style返回
     	canvas.style.width = `${ width }px`
     	canvas.style.height = `${ height }px`
+
+    	console.log(`canvas.width=${canvas.width},canvas.height=${canvas.height}`)
 
     	const sel = this[_].selection.select
     	// 重新拾取焦点定位

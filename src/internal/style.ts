@@ -26,7 +26,7 @@ function initDocumentInternal(): void {
 	SCROLLBAR_SIZE = getScrollBarWidth() || 10
 	const style = document.createElement('style')
 	style.setAttribute('type', 'text/css')
-	style.setAttribute('data-name', 'cheetah-grid')
+	style.setAttribute('data-name', 'data-grid')
 	style.innerHTML = `
 .data-grid .grid-scrollable {
 	overflow: scroll;

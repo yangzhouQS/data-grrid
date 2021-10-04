@@ -19,12 +19,12 @@ export interface ThemeDefine {
     // background
     defaultBgColor?: ColorPropertyDefine;
     frozenRowsBgColor?: ColorPropertyDefine;
-    selectionBgColor: ColorPropertyDefine;
-    highlightBgColor?: ColorPropertyDefine;
+    selectionBgColor: ColorPropertyDefine; // 拖拽选中背景
+    highlightBgColor?: ColorPropertyDefine; // 高亮单元格
     // border
     borderColor: ColorsPropertyDefine;
     frozenRowsBorderColor: ColorsPropertyDefine;
-    highlightBorderColor: ColorsPropertyDefine;
+    highlightBorderColor: ColorsPropertyDefine; // 高亮边框
     checkbox: {
         uncheckBgColor?: ColorPropertyDefine;
         checkBgColor?: ColorPropertyDefine;
