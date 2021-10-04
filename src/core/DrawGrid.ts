@@ -54,8 +54,78 @@ const {
 
 const _ = getDrawGridSymbol()
 
-function createRootElement(): HTMLElement {
+// function parseInt10(val: string): number {
+// 	return parseInt(val, 10)
+// }
+
+/**
+ * 根据DOM获取元素宽度和高度
+ * @param whIdx
+ * @param root
+ */
+// function _getSize(whIdx: number, root: HTMLElement) {
+// 	window['_rootDom'] = root
+// 	const wh = [ 'width', 'height' ][whIdx] as 'width' | 'height'
+// 	const cwh = [ 'clientWidth', 'clientHeight' ][whIdx] as 'clientWidth' | 'clientHeight'
+// 	const plt = [ 'paddingLeft', 'paddingTop' ][whIdx] as 'paddingLeft' | 'paddingTop'
+// 	const prb = [ 'paddingRight', 'paddingBottom' ][whIdx] as 'paddingRight' | 'paddingBottom'
+// 	const stl = document.defaultView.getComputedStyle(root, null)
+// 	// document.defaultView.getComputedStyle(window._rootDom, null)['clientHeight']
+// 	// document.defaultView.getComputedStyle(window._rootDom, null)['clientHeight']
+// 	console.log('root.clientHeight', root.clientHeight)
+// 	// console.log('root.clientHeight', root.clientHeight, cwh)
+// 	return (
+// 		(root[cwh] || parseInt10(stl[wh]) ||
+//             parseInt10(root.style[wh])) - (parseInt10(stl[plt]) || 0) - (parseInt10(stl[prb]) || 0)
+// 	) | 0
+// }
+
+/**
+ * 创建画布容器
+ * @param parentElement
+ */
+// function createRoot(parentElement: HTMLElement): HTMLElement {
+// 	const rootStyle = parentElement.style
+// 	if (rootStyle) {
+// 		rootStyle['webkitTapHighlightColor'] = 'transparent'
+// 		rootStyle.webkitUserSelect = 'none'
+// 		rootStyle.userSelect = 'none';
+// 		(rootStyle as any)['-webkit-touch-callout'] = 'none'
+// 		parentElement.innerHTML = ''
+// 	}
+// 	console.dir(parentElement)
+// 	setTimeout(()=>{
+// 		console.log(`setTimeout==>parentElement.clientHeight = ${parentElement.clientHeight}`)
+// 	}, 1000)
+// 	console.log(`parentElement.clientHeight = ${parentElement.clientHeight}`)
+// 	const width = _getSize(0, parentElement)
+// 	const height = _getSize(1, parentElement)
+// 	console.log(`width:${ width },height:${ height }`)
+// 	const domRoot = document.createElement('div')
+// 	domRoot.classList.add('data-grid')
+// 	domRoot.style.cssText = [
+// 		'position:relative',
+// 		// IOS13 safari probably has a compositing bug (z order of the canvas and the consequent
+// 		// dom does not act as expected) when some of the parent dom has
+// 		// `-webkit-overflow-scrolling: touch;` and the webpage is longer than one screen and
+// 		// the canvas is not at the top part of the page.
+// 		// Check `https://bugs.webkit.org/show_bug.cgi?id=203681` for more details. We remove
+// 		// this `overflow:hidden` to avoid the bug.
+// 		// 'overflow:hidden',
+// 		'width:' + width + 'px',
+// 		// 'height:' + height + 'px',
+// 		'padding:0',
+// 		'margin:0',
+// 		'border-width:0'
+// 	].join(';') + ';'
+//
+// 	return domRoot
+// }
+
+function createRootElement(parentElement: HTMLElement): HTMLElement {
 	const element = document.createElement('div')
+	console.log('parentElement.offsetWidth', parentElement.offsetWidth)
+	console.log('parentElement.clientWidth', parentElement.clientWidth)
 	element.classList.add('data-grid')
 	return element
 }
@@ -436,7 +506,6 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 		let h = _getRowsHeight.call(grid, 0, rowCount - 1) - visibleRect.top
 		const width = Math.min(grid.canvas.width, w)
 		const height = Math.min(grid.canvas.height, h)
-		console.log(grid.canvas.width, w)
 		ctx.save()
 		try {
 			ctx.beginPath()
@@ -2719,7 +2788,9 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	const protectedSpace = (this[_] = {} as DrawGridProtected)
     	style.initDocument()
     	// 装载canvas画布容器
-    	protectedSpace.element = createRootElement()
+    	protectedSpace.element = createRootElement(parentElement)
+    	debugger
+    	// protectedSpace.element = createRoot(parentElement)
     	protectedSpace.scrollable = new Scrollable()
     	protectedSpace.handler = new EventHandler()
     	protectedSpace.selection = new Selection(this)
@@ -2978,8 +3049,6 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	//整数 为使之一致，设定style返回
     	canvas.style.width = `${ width }px`
     	canvas.style.height = `${ height }px`
-
-    	console.log(`canvas.width=${canvas.width},canvas.height=${canvas.height}`)
 
     	const sel = this[_].selection.select
     	// 重新拾取焦点定位
