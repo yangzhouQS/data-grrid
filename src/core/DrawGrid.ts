@@ -54,7 +54,6 @@ const {
 
 const _ = getDrawGridSymbol()
 
-
 function createRootElement(): HTMLElement {
 	const element = document.createElement('div')
 	element.classList.add('data-grid')
@@ -336,13 +335,13 @@ function _drawRow(
 ): void {
 	const { colCount } = grid[_]
 	const drawOuter = (col: number, absoluteLeft: number): void => {
-	    const canvasWidth = grid[_].canvas.width
+		const canvasWidth = grid[_].canvas.width
 		const outerLeft = absoluteLeft - visibleRect.left
 		// 绘制数据区域以外的绘图
 		// 擦除画布计算之外区域
 		if (col >= colCount - 1 && canvasWidth > absoluteLeft - visibleRect.left) {
 			ctx.clearRect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
-		}else {
+		} else {
 			ctx.save()
 			ctx.beginPath()
 			ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6'
@@ -392,6 +391,11 @@ function _getInitContext(this: DrawGrid): CanvasRenderingContext2D {
 	return this._getInitContext()
 }
 
+/**
+ * 初始化绘制
+ * @param grid
+ * @param drawRect
+ */
 function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 	const visibleRect = _getVisibleRect(grid)
 	const { rowCount } = grid[_]
@@ -426,6 +430,25 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 		}
 	}
 
+	const drawBorder = () => {
+		let { width } = grid.canvas
+		let { height } = grid.canvas
+		ctx.save()
+		try {
+			ctx.beginPath()
+			ctx.lineWidth = 1 || 0
+			ctx.strokeStyle = 'red' // , this.borderColor || 'transparent'
+			ctx.rect(
+					0 + ctx.lineWidth / 2,
+					0 + ctx.lineWidth / 2,
+					width - ctx.lineWidth,
+					height - ctx.lineWidth
+			)
+			ctx.stroke()
+		} finally {
+			ctx.restore()
+		}
+	}
 	let skipAbsoluteTop = 0
 	if (initFrozenRow) {
 		let absoluteTop = initFrozenRow.top
@@ -437,6 +460,7 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 			if (drawBottom <= absoluteTop) {
 				//描画範囲外（終了）
 				drawOuter(row, absoluteTop)
+				drawBorder()
 				drawLayers.draw(ctx)
 				return
 			}
@@ -455,12 +479,13 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 		if (drawBottom <= absoluteTop) {
 			//描画範囲外（終了）
 			drawOuter(row, absoluteTop)
+			drawBorder()
 			drawLayers.draw(ctx)
 			return
 		}
 	}
 	drawOuter(rowCount - 1, absoluteTop)
-
+	drawBorder()
 	drawLayers.draw(ctx)
 }
 
