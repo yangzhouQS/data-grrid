@@ -4,7 +4,7 @@ import { isNode } from './utils'
 
 const handler = new EventHandler()
 
-let ratio = 1
+let ratio: number = 1
 
 function setRatio(): void {
 	if (isNode) {
@@ -22,6 +22,10 @@ if (!isNode) {
 	handler.on(window, 'resize', setRatio)
 }
 
+/**
+ * 设置画布宽度和高度
+ * @param canvas
+ */
 export function transform(canvas: HTMLCanvasElement): HTMLCanvasElement {
 	const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
@@ -66,7 +70,6 @@ export function transform(canvas: HTMLCanvasElement): HTMLCanvasElement {
 		enumerable: true
 	})
 	const { drawImage } = ctx
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	ctx.drawImage = function(img: CanvasImageSource, ...args: any[]): void {
 		if (img !== canvas || ratio === 1) {
 			return (drawImage as AnyFunction).call(this, img, ...args)

@@ -46,7 +46,8 @@ const _ = getDrawGridSymbol()
 
 function createRootElement(): HTMLElement {
 	const element = document.createElement('div')
-	element.classList.add('cheetah-grid')
+	// element.classList.add('cheetah-grid')
+	element.classList.add('data-grid')
 	return element
 }
 
@@ -2697,6 +2698,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	} = options
     	const protectedSpace = (this[_] = {} as DrawGridProtected)
     	style.initDocument()
+    	// 装载canvas画布容器
     	protectedSpace.element = createRootElement()
     	protectedSpace.scrollable = new Scrollable()
     	protectedSpace.handler = new EventHandler()

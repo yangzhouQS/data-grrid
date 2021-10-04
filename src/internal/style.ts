@@ -1,3 +1,7 @@
+/**
+ * 计算滚动条宽度
+ * @return {number}
+ */
 function getScrollBarWidth(): number {
 	const dummy = document.createElement('div')
 	const { style } = dummy
@@ -15,25 +19,29 @@ function getScrollBarWidth(): number {
 let SCROLLBAR_SIZE: number
 import './style.css'
 
+/**
+ * 滚动条相关初始化
+ */
 function initDocumentInternal(): void {
-	// require("@/internal/style.css");
 	SCROLLBAR_SIZE = getScrollBarWidth() || 10
 	const style = document.createElement('style')
 	style.setAttribute('type', 'text/css')
 	style.setAttribute('data-name', 'cheetah-grid')
 	style.innerHTML = `
-.cheetah-grid .grid-scroll-end-point {
+.data-grid .grid-scrollable {
+	overflow: scroll;
+}
+.data-grid .grid-scroll-end-point {
 	width: ${ SCROLLBAR_SIZE }px;
 	height: ${ SCROLLBAR_SIZE }px;
 }
-.cheetah-grid > canvas {
+.data-grid > canvas {
 	width: -webkit-calc(100% - ${ SCROLLBAR_SIZE }px);
 	width: calc(100% - ${ SCROLLBAR_SIZE }px);
 	height: -webkit-calc(100% - ${ SCROLLBAR_SIZE }px);
 	height: calc(100% - ${ SCROLLBAR_SIZE }px);
 }
 		`
-
 	document.head.appendChild(style)
 }
 
