@@ -1,4 +1,4 @@
-import dataGrid from '../src/main'
+import * as dataGrid from '../src/main'
 import './styles/index.css'
 
 const records = [
@@ -183,9 +183,9 @@ const grid = new dataGrid.ListGrid({
         borderColor: 'green',
         highlightBorderColor: '#2373c8',
         highlightBgColor: '#84de8e',
-        selectionBgColor: '#c19797',
+        selectionBgColor: '#c19797'
         // frozenRowsBorderColor: 'red'
     }
 })
-grid.records = records
+grid.records = [ ...records, ...records, ...records, ...records, ...records ]
 

@@ -12,7 +12,7 @@ export type PartialThemeDefine = Partial<ThemeDefine>;
 
 export interface ThemeDefine {
     font?: string;
-    underlayBackgroundColor: string;
+    underlayBackgroundColor: string; // 未绘制区域背景
     // color
     color: ColorPropertyDefine;
     frozenRowsColor?: ColorPropertyDefine;

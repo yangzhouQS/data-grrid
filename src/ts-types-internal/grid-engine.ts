@@ -18,6 +18,8 @@ export interface DrawCellInfo<T> {
     messageHandler: MessageHandler<T>;
     style: ColumnStyleOption | HeaderStyleOption | null | undefined;
 
+    clearCellBase(): void
+
     drawCellBase(arg?: { bgColor?: ColorPropertyDefine }): void;
 
     drawCellBg(arg?: { bgColor?: ColorPropertyDefine }): void;

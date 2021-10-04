@@ -1040,6 +1040,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     	}
     }
 
+    public clearCell(context: CellContext): void {
+    	const rect = context.getRect()
+    	this.drawWithClip(context, (ctx) => {
+    		ctx.clearRect(rect.left, rect.top, rect.width, rect.height)
+    	})
+    }
+
     fillCell(context: CellContext, { fillColor = this.theme.defaultBgColor }: { fillColor?: ColorPropertyDefine } = {}): void {
     	const rect = context.getRect()
 
@@ -1048,6 +1055,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     		ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx)
 
     		ctx.beginPath()
+    		ctx.clearRect(rect.left, rect.top, rect.width, rect.height)
     		ctx.rect(rect.left, rect.top, rect.width, rect.height)
     		ctx.fill()
     	})

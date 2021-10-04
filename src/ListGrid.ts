@@ -255,6 +255,10 @@ function _onDrawValue<T>(
 		_borderWithState(grid, helper, context)
 	}
 
+	const clearCellBase = () => {
+		helper.clearCell(context)
+	}
+
 	const drawCellBase = ({ bgColor }: { bgColor?: ColorPropertyDefine } = {}): void => {
 		drawCellBg({ bgColor })
 		drawCellBorder()
@@ -265,6 +269,7 @@ function _onDrawValue<T>(
 		getMessage: () => _getCellMessage(grid, col, row),
 		messageHandler: grid[_].messageHandler,
 		style,
+		clearCellBase,
 		drawCellBase,
 		drawCellBg,
 		drawCellBorder,

@@ -14,7 +14,7 @@ import {
 	KEY_ALPHA_V
 } from './internal/KEY_CODE'
 import * as calc from '../internal/calc'
-import * as hiDPI from '../internal/hiDPI'
+// import * as hiDPI from '../internal/hiDPI'
 import * as style from '../internal/style'
 import type {
 	AfterSelectedCellEvent,
@@ -44,6 +44,7 @@ import { Scrollable } from '../internal/Scrollable'
 import { getFontSize } from '../internal/canvases'
 import { getDrawGridSymbol } from '../internal/symbolManager'
 import { parsePasteRangeBoxValues } from '../internal/paste-utils'
+import { guid } from './utils'
 
 const {
 	isTouchEvent,
@@ -53,81 +54,111 @@ const {
 } = event
 
 const _ = getDrawGridSymbol()
+let instances: { [key: number]: DrawGrid } = {}
 
-// function parseInt10(val: string): number {
-// 	return parseInt(val, 10)
+// function createRootElement(): HTMLElement {
+// 	const element = document.createElement('div')
+// 	element.classList.add('data-grid')
+// 	return element
 // }
+
+let dpr = 1
+if (typeof window !== 'undefined') {
+	dpr = Math.max(window.devicePixelRatio
+        || (window.screen && (window.screen as any).deviceXDPI / (window.screen as any).logicalXDPI)
+        || 1, 1)
+}
+
+// retina 屏幕优化
+export const devicePixelRatio = dpr;
+
+/**
+ * 创建画布设置大小
+ * @param grid
+ * @param parentElement
+ * @param dpr
+ */
+function createDom(grid: DrawGrid, parentElement: HTMLElement, dpr?: number): HTMLCanvasElement {
+	const newDom = document.createElement('canvas')
+	const width = _getSize(0, parentElement)
+	const height = _getSize(1, parentElement)
+	dpr = dpr || devicePixelRatio
+
+	const newDomStyle = newDom.style
+	if (newDomStyle) {  // In node or some other non-browser environment
+		newDomStyle.position = 'absolute'
+		newDomStyle.left = '0'
+		newDomStyle.top = '0'
+		newDomStyle.width = width + 'px'
+		newDomStyle.height = height + 'px'
+
+		newDom.setAttribute('data-grid-dom-id', '10086')
+	}
+
+	newDom.width = width * dpr
+	newDom.height = height * dpr
+
+	return newDom
+}
+
+function parseInt10(val: string): number {
+	return parseInt(val, 10)
+}
 
 /**
  * 根据DOM获取元素宽度和高度
  * @param whIdx
  * @param root
  */
-// function _getSize(whIdx: number, root: HTMLElement) {
-// 	window['_rootDom'] = root
-// 	const wh = [ 'width', 'height' ][whIdx] as 'width' | 'height'
-// 	const cwh = [ 'clientWidth', 'clientHeight' ][whIdx] as 'clientWidth' | 'clientHeight'
-// 	const plt = [ 'paddingLeft', 'paddingTop' ][whIdx] as 'paddingLeft' | 'paddingTop'
-// 	const prb = [ 'paddingRight', 'paddingBottom' ][whIdx] as 'paddingRight' | 'paddingBottom'
-// 	const stl = document.defaultView.getComputedStyle(root, null)
-// 	// document.defaultView.getComputedStyle(window._rootDom, null)['clientHeight']
-// 	// document.defaultView.getComputedStyle(window._rootDom, null)['clientHeight']
-// 	console.log('root.clientHeight', root.clientHeight)
-// 	// console.log('root.clientHeight', root.clientHeight, cwh)
-// 	return (
-// 		(root[cwh] || parseInt10(stl[wh]) ||
-//             parseInt10(root.style[wh])) - (parseInt10(stl[plt]) || 0) - (parseInt10(stl[prb]) || 0)
-// 	) | 0
-// }
+function _getSize(whIdx: number, root: HTMLElement) {
+	window['_rootDom'] = root
+	const wh = [ 'width', 'height' ][whIdx] as 'width' | 'height'
+	const cwh = [ 'offsetWidth', 'offsetHeight' ][whIdx] as 'offsetWidth' | 'offsetHeight'
+	const plt = [ 'paddingLeft', 'paddingTop' ][whIdx] as 'paddingLeft' | 'paddingTop'
+	const prb = [ 'paddingRight', 'paddingBottom' ][whIdx] as 'paddingRight' | 'paddingBottom'
+	const stl = document.defaultView.getComputedStyle(root, null)
+	return (
+		(root[cwh] || parseInt10(stl[wh]) ||
+            parseInt10(root.style[wh])) - (parseInt10(stl[plt]) || 0) - (parseInt10(stl[prb]) || 0)
+	) | 0
+}
 
 /**
  * 创建画布容器
  * @param parentElement
  */
-// function createRoot(parentElement: HTMLElement): HTMLElement {
-// 	const rootStyle = parentElement.style
-// 	if (rootStyle) {
-// 		rootStyle['webkitTapHighlightColor'] = 'transparent'
-// 		rootStyle.webkitUserSelect = 'none'
-// 		rootStyle.userSelect = 'none';
-// 		(rootStyle as any)['-webkit-touch-callout'] = 'none'
-// 		parentElement.innerHTML = ''
-// 	}
-// 	console.dir(parentElement)
-// 	setTimeout(()=>{
-// 		console.log(`setTimeout==>parentElement.clientHeight = ${parentElement.clientHeight}`)
-// 	}, 1000)
-// 	console.log(`parentElement.clientHeight = ${parentElement.clientHeight}`)
-// 	const width = _getSize(0, parentElement)
-// 	const height = _getSize(1, parentElement)
-// 	console.log(`width:${ width },height:${ height }`)
-// 	const domRoot = document.createElement('div')
-// 	domRoot.classList.add('data-grid')
-// 	domRoot.style.cssText = [
-// 		'position:relative',
-// 		// IOS13 safari probably has a compositing bug (z order of the canvas and the consequent
-// 		// dom does not act as expected) when some of the parent dom has
-// 		// `-webkit-overflow-scrolling: touch;` and the webpage is longer than one screen and
-// 		// the canvas is not at the top part of the page.
-// 		// Check `https://bugs.webkit.org/show_bug.cgi?id=203681` for more details. We remove
-// 		// this `overflow:hidden` to avoid the bug.
-// 		// 'overflow:hidden',
-// 		'width:' + width + 'px',
-// 		// 'height:' + height + 'px',
-// 		'padding:0',
-// 		'margin:0',
-// 		'border-width:0'
-// 	].join(';') + ';'
-//
-// 	return domRoot
-// }
+function createRoot(parentElement: HTMLElement): HTMLElement {
+	const rootStyle = parentElement.style
+	if (rootStyle) {
+		rootStyle['webkitTapHighlightColor'] = 'transparent'
+		rootStyle.webkitUserSelect = 'none'
+		rootStyle.userSelect = 'none';
+		(rootStyle as any)['-webkit-touch-callout'] = 'none'
+		parentElement.innerHTML = ''
+	}
+	console.log(`parentElement.clientHeight = ${ parentElement.clientHeight }`)
+	const width = _getSize(0, parentElement)
+	const height = _getSize(1, parentElement)
+	console.log(`width:${ width },height:${ height }`)
+	const domRoot = document.createElement('div')
+	domRoot.classList.add('data-grid')
+	domRoot.style.cssText = [
+		'position:relative',
+		// IOS13 safari probably has a compositing bug (z order of the canvas and the consequent
+		// dom does not act as expected) when some of the parent dom has
+		// `-webkit-overflow-scrolling: touch;` and the webpage is longer than one screen and
+		// the canvas is not at the top part of the page.
+		// Check `https://bugs.webkit.org/show_bug.cgi?id=203681` for more details. We remove
+		// this `overflow:hidden` to avoid the bug.
+		// 'overflow:hidden',
+		'width:' + width + 'px',
+		'height:' + height + 'px',
+		'padding:0',
+		'margin:0',
+		'border-width:0'
+	].join(';') + ';'
 
-function createRootElement(parentElement: HTMLElement): HTMLElement {
-	const element = document.createElement('div')
-	console.log('parentElement.offsetWidth', parentElement.offsetWidth)
-	console.log('parentElement.clientHeight', parentElement.clientHeight)
-	element.classList.add('data-grid')
-	return element
+	return domRoot
 }
 
 function _vibrate(e: TouchEvent | MouseEvent): void {
@@ -410,14 +441,20 @@ function _drawRow(
 		// 绘制数据区域以外的绘图
 		// 擦除画布计算之外区域
 		if (col >= colCount - 1 && canvasWidth > absoluteLeft - visibleRect.left) {
-			ctx.clearRect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
-		} else {
-			ctx.save()
-			ctx.beginPath()
-			ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6'
-			ctx.rect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
-			ctx.fill()
-			ctx.restore()
+			if (grid.underlayBackgroundColor === 'transparent') {
+				ctx.clearRect(
+						outerLeft,
+						absoluteTop - visibleRect.top,
+						canvasWidth - outerLeft, height
+				)
+			} else {
+				ctx.save()
+				ctx.beginPath()
+				ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6'
+				ctx.rect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
+				ctx.fill()
+				ctx.restore()
+			}
 		}
 	}
 
@@ -488,15 +525,19 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 	const drawLayers = new DrawLayers()
 
 	const drawOuter = (row: number, absoluteTop: number): void => {
-		//データ範囲外の描画
+		const outerTop = absoluteTop - visibleRect.top
+		// 在画布高度之外绘制
 		if (row >= rowCount - 1 && grid[_].canvas.height > absoluteTop - visibleRect.top) {
-			const outerTop = absoluteTop - visibleRect.top
-			ctx.save()
-			ctx.beginPath()
-			ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6'
-			ctx.rect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
-			ctx.fill()
-			ctx.restore()
+		    if (grid.underlayBackgroundColor==='transparent'){
+		        ctx.clearRect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
+			}else {
+				ctx.save()
+				ctx.beginPath()
+				ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6'
+				ctx.rect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
+				ctx.fill()
+				ctx.restore()
+			}
 		}
 	}
 
@@ -2788,14 +2829,15 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	const protectedSpace = (this[_] = {} as DrawGridProtected)
     	style.initDocument()
     	// 装载canvas画布容器
-    	protectedSpace.element = createRootElement(parentElement)
-    	// protectedSpace.element = createRoot(parentElement)
+    	// protectedSpace.element = createRootElement()
+    	protectedSpace.element = createRoot(parentElement)
     	protectedSpace.scrollable = new Scrollable()
     	protectedSpace.handler = new EventHandler()
     	protectedSpace.selection = new Selection(this)
     	protectedSpace.focusControl = new FocusControl(this, protectedSpace.scrollable.getElement(), protectedSpace.scrollable)
 
-    	protectedSpace.canvas = hiDPI.transform(document.createElement('canvas'))
+    	// protectedSpace.canvas = hiDPI.transform(document.createElement('canvas'))
+    	protectedSpace.canvas = createDom(this, protectedSpace.element)
     	protectedSpace.context = protectedSpace.canvas.getContext('2d', {
     		alpha: false
     	})!
@@ -2850,6 +2892,9 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	}
     	_bindEvents.call(this)
     	this.bindEventsInternal()
+
+    	// 缓存创建的实例
+    	instances[guid()] = this
     }
 
     /**

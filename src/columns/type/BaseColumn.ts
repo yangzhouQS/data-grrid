@@ -154,7 +154,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     	const { style, getRecord, drawCellBase, getCell } = info
     	const helper = grid.getGridCanvasHelper()
     	drawCellBase()
-
+    	// clearCellBase()
     	const record = getRecord()
     	let promise
     	if (isPromise(record)) {

@@ -1,4 +1,4 @@
-// import { IconDefine } from './ts-types'
+import { IconDefine } from './ts-types'
 import { columns, columns as _columns } from './columns'
 import { core, core as _core } from './core'
 import { tools, tools as _tools } from './tools'
@@ -45,7 +45,22 @@ export const _dataGrid = {
 	// plugin registers
 	register: _register
 }
-
+// namespace dataGrid {
+//     export const { version } = _dataGrid
+//
+//     export class ListGrid<T> extends _dataGrid.ListGrid<T> {
+//     }
+//
+//     export const { core } = _dataGrid
+//     export const { tools } = _dataGrid
+//     export const { columns } = _dataGrid
+//     export const { data } = _dataGrid
+//     export const { headers } = _dataGrid
+//     export const { themes } = _dataGrid
+//     export const { GridCanvasHelper } = _dataGrid
+//     export const { icons } = _dataGrid
+//     export const { register } = _dataGrid
+// }
 export default {
 	version: '1.0.1',
 	core: _core,
