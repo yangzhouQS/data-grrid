@@ -125,7 +125,7 @@ const _ = getDrawGridSymbol()
 function createRootElement(parentElement: HTMLElement): HTMLElement {
 	const element = document.createElement('div')
 	console.log('parentElement.offsetWidth', parentElement.offsetWidth)
-	console.log('parentElement.clientWidth', parentElement.clientWidth)
+	console.log('parentElement.clientHeight', parentElement.clientHeight)
 	element.classList.add('data-grid')
 	return element
 }
@@ -2789,7 +2789,6 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	style.initDocument()
     	// 装载canvas画布容器
     	protectedSpace.element = createRootElement(parentElement)
-    	debugger
     	// protectedSpace.element = createRoot(parentElement)
     	protectedSpace.scrollable = new Scrollable()
     	protectedSpace.handler = new EventHandler()

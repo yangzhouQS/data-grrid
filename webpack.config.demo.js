@@ -10,11 +10,14 @@ module.exports = {
 	mode: 'development',
 	devtool: 'cheap-module-source-map',
 	entry: {
-		dataGrid: './demo/main.ts'
+		dataGrid: './src/main.ts'
 	},
 	output: {
-		filename: 'index.js',
-		libraryTarget: 'umd'
+		filename: 'dataGrid.js',
+		library: 'dataGrid',
+		// libraryTarget: 'umd',
+		libraryTarget: 'umd',
+		// libraryTarget: 'window',
 	},
 	optimization: {
 		minimize: false
