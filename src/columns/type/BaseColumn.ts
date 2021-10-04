@@ -1,5 +1,6 @@
 import * as styleContents from '../style'
-import type { BaseColumnOption, CellAddress, CellContext, ColumnTypeAPI, EventListenerId, GridCanvasHelperAPI, LayoutObjectId, ListGridAPI, MaybePromise, Message, TransformRecord } from '../../ts-types'
+import type { BaseColumnOption, CellAddress, CellContext, ColumnTypeAPI, EventListenerId, GridCanvasHelperAPI, LayoutObjectId,
+	ListGridAPI, MaybePromise, Message, TransformRecord } from '../../ts-types'
 import type { ColumnFadeinState, DrawCellInfo, GridInternal } from '../../ts-types-internal'
 import { isPromise, obj } from '../../internal/utils'
 import { BaseStyle } from '../style/BaseStyle'
@@ -125,7 +126,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     	let displayValue = this.convertInternal(value)
     	if (this.transformRecord) {
     		// @ts-ignore
-    		displayValue = this.transformRecord(value, displayValue, cell, grid)
+    		displayValue = this.transformRecord({value, displayValue, cell, grid})
     	}
     	return displayValue
     }

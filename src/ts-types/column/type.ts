@@ -3,7 +3,7 @@ import { TransformRecord } from '../grid-engine'
 
 export interface BaseColumnOption {
     fadeinWhenCallbackInPromise?: boolean | null;
-    transformRecord?:TransformRecord
+    transformRecord?: TransformRecord
 }
 
 export interface NumberColumnOption extends BaseColumnOption {
