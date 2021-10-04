@@ -754,11 +754,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     	_refreshHeader(this)
 
     	this.invalidate()
-    	protectedSpace.handler.on(window, 'resize', () => {
-    		this.updateSize()
-    		this.updateScroll()
-    		this.invalidate()
-    	})
+    	protectedSpace.handler.on(window, 'resize', () => this.resize())
     }
 
     /**

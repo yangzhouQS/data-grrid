@@ -27,6 +27,7 @@ function initDocumentInternal(): void {
 	const style = document.createElement('style')
 	style.setAttribute('type', 'text/css')
 	style.setAttribute('data-name', 'data-grid')
+	style.setAttribute('id', 'data-grid')
 	style.innerHTML = `
 .data-grid .grid-scrollable {
 	overflow: scroll;
@@ -36,12 +37,12 @@ function initDocumentInternal(): void {
 	height: ${ SCROLLBAR_SIZE }px;
 }
 .data-grid > canvas {
-	width: -webkit-calc(100% - ${ SCROLLBAR_SIZE }px);
-	width: calc(100% - ${ SCROLLBAR_SIZE }px);
-	height: -webkit-calc(100% - ${ SCROLLBAR_SIZE }px);
-	height: calc(100% - ${ SCROLLBAR_SIZE }px);
+    width: -webkit-calc(100% - ${ SCROLLBAR_SIZE }px);
+    width: calc(100% - ${ SCROLLBAR_SIZE }px);
+    height: -webkit-calc(100% - ${ SCROLLBAR_SIZE }px);
+    height: calc(100% - ${ SCROLLBAR_SIZE }px);
 }
-		`
+`
 	document.head.appendChild(style)
 }
 

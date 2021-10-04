@@ -6,13 +6,11 @@
 *, ::before, ::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 #app {
   width: 1222px;
   height: 400px;
-  box-sizing: border-box;
   margin: 50px auto;
   border: 1px solid #2196f3;
   padding: 10px;

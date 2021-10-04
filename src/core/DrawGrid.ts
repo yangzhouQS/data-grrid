@@ -2986,6 +2986,15 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	this[_].focusControl.setFocusRect(this.getCellRect(sel.col, sel.row))
     }
 
+    public resize() {
+    	if (this.getElement().offsetParent) {
+    		// 只在元素可见时刷新
+    		this.updateSize()
+    		this.updateScroll()
+    		this.invalidate()
+    	}
+    }
+
     /**
      * Apply the changed scroll size.
      * @return {boolean} `true` if there was a change in the scroll size
