@@ -1,7 +1,7 @@
 {
-  "name": "@hodgef/ts-library-boilerplate-basic",
-  "version": "1.0.155",
-  "description": "Typescript Minimal Starter Kit for building libraries",
+  "name": "data-grid",
+  "version": "0.0.1",
+  "description": "data-grid",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
@@ -11,13 +11,9 @@
     "build:dts": "dts-bundle --name cheetah-grid --main dist-ts/main.d.ts --out ../dist/index.d.ts",
     "build:webpack": "cross-env NO_UPDATE_NOTIFIER=1 webpack",
     "build:demo": "rimraf dist && webpack --config webpack.config.demo.js",
-    "prettier": "prettier --write --parser typescript src/**/*.ts",
     "eslint": "eslint . --ext .js,.ts",
     "eslint:fix": "eslint ./src --fix --ext .js,.ts",
-    "eslint-demo:fix": "eslint ./demo --fix --ext .js,.ts",
-    "coverage": "npm run test -- --coverage",
-    "prepare": "npm run build",
-    "trypublish": "npm publish || true"
+    "eslint-demo:fix": "eslint ./demo --fix --ext .js,.ts"
   },
   "url": "",
   "license": "MIT",
