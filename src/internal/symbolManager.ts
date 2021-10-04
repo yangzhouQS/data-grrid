@@ -1,35 +1,5 @@
-// /*/!* eslint-disable @typescript-eslint/no-explicit-any *!/
-// import { isNode } from './utils'
-//
-// type SymbolType = (description?: string | number) => symbol;
-//
-// const Symbol: SymbolType = isNode
-// 	? (global.Symbol as SymbolType)
-// 	: (window.Symbol as SymbolType)
-// 		? (window.Symbol as SymbolType)
-// 		: ((): SymbolType => {
-// 			function random(): string {
-// 				const c = 'abcdefghijklmnopqrstuvwxyz0123456789'
-// 				const cl = c.length
-// 				let r = ''
-// 				for (let i = 0; i < 10; i++) {
-// 					r += c[Math.floor(Math.random() * cl)]
-// 				}
-// 				return r
-// 			}
-//
-// 			return (name?: string | number): symbol => {
-// 				if (name) {
-// 					return `#${ name }_${ random() }` as any
-// 				} else {
-// 					return `#_${ random() }` as any
-// 				}
-// 			}
-// 		})()
-// const mem: { [key: string]: symbol } = {}*/
-
-export function get(name?: string): '$$$$private symbol$$$$' {
-	return (name || '_') as any
+export function get(name: string = ''): symbol {
+	return Symbol.for(name)
 }
 
 export function getThemeSymbol(): '$$$$theme_symbol$$$$' {

@@ -1,7 +1,16 @@
 import * as styleContents from '../style'
 import type {
-	BaseColumnOption, CellAddress, CellContext, ColumnTypeAPI, EventListenerId, GridCanvasHelperAPI, LayoutObjectId,
-	ListGridAPI, MaybePromise, Message, TransformRecord
+	BaseColumnOption,
+	CellAddress,
+	CellContext,
+	ColumnTypeAPI,
+	EventListenerId,
+	GridCanvasHelperAPI,
+	LayoutObjectId,
+	ListGridAPI,
+	MaybePromise,
+	Message,
+	TransformRecord
 } from '../../ts-types'
 import type { ColumnFadeinState, DrawCellInfo, GridInternal } from '../../ts-types-internal'
 import { isPromise, obj } from '../../internal/utils'
