@@ -1,9 +1,10 @@
 import type { ColumnMenuItemOptions } from '../define'
-import { TransformRecord } from '../grid-engine'
+import { CanToggle, DrawColumnCallback, MultilineText, Toggled, TransformRecord } from '../grid-engine'
 
 export interface BaseColumnOption {
     fadeinWhenCallbackInPromise?: boolean | null;
     transformRecord?: TransformRecord
+    hidden?: boolean | ((record: any) => boolean)
 }
 
 export interface NumberColumnOption extends BaseColumnOption {
@@ -90,3 +91,14 @@ export type HeaderTypeOption =
     | 'sort'
     | 'CHECK'
     | 'check';
+
+class CellStyle {
+}
+
+export interface TreeColumnOption<T> extends BaseColumnOption {
+    draw?: DrawColumnCallback
+    canToggle?: CanToggle
+    toggled?: Toggled
+    cellStyle?: CellStyle
+    multilineText?: MultilineText
+}

@@ -1,40 +1,54 @@
-import type * as headerAction from '../../header/action'
-import type * as headerType from '../../header/type'
+import { BaseAction as HeaderBaseAction } from '../../header/action'
+import { BaseHeader } from '../../header/type'
 import type {
-	CellRange,
-	ColumnActionOption,
-	ColumnIconOption,
-	ColumnStyleOption,
-	ColumnTypeOption,
-	FieldDef,
-	HeaderActionOption,
-	HeaderStyleOption,
-	HeaderTypeOption,
-	LayoutObjectId,
-	ListGridAPI,
-	Message
+    CellAddress,
+    CellRange,
+    ColumnActionOption,
+    ColumnIconOption,
+    ColumnStyleOption,
+    ColumnTypeOption,
+    FieldDef,
+    HeaderActionOption,
+    HeaderStyleOption,
+    HeaderTypeOption,
+    LayoutObjectId,
+    ListGridAPI,
+    Message
 } from '../../ts-types'
 import type { BaseAction } from '../../columns/action'
 import type { BaseColumn } from '../../columns/type/BaseColumn'
 import type { BaseStyle as HeaderBaseStyle } from '../../header/style'
 
+type TooltipOption<T> = string | ((rec: T) => string)
+type HeaderTooltip<T> =
+    | string
+    | ((header: { cell: CellAddress; field: FieldDef<T> }) => string)
 export type OldSortOption<T> = boolean | ((order: 'asc' | 'desc', col: number, grid: ListGridAPI<T>) => void);
 
 export interface BaseHeaderDefine<T> {
     caption?: string | (() => string);
     headerField?: string;
     headerStyle?: HeaderStyleOption | HeaderBaseStyle | null;
-    headerType?: HeaderTypeOption | headerType.BaseHeader<T> | null;
-    headerAction?: HeaderActionOption | headerAction.BaseAction<T> | null;
+    headerType?: HeaderTypeOption | BaseHeader<T> | null;
+    headerAction?: HeaderActionOption | HeaderBaseAction<T> | null;
+
+    headerIcon?: ColumnIconOption<T> | ColumnIconOption<T>[]
+    headerTooltip?: HeaderTooltip<T>
+    headerTooltipType?: HeaderTooltip<T>
+    headerIconTooltip?: HeaderTooltip<T>
+
     sort?: OldSortOption<T>;
+
+    // 头部单元格合并
+    colSpan?: number;
+    rowSpan?: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderDefine<T> extends BaseHeaderDefine<T> {
 }
 
 export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
-    field?: FieldDef<T> | string;
+    field?: FieldDef<T>;
     width?: number | string;
     minWidth?: number | string;
     maxWidth?: number | string;
@@ -43,11 +57,10 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
     columnType?: ColumnTypeOption | BaseColumn<T, any> | null;
     action?: ColumnActionOption | BaseAction<T> | null;
     style?: ColumnStyleOption | null;
-
-    // contentHidden?: boolean | ((record: T) => boolean)
-    //   disableResize?: boolean
-    //   tooltip?: TooltipOption<T>
-    //   tooltipType?: TooltipOption<T>
+    contentHidden?: boolean | ((record: T) => boolean);
+    disableResize?: boolean;
+    tooltip?: TooltipOption<T>;
+    tooltipType?: TooltipOption<T>;
 }
 
 /**
@@ -56,20 +69,27 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
 export interface HeaderData<T> {
     id: LayoutObjectId;
     caption?: string | (() => string);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     field?: any;
     style?: HeaderStyleOption | HeaderBaseStyle | null;
-    headerType: headerType.BaseHeader<T>;
-    action?: headerAction.BaseAction<T>;
+    headerType: BaseHeader<T>;
+    action?: HeaderBaseAction<T>;
     define: HeaderDefine<T>;
+    icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
+    tooltip?: HeaderTooltip<T>;
+    tooltipType?: HeaderTooltip<T>;
+    iconTooltip?: HeaderTooltip<T>
 }
 
 export interface WidthData {
     width?: number | string;
     minWidth?: number | string;
     maxWidth?: number | string;
+    disableResize?: boolean
 }
 
+/**
+ * 单元格数据展示约束
+ */
 export interface ColumnData<T> extends WidthData {
     id: LayoutObjectId;
     field?: FieldDef<T>;
@@ -79,6 +99,9 @@ export interface ColumnData<T> extends WidthData {
     action?: BaseAction<T>;
     style: ColumnStyleOption | null | undefined;
     define: ColumnDefine<T>;
+    contentHidden?: boolean | ((record: T) => boolean)
+    tooltip?: TooltipOption<T>
+    tooltipType?: TooltipOption<T>
 }
 
 // Simple header

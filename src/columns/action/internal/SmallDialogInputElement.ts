@@ -4,7 +4,7 @@ import { EventHandler } from '../../../internal/EventHandler'
 import { createElement } from '../../../internal/dom'
 import { setInputValue } from './input-value-handler'
 
-const CLASSNAME = 'cheetah-grid__small-dialog-input'
+const CLASSNAME = 'data-grid__small-dialog-input'
 const INPUT_CLASSNAME = `${ CLASSNAME }__input`
 const HIDDEN_CLASSNAME = `${ CLASSNAME }--hidden`
 const SHOWN_CLASSNAME = `${ CLASSNAME }--shown`

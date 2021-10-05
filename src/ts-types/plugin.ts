@@ -49,6 +49,14 @@ export interface ThemeDefine {
         errorBgColor?: ColorPropertyDefine;
         warnBgColor?: ColorPropertyDefine;
     };
+
+    tree: {
+        lineColor?: ColorPropertyDefine
+        buttonColor?: ColorPropertyDefine
+        buttonBgColor?: ColorPropertyDefine
+        buttonBorderColor?: ColorPropertyDefine
+        linkColor?: ColorPropertyDefine
+    };
 }
 
 export type RequiredThemeDefine = Required<ThemeDefine> & {
@@ -57,4 +65,5 @@ export type RequiredThemeDefine = Required<ThemeDefine> & {
     button: Required<ThemeDefine['button']>;
     header: Required<ThemeDefine['header']>;
     messages: Required<ThemeDefine['messages']>;
+    tree: Required<ThemeDefine['tree']>
 };

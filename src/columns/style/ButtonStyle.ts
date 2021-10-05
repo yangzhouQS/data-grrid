@@ -1,10 +1,10 @@
 import type { ButtonStyleOption, ColorDef } from '../../ts-types'
-import { Style } from './Style'
+import { Styles } from './Styles'
 import { defaults } from '../../internal/utils'
 
 let defaultStyle: ButtonStyle
 
-export class ButtonStyle extends Style {
+export class ButtonStyle extends Styles {
     private _buttonBgColor?: ColorDef
 
     static get DEFAULT(): ButtonStyle {

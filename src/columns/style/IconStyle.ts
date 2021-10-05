@@ -1,10 +1,10 @@
 import type { IconStyleOption } from '../../ts-types'
-import { Style } from './Style'
+import { Styles } from './Styles'
 import { defaults } from '../../internal/utils'
 
 let defaultStyle: IconStyle
 
-export class IconStyle extends Style {
+export class IconStyle extends Styles {
 	static get DEFAULT(): IconStyle {
 		return defaultStyle ? defaultStyle : (defaultStyle = new IconStyle())
 	}

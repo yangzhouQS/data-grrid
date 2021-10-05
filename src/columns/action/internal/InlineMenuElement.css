@@ -1,4 +1,4 @@
-.cheetah-grid__inline-menu {
+.data-grid__inline-menu {
   position: absolute;
   color: rgba(0, 0, 0, 0.87);
   box-sizing: content-box;
@@ -10,23 +10,23 @@
   max-height: calc(100vh - 40px);
   overflow-y: auto;
 }
-.cheetah-grid__inline-menu--hidden {
+.data-grid__inline-menu--hidden {
   transform: scale(0.9);
   box-shadow: none;
   opacity: 0;
   pointer-events: none;
   transition: all 50ms ease-out;
 }
-.cheetah-grid__inline-menu--hidden * {
+.data-grid__inline-menu--hidden * {
   pointer-events: none;
 }
-.cheetah-grid__inline-menu--shown {
+.data-grid__inline-menu--shown {
   transform: translateY(-7px);
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   opacity: 1;
   transition: all 150ms ease-out;
 }
-.cheetah-grid__inline-menu__menu-item {
+.data-grid__inline-menu__menu-item {
   height: 100%;
   box-sizing: border-box;
   display: flex;
@@ -38,10 +38,10 @@
   overflow: hidden;
   padding: 0 16px;
 }
-.cheetah-grid__inline-menu__menu-item--empty {
+.data-grid__inline-menu__menu-item--empty {
   color: rgba(0, 0, 0, 0.38);
 }
-.cheetah-grid__inline-menu__menu-item::before {
+.data-grid__inline-menu__menu-item::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -53,12 +53,12 @@
   pointer-events: none;
   transition: opacity 15ms linear;
 }
-.cheetah-grid__inline-menu__menu-item:hover::before {
+.data-grid__inline-menu__menu-item:hover::before {
   opacity: 0.04;
 }
-.cheetah-grid__inline-menu__menu-item[data-select]::before {
+.data-grid__inline-menu__menu-item[data-select]::before {
   opacity: 0.04;
 }
-.cheetah-grid__inline-menu__menu-item:focus::before {
+.data-grid__inline-menu__menu-item:focus::before {
   opacity: 0.12;
 }

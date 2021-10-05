@@ -17,8 +17,18 @@ import {
 import {
 	EVENT_TYPE,
 	BaseStyle,
-	Style,
-	of as headerStyleOf
+	Styles,
+	NumberStyle,
+	CheckStyle,
+	RadioStyle,
+	ButtonStyle,
+	ImageStyle,
+	IconStyle,
+	PercentCompleteBarStyle,
+	MultilineTextStyle,
+	MenuStyle,
+	TreeStyle,
+	of as styleOf
 } from './columns/style'
 
 import {
@@ -34,14 +44,25 @@ import {
 	MultilineTextColumn,
 	BranchGraphColumn,
 	RadioColumn,
+	TreeColumn,
 	of as typeOf
 } from './columns/type'
 
 const style = {
 	EVENT_TYPE,
 	BaseStyle,
-	Style,
-	headerStyleOf
+	Style: Styles,
+	NumberStyle,
+	CheckStyle,
+	RadioStyle,
+	ButtonStyle,
+	ImageStyle,
+	IconStyle,
+	PercentCompleteBarStyle,
+	MultilineTextStyle,
+	MenuStyle,
+	TreeStyle,
+	styleOf
 }
 const type = {
 	TYPES,
@@ -56,6 +77,7 @@ const type = {
 	MultilineTextColumn,
 	BranchGraphColumn,
 	RadioColumn,
+	TreeColumn,
 	of: typeOf
 }
 const action = {

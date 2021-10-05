@@ -20,6 +20,7 @@ import { MultilineTextColumn } from './type/MultilineTextColumn'
 import { NumberColumn } from './type/NumberColumn'
 import { PercentCompleteBarColumn } from './type/PercentCompleteBarColumn'
 import { RadioColumn } from './type/RadioColumn'
+import {TreeColumn } from './type/TreeColumn'
 
 export const TYPES = {
 	DEFAULT: new Column<any>(),
@@ -28,7 +29,8 @@ export const TYPES = {
 	RADIO: new RadioColumn<any>(),
 	BUTTON: new ButtonColumn<any>(),
 	IMAGE: new ImageColumn<any>(),
-	MULTILINETEXT: new MultilineTextColumn<any>()
+	MULTILINETEXT: new MultilineTextColumn<any>(),
+	TREE: new TreeColumn<any>()
 }
 
 /**
@@ -46,6 +48,7 @@ export {
 	BranchGraphColumn,
 	MenuColumn,
 	MultilineTextColumn,
+	TreeColumn,
 	// types
 	BaseColumnOption,
 	BranchGraphColumnOption,

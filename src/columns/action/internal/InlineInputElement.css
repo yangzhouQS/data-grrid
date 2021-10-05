@@ -1,8 +1,8 @@
 /* ms */
-.cheetah-grid__inline-input::-ms-clear {
+.data-grid__inline-input::-ms-clear {
   visibility: hidden;
 }
-.cheetah-grid__inline-input {
+.data-grid__inline-input {
   position: absolute;
   box-sizing: border-box;
 }

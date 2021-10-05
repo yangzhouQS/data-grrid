@@ -13,10 +13,12 @@ import type {
 	TransformRecord
 } from '../../ts-types'
 import type { ColumnFadeinState, DrawCellInfo, GridInternal } from '../../ts-types-internal'
-import { isPromise, obj } from '../../internal/utils'
+import { getOrApply, isDef, isPromise, obj } from '../../internal/utils'
 import { BaseStyle } from '../style/BaseStyle'
 import { animate } from '../../internal/animate'
 import { getColumnFadeinStateId } from '../../internal/symbolManager'
+import { Rect } from '../../internal/Rect'
+import { getInlineEditingState } from '../utils'
 
 const { setReadonly } = obj
 const COLUMN_FADEIN_STATE_ID = getColumnFadeinStateId()
@@ -106,10 +108,13 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
 
     private _transformRecord?: TransformRecord
 
+    private _hidden?: boolean | ((record: T) => boolean)
 
     constructor(option: BaseColumnOption = {}) {
     	this.onDrawCell = this.onDrawCell.bind(this) //スコープを固定させる
     	this._transformRecord = option.transformRecord
+    	this._hidden = option.hidden
+
     	//Promiseのcallbackでフェードイン表示する
     	this._fadeinWhenCallbackInPromise = option.fadeinWhenCallbackInPromise || false
     }
@@ -124,6 +129,40 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
 
     get StyleClass(): typeof BaseStyle {
     	return BaseStyle
+    }
+
+    get hidden(): boolean | ((record: T) => boolean) {
+    	return this._hidden
+    }
+
+    set hidden(value: boolean | ((record: T) => boolean)) {
+    	this._hidden = value
+    }
+
+    public reviseAttachCellsArea(
+    		_rect: Rect,
+    		_row: number,
+    		_grid: ListGridAPI<T>
+    ) {
+    	// nothing
+    }
+
+    public reviseAttachCellsPadding(
+    		padding: [ number, number, number, number ],
+    		row: number,
+    		grid: ListGridAPI<T>
+    ) {
+    	const state = getInlineEditingState(grid)
+    	if (state.inputPadding) {
+    		padding[0] += state.inputPadding[0]
+    		padding[1] += state.inputPadding[1]
+    		padding[2] += state.inputPadding[2]
+    		padding[3] += state.inputPadding[3]
+    	}
+    }
+
+    public reviseFocusRect(_rect: Rect, _row: number, _grid: ListGridAPI<T>) {
+    	// nothing
     }
 
     /**
@@ -151,7 +190,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
      */
     onDrawCell(cellValue: MaybePromise<unknown>, info: DrawCellInfo<T>, context: CellContext, grid: ListGridAPI<T>): void | Promise<void> {
     	// 单元格绘制相关信息
-    	const { style, getRecord, drawCellBase, getCell } = info
+    	const { style, getRecord, drawCellBase, getCell, getContentHidden } = info
     	const helper = grid.getGridCanvasHelper()
     	drawCellBase()
     	// clearCellBase()
@@ -184,8 +223,16 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     				if (!drawRect) {
     					return
     				}
-
+    				const _record = getRecord() as T
+    				if (isPromise(_record)) {
+    					return
+    				}
     				const actStyle = styleContents.of(style, record, this.StyleClass)
+
+    				if (this.isContentHidden(_record, getContentHidden)) {
+    					return
+    				}
+
     				// 绘制内容
     				// this.drawInternal(this.convertInternal(val), currentContext, actStyle, helper, grid, info)
     				this.drawInternal(
@@ -259,5 +306,23 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
 
     getCopyCellValue(value: V, _grid: ListGridAPI<T>, _cell: CellAddress): string {
     	return value as any
+    }
+
+    protected drawEditingInternal(
+    		_context: CellContext,
+    		_style: BaseStyle,
+    		_helper: GridCanvasHelperAPI,
+    		_grid: ListGridAPI<T>,
+    		_info: DrawCellInfo<T>
+    ): void {
+    	// nothing
+    }
+
+    private isContentHidden(record: T, getContentHidden: () => boolean) {
+    	let contentHidden = getOrApply(this.hidden, record)
+    	if (!isDef(contentHidden)) {
+    		contentHidden = getContentHidden()
+    	}
+    	return contentHidden
     }
 }

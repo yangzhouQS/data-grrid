@@ -2,7 +2,7 @@
 // import * as style from './header/style'
 // import * as type from './header/type'
 
-import { ACTIONS, BaseAction, BaseActionOption, CheckHeaderAction, ImmutableHeaderActions, SortHeaderAction, of as headerActionOf, ofCell as headerActionOfCell } from './header/action'
+import { ACTIONS, BaseAction, CheckHeaderAction, ImmutableHeaderActions, SortHeaderAction, of as headerActionOf, ofCell as headerActionOfCell } from './header/action'
 import {
 	BaseStyle,
 	// BaseStdStyle,

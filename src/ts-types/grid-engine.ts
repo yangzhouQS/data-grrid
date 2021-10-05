@@ -115,6 +115,8 @@ export interface DrawGridAPI {
     dispose(): void;
 
     addDisposable(disposable: { dispose(): void }): void;
+
+    _getMouseRelativePoint(e: Event): { x: number; y: number } | null
 }
 
 export interface DataSourceAPI<T> {
@@ -167,13 +169,10 @@ export interface ListGridAPI<T> extends DrawGridAPI {
 
     getRecordStartRowByRecordIndex(index: number): number;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getHeaderField(col: number, row: number): any | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getHeaderValue(col: number, row: number): any | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setHeaderValue(col: number, row: number, newValue: any): void;
 
     getCellRange(col: number, row: number): CellRange;
@@ -185,6 +184,13 @@ export interface ListGridAPI<T> extends DrawGridAPI {
     makeVisibleGridCell(field: FieldDef<T>, index: number): void;
 
     getGridCanvasHelper(): GridCanvasHelperAPI;
+
+    selectCellRange(
+        startCol: number,
+        startRow: number,
+        endCol: number,
+        endRow: number
+    ): void
 
     doChangeValue(
         col: number,
@@ -257,6 +263,19 @@ export interface GridCanvasHelperAPI {
             icons?: SimpleColumnIconOption[];
         }
     ): void;
+
+    getTextRect(
+        value: string,
+        context: CellContext,
+        option: {
+            font?: FontPropertyDefine
+            icons?: SimpleColumnIconOption[]
+            padding?: number | string | (number | string)[]
+            textAlign?: CanvasTextAlign
+            textBaseline?: CanvasTextBaseline
+            textOverflow?: TextOverflow
+        }
+    ): RectProps
 
     button(
         caption: string,
@@ -354,6 +373,33 @@ export interface GridCanvasHelperAPI {
             textBaseline?: CanvasTextBaseline;
         }
     ): InlineAPI;
+
+    tree(
+        value: string,
+        context: CellContext,
+        option: {
+            font?: string
+            offset?: number
+            color?: ColorPropertyDefine
+            lineColor?: ColorPropertyDefine
+            buttonColor?: ColorPropertyDefine
+            buttonBgColor?: ColorPropertyDefine
+            buttonBorderColor?: ColorPropertyDefine
+            icons?: SimpleColumnIconOption[]
+            padding?: number | string | (number | string)[]
+            textAlign?: CanvasTextAlign
+            textBaseline?: CanvasTextBaseline
+            textOverflow?: TextOverflow
+            treeInfo?: TreeInfo
+            treeNodeSpace?: number
+            isMultilineText?: boolean
+            autoWrapText?: boolean
+            lineHeight?: string | number
+            lineClamp?: LineClamp
+        }
+    ): void
+
+    attachArea(rect: RectProps, context: CellContext): void
 }
 
 export interface CellContext {
@@ -379,6 +425,63 @@ export interface Selection {
 }
 
 // =============== 新添加
+
+export interface CellSelection {
+    border: {
+        bottom: boolean
+        left: boolean
+        right: boolean
+        top: boolean
+    }
+    dragged: boolean
+    select: CellAddress
+    range: CellRange
+}
+
+export interface CellContext {
+    readonly col: number
+    readonly row: number
+    range: CellRange
+
+    getContext(): CanvasRenderingContext2D
+
+    toCurrentContext(): CellContext
+
+    getDrawRect(): RectProps | null
+
+    getRect(): RectProps
+
+    getSelection(): CellSelection
+
+    setRectFilter(rectFilter: (base: RectProps) => RectProps): void
+}
+
+export interface Selection {
+    select: CellAddress
+    range: CellRange
+}
+
+export type DrawColumnCallback = <T>(
+    value: any,
+    ctx: CanvasRenderingContext2D,
+    info: {
+        grid: ListGridAPI<T>
+        record: unknown
+        rect: RectProps
+        col: number
+        row: number
+        selection: CellSelection
+    }
+) => boolean
+
+export type DrawHeaderCallback = <T>(
+    value: any,
+    ctx: CanvasRenderingContext2D,
+    info: {
+        grid: ListGridAPI<T>
+    }
+) => boolean
+
 interface IRecordParams<T, V> {
     value: V,
     displayValue: V,
@@ -387,3 +490,41 @@ interface IRecordParams<T, V> {
 }
 
 export type TransformRecord = (params: IRecordParams<any, unknown>) => any
+
+export interface AttachCellStyle {
+    innerBox?: 'none' | 'dashed'
+}
+
+export type ToggledType = 'expand' | 'expandAll' | 'collapse' | 'collapseAll'
+
+export type CanToggleType = ToggledType | 'over'
+
+export type CellStyle = AttachCellStyle | (<T>(record: T) => AttachCellStyle)
+
+export type MultilineText = boolean | (<T>(record: T) => boolean)
+
+export interface TreeInfo {
+    expanded: boolean
+    isLast: boolean
+    isLeaf: boolean
+    key: any
+    level: number
+    levelLast: boolean[]
+    parentKey: any
+}
+
+export type CanToggle = (e: {
+    col: number
+    row: number
+    type: CanToggleType
+    treeInfo: TreeInfo
+    event: Event
+}) => boolean
+
+export type Toggled = (e: {
+    col: number
+    row: number
+    type: ToggledType
+    treeInfo: TreeInfo
+    event: Event
+}) => void

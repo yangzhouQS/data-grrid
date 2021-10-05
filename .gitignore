@@ -24,4 +24,3 @@ yarn-error.log*
 /dist-ts/
 ./dist/*
 ./demo/*
-./kaka-grid/*

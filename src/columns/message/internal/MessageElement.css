@@ -1,4 +1,4 @@
-.cheetah-grid__message-element {
+.data-grid__message-element {
   position: absolute;
   margin-top: -2px;
   box-sizing: border-box;
@@ -11,15 +11,15 @@
   color: rgba(0, 0, 0, 0.87);
 }
 
-.cheetah-grid__message-element--hidden {
+.data-grid__message-element--hidden {
   display: none;
 }
 
-.cheetah-grid__message-element--shown {
+.data-grid__message-element--shown {
   display: block;
 }
 
-.cheetah-grid__message-element__message {
+.data-grid__message-element__message {
   font-family: Roboto;
   font-size: 12px;
   font-size: 0.75rem;

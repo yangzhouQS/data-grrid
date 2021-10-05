@@ -1,4 +1,4 @@
-@keyframes cheetah-grid__tooltip-element--shown-animation {
+@keyframes data-grid__tooltip-element--shown-animation {
   0% {
     opacity: 0;
     transform: scale(0.8) translateX(-60%);
@@ -9,38 +9,40 @@
   }
 }
 
-.cheetah-grid__tooltip-element {
+.data-grid__tooltip-element {
   position: absolute;
   box-sizing: border-box;
   border-radius: 3px;
-  background-color: #232f34;
+  /*background-color: #232f34;*/
+  background-color: #ffffff;
   padding: 8px;
   pointer-events: none;
   user-select: none;
-  color: #fff;
+  color: #777777;
+  border: 1px solid #ddd;
 }
 
-.cheetah-grid__tooltip-element--hidden {
+.data-grid__tooltip-element--hidden {
   opacity: 0;
   transform: translateX(-50%);
   transition: opacity 75ms linear;
 }
 
-.cheetah-grid__tooltip-element--shown {
+.data-grid__tooltip-element--shown {
   opacity: 1;
   transform: translateX(-50%);
-  animation: cheetah-grid__tooltip-element--shown-animation 150ms ease-out;
+  animation: data-grid__tooltip-element--shown-animation 150ms ease-out;
 }
 
-.cheetah-grid__tooltip-element__content {
+.data-grid__tooltip-element__content {
   font-family: Roboto;
   font-size: 12px;
   font-size: 0.75rem;
   min-height: 1em;
-  line-height: 1;
   width: 100%;
   display: block;
   white-space: pre-wrap;
   margin: 0;
   box-sizing: border-box;
+  line-height: 1.75em;
 }

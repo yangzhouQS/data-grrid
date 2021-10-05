@@ -19,5 +19,4 @@ export interface FieldAssessor<T> {
 }
 
 export type FieldDef<T> = keyof T | FieldGetter<T> | FieldAssessor<T>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FieldData = MaybePromiseOrUndef<any>;

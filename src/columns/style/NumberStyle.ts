@@ -1,10 +1,10 @@
 import type { NumberStyleOption } from '../../ts-types'
-import { Style } from './Style'
+import { Styles } from './Styles'
 import { defaults } from '../../internal/utils'
 
 let defaultStyle: NumberStyle
 
-export class NumberStyle extends Style {
+export class NumberStyle extends Styles {
 	static get DEFAULT(): NumberStyle {
 		return defaultStyle ? defaultStyle : (defaultStyle = new NumberStyle())
 	}

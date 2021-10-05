@@ -2,7 +2,7 @@ import type {ListGridAPI, MessageObject} from '../../../ts-types';
 import {EventHandler} from '../../../internal/EventHandler';
 import {createElement} from '../../../internal/dom';
 
-const CLASSNAME = 'cheetah-grid__message-element';
+const CLASSNAME = 'data-grid__message-element';
 const MESSAGE_CLASSNAME = `${CLASSNAME}__message`;
 const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
 const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;

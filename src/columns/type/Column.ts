@@ -2,7 +2,7 @@ import * as utils from './columnUtils'
 import type { BaseColumnOption, CellContext, GridCanvasHelperAPI, ListGridAPI } from '../../ts-types'
 import { BaseColumn } from './BaseColumn'
 import type { DrawCellInfo } from '../../ts-types-internal'
-import { Style } from '../style/Style'
+import { Styles } from '../style/Styles'
 
 export class Column<T> extends BaseColumn<T, string> {
 
@@ -10,8 +10,8 @@ export class Column<T> extends BaseColumn<T, string> {
 		super(options)
 	}
 
-	get StyleClass(): typeof Style {
-		return Style
+	get StyleClass(): typeof Styles {
+		return Styles
 	}
 
 	public clone(): Column<T> {
@@ -21,7 +21,7 @@ export class Column<T> extends BaseColumn<T, string> {
 	drawInternal(
 			value: string,
 			context: CellContext,
-			style: Style,
+			style: Styles,
 			helper: GridCanvasHelperAPI,
 			_grid: ListGridAPI<T>,
 			{ drawCellBase, getIcon }: DrawCellInfo<T>

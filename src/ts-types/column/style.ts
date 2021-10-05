@@ -1,4 +1,4 @@
-import type { LineClamp, TextOverflow } from '../define'
+import type { Appearance, LineClamp, TextOverflow } from '../define'
 import type { ColorDef } from '../base'
 
 export interface ColumnStyle {
@@ -22,7 +22,9 @@ export interface StyleOption extends StdBaseStyleOption {
     color?: ColorDef;
     font?: string;
     padding?: number | string | (number | string)[];
+    inputPadding?: number | string | (number | string)[]
     textOverflow?: TextOverflow;
+    appearance?: Appearance
 }
 
 export interface HeaderStdStyleOption extends StdBaseStyleOption {
@@ -71,6 +73,17 @@ export interface MultilineTextHeaderStyleOption extends HeaderStdStyleOption {
 
 export interface MenuStyleOption extends StyleOption {
     appearance?: 'menulist-button' | 'none';
+}
+
+export interface TreeStyleOption extends StyleOption {
+    lineColor?: ColorDef
+    buttonColor?: ColorDef
+    buttonBgColor?: ColorDef
+    buttonBorderColor?: ColorDef
+    linkColor?: ColorDef
+    lineHeight?: string | number
+    autoWrapText?: boolean
+    lineClamp?: LineClamp
 }
 
 export interface ImageStyleOption extends StdBaseStyleOption {

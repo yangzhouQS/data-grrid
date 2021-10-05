@@ -7,7 +7,7 @@ import { setInputValue } from './input-value-handler'
 const KEY_TAB = 9
 const KEY_ENTER = 13
 
-const CLASSNAME = 'cheetah-grid__inline-input'
+const CLASSNAME = 'data-grid__inline-input'
 import './InlineInputElement.css'
 
 function createInputElement(): HTMLInputElement {

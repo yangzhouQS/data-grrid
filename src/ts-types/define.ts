@@ -1,5 +1,6 @@
 import type { ColorDef } from './base'
 import type { ListGridAPI } from './grid-engine'
+import { SimpleColumnIconOption } from '../ts-types-internal'
 
 // ****** Column Icon Options *******
 export interface FontIcon<T> {
@@ -90,3 +91,12 @@ export type ColorPropertyDefine = ColorDef | ((args: StylePropertyFunctionArg) =
 export type ColorsPropertyDefine = ColorPropertyDefine | (ColorDef | null)[] | ((args: StylePropertyFunctionArg) => (ColorDef | null)[]);
 
 export type FontPropertyDefine = string | ((args: StylePropertyFunctionArg) => string);
+
+export type Appearance =
+    | 'menulist-button'
+    | 'lookup-button'
+    | 'clear-button'
+    | 'date-button'
+    | 'none'
+    | ((active: boolean) => SimpleColumnIconOption)
+    | SimpleColumnIconOption

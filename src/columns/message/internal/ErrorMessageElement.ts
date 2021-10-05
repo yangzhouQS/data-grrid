@@ -1,6 +1,6 @@
 import { MessageElement } from './MessageElement'
 
-const CLASSNAME = 'cheetah-grid__error-message-element'
+const CLASSNAME = 'data-grid__error-message-element'
 const MESSAGE_CLASSNAME = `${ CLASSNAME }__message`
 import './ErrorMessageElement.css'
 

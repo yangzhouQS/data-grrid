@@ -2,7 +2,7 @@ import { EventHandler } from '../../internal/EventHandler'
 import type { ListGridAPI } from '../../ts-types'
 import { createElement } from '../../internal/dom'
 
-const CLASSNAME = 'cheetah-grid__tooltip-element'
+const CLASSNAME = 'data-grid__tooltip-element'
 const CONTENT_CLASSNAME = `${ CLASSNAME }__content`
 const HIDDEN_CLASSNAME = `${ CLASSNAME }--hidden`
 const SHOWN_CLASSNAME = `${ CLASSNAME }--shown`

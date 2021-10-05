@@ -1,10 +1,10 @@
 import type { LineClamp, MultilineTextStyleOption } from '../../ts-types'
-import { Style } from './Style'
+import { Styles } from './Styles'
 import { defaults } from '../../internal/utils'
 
 let defaultStyle: MultilineTextStyle
 
-export class MultilineTextStyle extends Style {
+export class MultilineTextStyle extends Styles {
     private _lineHeight: string | number
 
     private _autoWrapText: boolean

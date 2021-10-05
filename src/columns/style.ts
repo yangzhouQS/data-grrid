@@ -21,13 +21,14 @@ import { MultilineTextStyle } from './style/MultilineTextStyle'
 import { NumberStyle } from './style/NumberStyle'
 import { PercentCompleteBarStyle } from './style/PercentCompleteBarStyle'
 import { RadioStyle } from './style/RadioStyle'
-import { Style } from './style/Style'
+import { Styles } from './style/Styles'
+import { TreeStyle } from './style/TreeStyle'
 
 const { EVENT_TYPE } = BaseStyle
 export {
 	EVENT_TYPE,
 	BaseStyle,
-	Style,
+	Styles,
 	NumberStyle,
 	CheckStyle,
 	RadioStyle,
@@ -37,6 +38,7 @@ export {
 	PercentCompleteBarStyle,
 	MultilineTextStyle,
 	MenuStyle,
+	TreeStyle,
 	// types
 	BaseStyleOption,
 	ButtonStyleOption,
@@ -54,7 +56,7 @@ export function of(
 		columnStyle: ColumnStyleOption | null | undefined,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		record: any,
-		StyleClassDef: typeof BaseStyle = Style
+		StyleClassDef: typeof BaseStyle = Styles
 ): BaseStyle {
 	if (columnStyle) {
 		if (columnStyle instanceof BaseStyle) {

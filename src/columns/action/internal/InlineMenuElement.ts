@@ -10,7 +10,7 @@ const KEY_UP = 38
 const KEY_DOWN = 40
 const KEY_ESC = 27
 
-const CLASSNAME = 'cheetah-grid__inline-menu'
+const CLASSNAME = 'data-grid__inline-menu'
 const ITEM_CLASSNAME = `${ CLASSNAME }__menu-item`
 const HIDDEN_CLASSNAME = `${ CLASSNAME }--hidden`
 const SHOWN_CLASSNAME = `${ CLASSNAME }--shown`
