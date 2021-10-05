@@ -74,7 +74,7 @@ const grid = new dataGrid.ListGrid({
     header: [
         {
             caption: '序号',
-            width: 85,
+            width: 200,
             columnType: new dataGrid.columns.type.Column<any>({
                 transformRecord({ value, displayValue, cell, grid }) {
                     return cell.row - grid.frozenRowCount + 1
@@ -84,7 +84,7 @@ const grid = new dataGrid.ListGrid({
                 textAlign: 'center'
             }
         },
-        { field: 'id', caption: 'ID', width: 100 },
+        { field: 'id', caption: 'ID', width: 200 },
         {
             caption: '基本信息',
             headerStyle: {
@@ -98,7 +98,7 @@ const grid = new dataGrid.ListGrid({
         {
             field: 'text',
             caption: 'text',
-            width: 300,
+            width: 200,
             columnType: new dataGrid.columns.type.MultilineTextColumn({}),
             style: {
                 autoWrapText: true, // 是否换行
@@ -122,19 +122,19 @@ const grid = new dataGrid.ListGrid({
                 max: 20
             })
         },
-        { field: 'sex', caption: '性别', width: 300 },
-        { field: 'email', caption: '邮件', width: '10%' },
+        { field: 'sex', caption: '性别', width: 200 },
+        { field: 'email', caption: '邮件', width: 200 },
         {
             field: 'check',
             caption: 'check',
-            width: 120,
+            width: 200,
             columnType: 'check',
             action: 'check'
         },
         {
             field: 'value',
             caption: '数字列',
-            width: 180,
+            width: 200,
             columnType: new dataGrid.columns.type.NumberColumn({})
         },
         {
@@ -153,7 +153,7 @@ const grid = new dataGrid.ListGrid({
         {
             field: 'check',
             caption: 'check',
-            width: 120,
+            width: 200,
             columnType: 'check',
             action: 'check',
             style: {
@@ -167,7 +167,7 @@ const grid = new dataGrid.ListGrid({
         {
             field: 'sel',
             caption: '下拉选择',
-            width: 260,
+            width: 200,
             columnType: new dataGrid.columns.type.MenuColumn({ options }),
             style: {
                 appearance: 'none'
@@ -178,7 +178,7 @@ const grid = new dataGrid.ListGrid({
     defaultRowHeight: 50,
     hiddenHeader: true,
     readonly: true,
-    frozenColCount: 1,
+    // frozenColCount: 1, // 固定列
     theme: {
         borderColor: 'green',
         highlightBorderColor: '#2373c8',

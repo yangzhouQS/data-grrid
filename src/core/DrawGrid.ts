@@ -33,7 +33,7 @@ import type {
 	PasteCellEvent,
 	PasteRangeBoxValues
 } from '../ts-types'
-import { array, browser, event, isDescendantElement, isPromise, isDef } from '../internal/utils'
+import { array, browser, event, isDescendantElement, isPromise } from '../internal/utils'
 
 import { DG_EVENT_TYPE } from './DG_EVENT_TYPE'
 import { EventHandler } from '../internal/EventHandler'
@@ -44,122 +44,12 @@ import { Scrollable } from '../internal/Scrollable'
 import { getFontSize } from '../internal/canvases'
 import { getDrawGridSymbol } from '../internal/symbolManager'
 import { parsePasteRangeBoxValues } from '../internal/paste-utils'
-import { guid } from './utils'
+import { guid, createRoot, createDom } from './utils'
 
-const {
-	isTouchEvent,
-	getMouseButtons,
-	getKeyCode,
-	cancel: cancelEvent
-} = event
+const { isTouchEvent, getMouseButtons, getKeyCode, cancel: cancelEvent } = event
 
 const _ = getDrawGridSymbol()
 let instances: { [key: number]: DrawGrid } = {}
-
-// function createRootElement(): HTMLElement {
-// 	const element = document.createElement('div')
-// 	element.classList.add('data-grid')
-// 	return element
-// }
-
-let dpr = 1
-if (typeof window !== 'undefined') {
-	dpr = Math.max(window.devicePixelRatio
-        || (window.screen && (window.screen as any).deviceXDPI / (window.screen as any).logicalXDPI)
-        || 1, 1)
-}
-
-// retina 屏幕优化
-export const devicePixelRatio = dpr;
-
-/**
- * 创建画布设置大小
- * @param grid
- * @param parentElement
- * @param dpr
- */
-function createDom(grid: DrawGrid, parentElement: HTMLElement, dpr?: number): HTMLCanvasElement {
-	const newDom = document.createElement('canvas')
-	const width = _getSize(0, parentElement)
-	const height = _getSize(1, parentElement)
-	dpr = dpr || devicePixelRatio
-
-	const newDomStyle = newDom.style
-	if (newDomStyle) {  // In node or some other non-browser environment
-		newDomStyle.position = 'absolute'
-		newDomStyle.left = '0'
-		newDomStyle.top = '0'
-		newDomStyle.width = width + 'px'
-		newDomStyle.height = height + 'px'
-
-		newDom.setAttribute('data-grid-dom-id', '10086')
-	}
-
-	newDom.width = width * dpr
-	newDom.height = height * dpr
-
-	return newDom
-}
-
-function parseInt10(val: string): number {
-	return parseInt(val, 10)
-}
-
-/**
- * 根据DOM获取元素宽度和高度
- * @param whIdx
- * @param root
- */
-function _getSize(whIdx: number, root: HTMLElement) {
-	window['_rootDom'] = root
-	const wh = [ 'width', 'height' ][whIdx] as 'width' | 'height'
-	const cwh = [ 'offsetWidth', 'offsetHeight' ][whIdx] as 'offsetWidth' | 'offsetHeight'
-	const plt = [ 'paddingLeft', 'paddingTop' ][whIdx] as 'paddingLeft' | 'paddingTop'
-	const prb = [ 'paddingRight', 'paddingBottom' ][whIdx] as 'paddingRight' | 'paddingBottom'
-	const stl = document.defaultView.getComputedStyle(root, null)
-	return (
-		(root[cwh] || parseInt10(stl[wh]) ||
-            parseInt10(root.style[wh])) - (parseInt10(stl[plt]) || 0) - (parseInt10(stl[prb]) || 0)
-	) | 0
-}
-
-/**
- * 创建画布容器
- * @param parentElement
- */
-function createRoot(parentElement: HTMLElement): HTMLElement {
-	const rootStyle = parentElement.style
-	if (rootStyle) {
-		rootStyle['webkitTapHighlightColor'] = 'transparent'
-		rootStyle.webkitUserSelect = 'none'
-		rootStyle.userSelect = 'none';
-		(rootStyle as any)['-webkit-touch-callout'] = 'none'
-		parentElement.innerHTML = ''
-	}
-	console.log(`parentElement.clientHeight = ${ parentElement.clientHeight }`)
-	const width = _getSize(0, parentElement)
-	const height = _getSize(1, parentElement)
-	console.log(`width:${ width },height:${ height }`)
-	const domRoot = document.createElement('div')
-	domRoot.classList.add('data-grid')
-	domRoot.style.cssText = [
-		'position:relative',
-		// IOS13 safari probably has a compositing bug (z order of the canvas and the consequent
-		// dom does not act as expected) when some of the parent dom has
-		// `-webkit-overflow-scrolling: touch;` and the webpage is longer than one screen and
-		// the canvas is not at the top part of the page.
-		// Check `https://bugs.webkit.org/show_bug.cgi?id=203681` for more details. We remove
-		// this `overflow:hidden` to avoid the bug.
-		// 'overflow:hidden',
-		'width:' + width + 'px',
-		'height:' + height + 'px',
-		'padding:0',
-		'margin:0',
-		'border-width:0'
-	].join(';') + ';'
-
-	return domRoot
-}
 
 function _vibrate(e: TouchEvent | MouseEvent): void {
 	if (navigator.vibrate && isTouchEvent(e)) {
@@ -170,10 +60,7 @@ function _vibrate(e: TouchEvent | MouseEvent): void {
 
 function _getTargetRowAt(this: DrawGrid, absoluteY: number): { row: number; top: number } | null {
 	const internal = this.getTargetRowAtInternal(absoluteY)
-	// if (internal != null) {
-	// return internal
-	// }
-	if (isDef(internal)) {
+	if (internal != null && typeof internal !== 'undefined') {
 		return internal
 	}
 	const findBefore = (
@@ -197,13 +84,7 @@ function _getTargetRowAt(this: DrawGrid, absoluteY: number): { row: number; top:
 		}
 		return null
 	}
-	const findAfter = (
-			startRow: number,
-			startBottom: number
-	): {
-        top: number;
-        row: number;
-    } | null => {
+	const findAfter = (startRow: number, startBottom: number): { top: number; row: number; } | null => {
 		let top = startBottom - _getRowHeight.call(this, startRow)
 		const { rowCount } = this[_]
 		for (let row = startRow; row < rowCount; row++) {
@@ -229,13 +110,7 @@ function _getTargetRowAt(this: DrawGrid, absoluteY: number): { row: number; top:
 }
 
 
-function _getTargetColAt(
-		grid: DrawGrid,
-		absoluteX: number
-): {
-    left: number;
-    col: number;
-} | null {
+function _getTargetColAt(grid: DrawGrid, absoluteX: number): { left: number; col: number; } | null {
 	let left = 0
 	const { colCount } = grid[_]
 	for (let col = 0; col < colCount; col++) {
@@ -435,17 +310,26 @@ function _drawRow(
 		drawLayers: DrawLayers
 ): void {
 	const { colCount } = grid[_]
+
+	// 绘制数据区域以外的绘图
 	const drawOuter = (col: number, absoluteLeft: number): void => {
-		const canvasWidth = grid[_].canvas.width
-		const outerLeft = absoluteLeft - visibleRect.left
-		// 绘制数据区域以外的绘图
+		const canvasWidth = grid[_].canvas.width // 画布总宽度
+		const outerLeft = absoluteLeft - visibleRect.left // 列总宽度 - 可视区域左侧距离画布左侧距离
+		// console.log(`canvasWidth=${canvasWidth}, absoluteLeft=${absoluteLeft},visibleRect.left=${visibleRect.left}, outerLeft=${outerLeft}, grid.underlayBackgroundColor`)
 		// 擦除画布计算之外区域
 		if (col >= colCount - 1 && canvasWidth > absoluteLeft - visibleRect.left) {
 			if (grid.underlayBackgroundColor === 'transparent') {
+				/**
+                 * x    要清除的矩形左上角的 x 坐标。
+                 * y    要清除的矩形左上角的 y 坐标。
+                 * width    要清除的矩形的宽度，以像素计。
+                 * height    要清除的矩形的高度，以像素计。
+                 */
 				ctx.clearRect(
 						outerLeft,
 						absoluteTop - visibleRect.top,
-						canvasWidth - outerLeft, height
+						canvasWidth - outerLeft,
+						height
 				)
 			} else {
 				ctx.save()
@@ -459,7 +343,7 @@ function _drawRow(
 	}
 
 	let skipAbsoluteLeft = 0
-	if (initFrozenCol) {
+	if (initFrozenCol) { // 固定列
 		let absoluteLeft = initFrozenCol.left
 		const count = grid[_].frozenColCount // 固定列
 		for (let { col } = initFrozenCol; col < count; col++) {
@@ -528,9 +412,9 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 		const outerTop = absoluteTop - visibleRect.top
 		// 在画布高度之外绘制
 		if (row >= rowCount - 1 && grid[_].canvas.height > absoluteTop - visibleRect.top) {
-		    if (grid.underlayBackgroundColor==='transparent'){
-		        ctx.clearRect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
-			}else {
+			if (grid.underlayBackgroundColor === 'transparent') {
+				ctx.clearRect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
+			} else {
 				ctx.save()
 				ctx.beginPath()
 				ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6'
@@ -603,13 +487,61 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 	drawLayers.draw(ctx)
 }
 
+let _isPreciseColWidth = false
+
 function _toPxWidth(grid: DrawGrid, width: string | number): number {
-	return Math.round(calc.toPx(width, grid[_].calcWidthContext))
+	// 解决100%出现滚动条问题，此办法会导致右侧有空白，空白部分由_initColWidthsOffset负责填充
+	// return Math.round(toPx(width, grid[_].calcWidthContext));
+	const w = calc.toPx(width, grid[_].calcWidthContext)
+	return _isPreciseColWidth ? w : Math.round(w)
 }
 
+function _getColPreciseWidth(grid: DrawGrid, col: number) {
+	try {
+		_isPreciseColWidth = true
+		return grid.getColWidth(col)
+	} finally {
+		_isPreciseColWidth = false
+	}
+}
+
+function _initColWidthsOffset(grid: DrawGrid) {
+	const colWidthsOffset: {
+        [col: number]: number
+    } = {}
+	let total = 0
+	for (let col = 0; col < grid.colCount; col++) {
+		const w1 = grid.getColWidth(col)
+		const w2 = _getColPreciseWidth(grid, col)
+		if (w1 !== w2) {
+			total += w2 - w1
+			colWidthsOffset[col] = 0
+		}
+	}
+	total = Math.round(total)
+	if (total > 0) {
+		for (const col in colWidthsOffset) {
+			if (colWidthsOffset.hasOwnProperty(col)) {
+				colWidthsOffset[col] += 1
+				total--
+				if (!total) {
+					break
+				}
+			}
+		}
+	}
+
+	grid[_].colWidthsOffset = colWidthsOffset
+}
+
+// function _resetColWidthOffset(grid: DrawGrid, col: number) {
+// 	delete grid[_].colWidthsOffset[col]
+// }
+
 function _adjustColWidth(grid: DrawGrid, col: number, orgWidth: number): number {
+	const offset = grid[_].colWidthsOffset[col] || 0
 	const limits = _getColWidthLimits(grid, col)
-	return Math.max(_applyColWidthLimits(limits, orgWidth), 0)
+	return Math.max(_applyColWidthLimits(limits, orgWidth), 0) + offset
 }
 
 function _applyColWidthLimits(limits: { min?: number; max?: number } | void | null, orgWidth: number): number {
@@ -652,28 +584,10 @@ function _getColWidthDefine(grid: DrawGrid, col: number): string | number {
  * @returns {object|null} the column width limits
  * @private
  */
-function _getColWidthLimits(
-		grid: DrawGrid,
-		col: number
-):
-    | {
-    min?: undefined;
-    minDef?: undefined;
-    max?: undefined;
-    maxDef?: undefined;
-}
-    | {
-    min: number;
-    minDef: string | number;
-    max?: undefined;
-    maxDef?: undefined;
-}
-    | {
-    min?: undefined;
-    minDef?: undefined;
-    max: number;
-    maxDef: string | number;
-}
+function _getColWidthLimits(grid: DrawGrid, col: number):
+    | { min?: undefined; minDef?: undefined; max?: undefined; maxDef?: undefined; }
+    | { min: number; minDef: string | number; max?: undefined; maxDef?: undefined; }
+    | { min?: undefined; minDef?: undefined; max: number; maxDef: string | number; }
     | null {
 	const limit = grid[_].colWidthsLimit[col]
 	if (!limit) {
@@ -750,7 +664,8 @@ function _calcAutoColWidthExpr(grid: DrawGrid, shortCircuit = true): string {
 		}
 	}
 	if (hasLimitsOnAuto.length && others.length) {
-		const autoPx = (fullWidth - _toPxWidth(grid, `calc(${ others.map((c) => (typeof c === 'number' ? `${ c }px` : c)).join(' + ') })`)) / autoCount
+		const autoPx = (fullWidth - _toPxWidth(grid, `calc(${ others.map((c) =>
+			(typeof c === 'number' ? `${ c }px` : c)).join(' + ') })`)) / autoCount
 		hasLimitsOnAuto.forEach((limits) => {
 			if (limits.min && autoPx < limits.min) {
 				others.push(limits.minDef)
@@ -1185,10 +1100,12 @@ function _getMouseAbstractPoint(grid: DrawGrid, evt: TouchEvent | MouseEvent): {
 	return { x, y }
 }
 
-
+/**
+ * 事件处理系统
+ * @return void
+ */
 function _bindEvents(this: DrawGrid): void {
-	// eslint-disable-next-line consistent-this, @typescript-eslint/no-this-alias
-	const grid = this
+	const grid = this as DrawGrid
 	const { handler, element, scrollable } = grid[_]
 	const getCellEventArgsSet = <EVT extends TouchEvent | MouseEvent>(
 		e: EVT
@@ -1610,11 +1527,11 @@ function _toRelativeRect(grid: DrawGrid, absoluteRect: Rect): Rect {
 
 	return rect
 }
-
 //end private methods
 
 
 /**
+ * 管理鼠标向下移动
  * managing mouse down moving
  * @private
  */
@@ -1728,6 +1645,7 @@ class BaseMouseDownMover {
 }
 
 /**
+ * 用鼠标管理单元格选择操作
  * managing cell selection operation with mouse
  * @private
  */
@@ -1740,7 +1658,8 @@ class CellSelector extends BaseMouseDownMover {
     		return
     	}
     	_moveFocusCell.call(this._grid, cell.col, cell.row, e.shiftKey)
-
+    	// TODO 重置列偏移
+    	// _resetColWidthOffset(this._grid, cell.col)
     	this._bindMoveAndUp(e)
 
     	this._cell = cell
@@ -1814,6 +1733,7 @@ class CellSelector extends BaseMouseDownMover {
 }
 
 /**
+ * 使用鼠标管理行宽度更改操作
  * managing row width changing operation with mouse
  * @private
  */
@@ -1895,6 +1815,7 @@ function setSafeInputValue(input: HTMLInputElement, value: string): void {
 }
 
 /**
+ * 管理焦点
  * Manage focus
  * @private
  */
@@ -2747,6 +2668,9 @@ interface DrawGridProtected {
             min?: string | number;
         };
     };
+    colWidthsOffset: {
+        [col: number]: number
+    };
     calcWidthContext: {
         _: DrawGridProtected;
         full: number;
@@ -2860,6 +2784,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     	protectedSpace.rowHeightsMap = new NumberMap<number>()
     	protectedSpace.colWidthsMap = new NumberMap<number | string>()
     	protectedSpace.colWidthsLimit = {}
+    	protectedSpace.colWidthsOffset = {}
     	protectedSpace.calcWidthContext = {
     		_: protectedSpace,
     		get full(): number {
@@ -3113,6 +3038,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
      * @return {boolean} `true` if there was a change in the scroll size
      */
     updateScroll(): boolean {
+    	_initColWidthsOffset(this)
     	const { scrollable } = this[_]
     	const newHeight = _getScrollHeight.call(this)
     	const newWidth = _getScrollWidth(this)
