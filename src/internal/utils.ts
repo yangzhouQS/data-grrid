@@ -300,7 +300,9 @@ function getKeyCode(e: KeyboardEvent): number {
     return e.keyCode || e.which
 }
 
-function isTouchEvent(e: TouchEvent | MouseEvent): e is TouchEvent {
+// function isTouchEvent(e: TouchEvent | MouseEvent): e is TouchEvent {
+function isTouchEvent(e: Event): e is TouchEvent {
+    if (!e)return false
     return !!(e as TouchEvent).changedTouches
 }
 

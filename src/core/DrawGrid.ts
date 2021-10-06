@@ -52,6 +52,7 @@ const _ = getDrawGridSymbol()
 let instances: { [key: number]: DrawGrid } = {}
 
 function _vibrate(e: TouchEvent | MouseEvent): void {
+
     if (navigator.vibrate && isTouchEvent(e)) {
         navigator.vibrate(50)
     }
@@ -1081,6 +1082,7 @@ function _updatedSelection(this: DrawGrid): void {
 
 function _getMouseAbstractPoint(grid: DrawGrid, evt: TouchEvent | MouseEvent): { x: number; y: number } | null {
     let e: MouseEvent | Touch
+
     if (isTouchEvent(evt)) {
         e = evt.changedTouches[0]
     } else {
@@ -1107,13 +1109,8 @@ function _getMouseAbstractPoint(grid: DrawGrid, evt: TouchEvent | MouseEvent): {
 function _bindEvents(this: DrawGrid): void {
     const grid = this as DrawGrid
     const { handler, element, scrollable } = grid[_]
-    const getCellEventArgsSet = <EVT extends TouchEvent | MouseEvent>(
-        e: EVT
-    ): {
-        abstractPos?: { x: number; y: number };
-        cell?: CellAddress;
-        eventArgs?: CellAddress & { event: EVT };
-    } => {
+    const getCellEventArgsSet = <EVT extends TouchEvent | MouseEvent>(e: EVT): { abstractPos?: { x: number; y: number }; cell?: CellAddress; eventArgs?: CellAddress & { event: EVT }; } => {
+
         const abstractPos = _getMouseAbstractPoint(grid, e)
         if (!abstractPos) {
             return {}
@@ -1147,6 +1144,7 @@ function _bindEvents(this: DrawGrid): void {
         return limit.max !== limit.min
     }
     handler.on(element, 'mousedown', (e) => {
+
         const eventArgsSet = getCellEventArgsSet(e)
         const { abstractPos, eventArgs } = eventArgsSet
         if (!abstractPos) {
@@ -1204,6 +1202,7 @@ function _bindEvents(this: DrawGrid): void {
         longTouchId = window.setTimeout(() => {
             //長押しした場合選択モード
             longTouchId = 0
+
             const abstractPos = _getMouseAbstractPoint(grid, e)
             if (!abstractPos) {
                 return
@@ -1576,6 +1575,7 @@ class BaseMouseDownMover {
         if (!last) {
             return false
         }
+
         const pt = _getMouseAbstractPoint(this._grid, e)
         return pt != null && pt.x === last.x && pt.y === last.y
     }
@@ -1629,6 +1629,7 @@ class BaseMouseDownMover {
         // mouseup後すぐに、clickイベントを反応しないようにする制御要
         if (this._moved) {
             //移動が発生していたら
+
             this._mouseEndPoint = _getMouseAbstractPoint(this._grid, e)
             setTimeout(() => {
                 this._mouseEndPoint = null
@@ -1721,6 +1722,7 @@ class CellSelector extends BaseMouseDownMover {
 
     private _getTargetCell(e: MouseEvent | TouchEvent): CellAddress | null {
         const grid = this._grid
+
         const abstractPos = _getMouseAbstractPoint(grid, e)
         if (!abstractPos) {
             return null
@@ -3933,6 +3935,9 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     }
 
     public _getMouseRelativePoint(e: Event | MouseEvent) {
+        if (!e) {
+            debugger
+        }
         const abstractPos = _getMouseAbstractPoint(this, e as MouseEvent)
         if (abstractPos) {
             return {

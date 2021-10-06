@@ -23,6 +23,9 @@ export interface DrawGridEvents {
      * Indicates the cell selection state has changed.
      */
     SELECTED_CELL: 'selected_cell';
+    MOUSE_SELECTED_START: 'mouse_selected_start'
+    MOUSE_SELECTED_END: 'mouse_selected_end'
+
     /**
      * Indicates key-downed.
      */
@@ -51,6 +54,15 @@ export interface DrawGridEvents {
     SCROLL: 'scroll';
     FOCUS_GRID: 'focus_grid';
     BLUR_GRID: 'blur_grid';
+
+    CAN_DRAG_SELECTION: 'can_drag_selection'
+    DRAG_SELECTION: 'drag_selection'
+    CLICK_UNDERLAY: 'click_underlay'
+    DBLCLICK_UNDERLAY: 'dblclick_underlay'
+    DBLTAP_UNDERLAY: 'dbltap_underlay'
+    COPY: 'copydata'
+    CUT: 'cutdata'
+    PASTE: 'pastedata'
 }
 
 /**
@@ -63,6 +75,8 @@ export const DG_EVENT_TYPE: DrawGridEvents = {
 	MOUSEDOWN_CELL: 'mousedown_cell',
 	MOUSEUP_CELL: 'mouseup_cell',
 	SELECTED_CELL: 'selected_cell',
+    MOUSE_SELECTED_START: 'mouse_selected_start',
+    MOUSE_SELECTED_END: 'mouse_selected_end',
 	KEYDOWN: 'keydown',
 	MOUSEMOVE_CELL: 'mousemove_cell',
 	MOUSEENTER_CELL: 'mouseenter_cell',
@@ -78,5 +92,14 @@ export const DG_EVENT_TYPE: DrawGridEvents = {
 	RESIZE_COLUMN: 'resize_column',
 	SCROLL: 'scroll',
 	FOCUS_GRID: 'focus_grid',
-	BLUR_GRID: 'blur_grid'
+	BLUR_GRID: 'blur_grid',
+
+    CAN_DRAG_SELECTION: 'can_drag_selection',
+    DRAG_SELECTION: 'drag_selection',
+    CLICK_UNDERLAY: 'click_underlay',
+    DBLCLICK_UNDERLAY: 'dblclick_underlay',
+    DBLTAP_UNDERLAY: 'dbltap_underlay',
+    COPY: 'copydata',
+    CUT: 'cutdata',
+    PASTE: 'pastedata',
 } as DrawGridEvents

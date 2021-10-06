@@ -82,10 +82,8 @@ export function createRoot(parentElement: HTMLElement): HTMLElement {
 		(rootStyle as any)['-webkit-touch-callout'] = 'none'
 		parentElement.innerHTML = ''
 	}
-	console.log(`parentElement.clientHeight = ${ parentElement.clientHeight }`)
 	const width = _getSize(0, parentElement)
 	const height = _getSize(1, parentElement)
-	console.log(`width:${ width },height:${ height }`)
 	const domRoot = document.createElement('div')
 	domRoot.classList.add('data-grid')
 	domRoot.style.cssText = [

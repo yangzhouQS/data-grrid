@@ -48,7 +48,7 @@ export interface HeaderDefine<T> extends BaseHeaderDefine<T> {
 }
 
 export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
-    field?: FieldDef<T>;
+    field?: FieldDef<T> | string;
     width?: number | string;
     minWidth?: number | string;
     maxWidth?: number | string;
@@ -92,7 +92,7 @@ export interface WidthData {
  */
 export interface ColumnData<T> extends WidthData {
     id: LayoutObjectId;
-    field?: FieldDef<T>;
+    field?: FieldDef<T> | string;
     icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
     message?: Message | ((record: T) => Message) | keyof T | (Message | ((record: T) => Message) | keyof T)[];
     columnType: BaseColumn<T, any>;

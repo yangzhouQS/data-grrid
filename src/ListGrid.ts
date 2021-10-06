@@ -100,7 +100,7 @@ function _getCellValue<T>(grid: ListGrid<T>, col: number, row: number): FieldDat
         return typeof caption === 'function' ? caption() : caption
     } else {
         const { field } = grid[_].layoutMap.getBody(col, row)
-        return _getField(grid, field, row)
+        return _getField(grid, field as FieldDef<T>, row)
     }
 }
 
@@ -121,7 +121,7 @@ function _setCellValue<T>(
             return false
         }
         const index = _getRecordIndexByRow(grid, row)
-        return grid[_].dataSource.setField(index, field, value)
+        return grid[_].dataSource.setField(index, field as FieldDef<T>, value)
     }
 }
 
@@ -832,10 +832,6 @@ export interface ListGridConstructorOptions<T> extends DrawGridConstructorOption
  * ListGrid
  */
 export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
-    _getMouseRelativePoint(e: Event): { x: number; y: number } {
-        throw new Error('Method not implemented.')
-    }
-
     protected [_]: ListGridProtected<T>
 
     static get EVENT_TYPE(): typeof LG_EVENT_TYPE {
@@ -1170,8 +1166,8 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
      * @param  {number} row The row index.
      * @return {*} The field object.
      */
-    getField(col: number, row: number): FieldDef<T> | undefined {
-        return this[_].layoutMap.getBody(col, row ?? this[_].layoutMap.headerRowCount).field
+    getField(col: number, row: number): FieldDef<T> |  undefined {
+        return this[_].layoutMap.getBody(col, row ?? this[_].layoutMap.headerRowCount).field as FieldDef<T>
     }
 
     /**

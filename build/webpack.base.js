@@ -10,7 +10,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = (env) => {
     let isDev = env.development;
-    console.log('---', dev, __dirname, path.resolve(__dirname, '../dist'));
     const base = {
         entry: {
             main: path.resolve(__dirname, '../src/main.js'),

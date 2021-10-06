@@ -1,80 +1,46 @@
 import * as dataGrid from '../src/main'
 import './styles/index.css'
+import { records } from './data.js'
 
-const records = [
-    {
-        id: 1,
-        name: 'liuMing',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        percent: '80%',
-        value2: 18,
-        sel: '',
-        age: 26,
-        check: false,
-        phone: '1008611',
-        sex: '男',
-        email: '263849722@qq.com',
-        value: 1234567890
+
+const cachedDataSource = dataGrid.data.CachedDataSource.ofArray(records)
+const treeDataSource = new dataGrid.data.TreeDataSource(cachedDataSource, {
+    keyField: 'id',
+    parentKeyField: 'parentId',
+    // expandedKeys: [30], // 默认展开的节点 keyField 值数组
+    hasChildren: function (rec) { // <- 此方法会频繁触发
+        // 返回当前记录（rec）是否有字节点
+        const ret = rec ? rec.isLeaf : true
+        return ret
     },
-    {
-        id: 2,
-        name: 'tom',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        percent: '80%',
-        value2: 18,
-        sel: '1',
-        age: 18,
-        check: false,
-        phone: '1008611',
-        sex: '男',
-        email: '263849722@qq.com',
-        value: 1234567890.12
-    },
-    {
-        id: 3,
-        name: 'sam',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        percent: '80%',
-        value2: 18,
-        sel: '2',
-        age: 34,
-        check: true,
-        phone: '1008611',
-        sex: '男',
-        email: '263849722@qq.com',
-        value: -1234567890.123
-    },
-    {
-        id: 4,
-        name: 'lisa',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        percent: '80%',
-        value2: 18,
-        sel: '3',
-        age: 12,
-        check: true,
-        phone: '1008611',
-        sex: '男',
-        email: '263849722@qq.com',
-        value: -1234567890.666666
+    // <- 此方法只有当rec有子节点且treeDataSource找不到子节点数据时才触发
+    getChildren: function (rec, all) {
+        // 返回当前记录（rec）的子节点记录数组
+        // all为false表示只返回一级子节点；为true则表示返回全部的子节点
+        /*const parentKey = rec ? rec.ghId : -1
+        if (!loadedData[parentKey]) {
+            loadedData[parentKey] = t.loadData(parentKey, all).then(function (records) {
+                if (Array.isArray(records)) {
+                    data.push.apply(data, records)
+                } else {
+                    data.push.apply(data, records.records)
+                }
+                cachedDataSource.length = data.length
+                return records
+            })
+        }
+        return loadedData[parentKey]*/
     }
-]
-const options = [
-    { value: '', label: 'Empty' },
-    { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' },
-    { value: '4', label: 'Option 4' },
-    { value: '5', label: 'Option 5' },
-    { value: '6', label: 'Option 6' },
-    { value: '7', label: 'Option 7' }
-]
+})
+
+
 const grid = new dataGrid.ListGrid({
     parentElement: document.getElementById('app'),
+    dataSource: treeDataSource,
     header: [
         {
             caption: '序号',
-            width: 200,
+            width: 100,
             columnType: new dataGrid.columns.type.Column<any>({
                 transformRecord({ value, displayValue, cell, grid }) {
                     return cell.row - grid.frozenRowCount + 1
@@ -84,108 +50,54 @@ const grid = new dataGrid.ListGrid({
                 textAlign: 'center'
             }
         },
-        { field: 'id', caption: 'ID', width: 200 },
         {
-            caption: '基本信息',
-            headerStyle: {
-                textAlign: 'center'
-            },
-            columns: [
-                { field: 'name', caption: '名称', width: 200 },
-                { field: 'age', caption: '年龄', width: 200 }
-            ]
-        },
-        {
-            field: 'text',
-            caption: 'text',
+            field: 'name',
+            caption: '工号',
             width: 200,
-            columnType: new dataGrid.columns.type.MultilineTextColumn({}),
-            style: {
-                autoWrapText: true, // 是否换行
-                lineClamp: 2,
-                lineHeight: 20,
-                textOverflow: 'ellipsis'
-            }
-        },
-        {
-            field: 'percent',
-            caption: 'percent',
-            width: 200,
-            columnType: new dataGrid.columns.type.PercentCompleteBarColumn()
-        },
-        {
-            field: 'value2',
-            caption: 'value(10-20)',
-            width: 200,
-            columnType: new dataGrid.columns.type.PercentCompleteBarColumn({
-                min: 10,
-                max: 20
-            })
-        },
-        { field: 'sex', caption: '性别', width: 200 },
-        { field: 'email', caption: '邮件', width: 200 },
-        {
-            field: 'check',
-            caption: 'check',
-            width: 200,
-            columnType: 'check',
-            action: 'check'
-        },
-        {
-            field: 'value',
-            caption: '数字列',
-            width: 200,
-            columnType: new dataGrid.columns.type.NumberColumn({})
-        },
-        {
-            caption: '操作',
-            width: 200,
-            columnType: new dataGrid.columns.type.ButtonColumn<any>({
-                caption: '点击'
-            }),
-            action: new dataGrid.columns.action.ButtonAction({
-                disabled: false,
-                action: (rec, info) => {
-                    console.log(rec, info)
-                }
+            columnType: new dataGrid.columns.type.TreeColumn({
+                canToggle: function (e) {
+                    if (e.type !== 'over') {
+                    }
+                    return true
+                },
+                toggled: function (e) {
+                    console.log('toggle')
+                },
+                multilineText: true
             })
         },
         {
-            field: 'check',
-            caption: 'check',
-            width: 200,
-            columnType: 'check',
-            action: 'check',
-            style: {
-                bgColor: '#4fe231',
-                borderColor: 'red',
-                uncheckBgColor: '#0ee5a1',
-                checkBgColor: 'rgb(255, 73, 72)',
-                textAlign: 'end'
-            }
+            field: 'fullName',
+            caption: '工号全称',
+            width: 300
         },
         {
-            field: 'sel',
-            caption: '下拉选择',
-            width: 200,
-            columnType: new dataGrid.columns.type.MenuColumn({ options }),
-            style: {
-                appearance: 'none'
-            }
+            field: 'ghState',
+            caption: '施工状态',
+            width: 80
+        },
+        {
+            field: 'creatorName',
+            caption: '创建人',
+            width: 180
+        },
+        {
+            field: 'createdAt',
+            caption: '创建时间',
+            width: 240
         }
     ],
     headerRowHeight: 40, // header行高
     defaultRowHeight: 50,
     hiddenHeader: true,
-    readonly: true,
+    readonly: true
     // frozenColCount: 1, // 固定列
-    theme: {
+    /*theme: {
         borderColor: 'green',
         highlightBorderColor: '#2373c8',
         highlightBgColor: '#84de8e',
-        selectionBgColor: '#c19797'
-        // frozenRowsBorderColor: 'red'
-    }
+        selectionBgColor: '#c19797',
+        frozenRowsBorderColor: 'red'
+    }*/
 })
-grid.records = [ ...records, ...records, ...records, ...records, ...records ]
 
