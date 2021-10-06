@@ -50,6 +50,7 @@ export const themes = {
 	MATERIAL_DESIGN,
 	theme,
 	of,
+	setDefault,
 	getDefault,
 	getChoices
 }

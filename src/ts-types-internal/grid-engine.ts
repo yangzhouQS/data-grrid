@@ -13,6 +13,10 @@ export interface DrawCellInfo<T> {
 
     getIcon(): ColumnIconOption<T> | ColumnIconOption<T>[] | null;
 
+    getHeaderIcon(): ColumnIconOption<T> | ColumnIconOption<T>[] | null
+
+    getHeaderIconTooltip(): string
+
     getMessage(): Message;
 
     messageHandler: MessageHandler<T>;

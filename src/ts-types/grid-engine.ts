@@ -3,7 +3,7 @@ import type { AnyListener, DrawGridEventHandlersEventMap, DrawGridEventHandlersR
 import type { CellAddress, CellRange, FieldData, FieldDef } from './grid'
 import type { ColorPropertyDefine, ColorsPropertyDefine, FontPropertyDefine, LineClamp, TextOverflow } from './define'
 import type { RequiredThemeDefine } from './plugin'
-import type { SimpleColumnIconOption } from '../ts-types-internal/data'
+import type { SimpleColumnIconOption } from '../ts-types-internal'
 
 export type LayoutObjectId = number | string | symbol;
 
@@ -146,8 +146,12 @@ export interface SortState {
     order: 'asc' | 'desc' | undefined;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type HeaderValues = Map<any, any>;
+
+export interface ListGridSpanBodyOptions {
+    startCol: number
+    endCol: number
+}
 
 export interface ListGridAPI<T> extends DrawGridAPI {
     records: T[] | null;
@@ -157,7 +161,8 @@ export interface ListGridAPI<T> extends DrawGridAPI {
     headerValues: HeaderValues;
     recordRowCount: number;
     disabled: boolean | ((getValue: T) => boolean);
-    readOnly: boolean | ((getValue: T) => boolean);
+    readonly: boolean | ((getValue: T) => boolean);
+    spanBodyOptions: ListGridSpanBodyOptions | null
 
     listen<TYPE extends keyof ListGridEventHandlersEventMap<T>>(type: TYPE, listener: (...event: ListGridEventHandlersEventMap<T>[TYPE]) => ListGridEventHandlersReturnMap[TYPE]): EventListenerId;
 
@@ -402,6 +407,18 @@ export interface GridCanvasHelperAPI {
     attachArea(rect: RectProps, context: CellContext): void
 }
 
+export interface CellSelection {
+    border: {
+        bottom: boolean
+        left: boolean
+        right: boolean
+        top: boolean
+    }
+    dragged: boolean
+    select: CellAddress
+    range: CellRange
+}
+
 export interface CellContext {
     readonly col: number;
     readonly row: number;
@@ -414,7 +431,8 @@ export interface CellContext {
 
     getRect(): RectProps;
 
-    getSelection(): { select: CellAddress; range: CellRange };
+    // 选中区域
+    getSelection(): CellSelection ; // { select: CellAddress; range: CellRange };
 
     setRectFilter(rectFilter: (base: RectProps) => RectProps): void;
 }

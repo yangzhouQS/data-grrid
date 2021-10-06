@@ -10,7 +10,7 @@ export function getDrawGridSymbol(): '$$$$draw_grid_symbol$$$$' {
     return get('protected.draw_grid') as any
 }
 
-export function getProtectedSymbol(): '$$$$protected symbol$$$$' {
+export function getListGridSymbol(): '$$$$protected symbol$$$$' {
     return get('protected.list_grid') as any
 }
 
