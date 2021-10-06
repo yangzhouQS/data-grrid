@@ -25,7 +25,7 @@
     <script src="kakaGrid.js"></script>
 </head>
 <body>
-<div id="app"></div>
+<div id="app" style="width: 1000px;height: 360px;"></div>
 <script>
   const records = [
     {
@@ -100,7 +100,7 @@
     header: [
       {
         caption: '序号',
-        width: 85,
+        width: 200,
         columnType: new kakaGrid.columns.type.Column({
           convert: function (value, displayValue, cell, grid) {
             return cell.row - grid.frozenRowCount + 1;
@@ -110,7 +110,7 @@
           textAlign: 'center'
         }
       },
-      { field: 'id', caption: 'ID', width: 100 },
+      { field: 'id', caption: 'ID', width: 200 },
       {
         caption: '基本信息',
         headerStyle: {
@@ -124,7 +124,7 @@
       {
         field: 'text',
         caption: 'text',
-        width: 300,
+        width: 200,
         columnType: new kakaGrid.columns.type.MultilineTextColumn({}),
         style: {
           autoWrapText: true, // 是否换行
@@ -148,19 +148,19 @@
           max: 20
         })
       },
-      { field: 'sex', caption: '性别', width: 300 },
+      { field: 'sex', caption: '性别', width: 200 },
       { field: 'email', caption: '邮件', width: '10%' },
       {
         field: 'check',
         caption: 'check',
-        width: 120,
+        width: 200,
         columnType: 'check',
         action: 'check'
       },
       {
         field: 'value',
         caption: '数字列',
-        width: 180,
+        width: 200,
         columnType: new kakaGrid.columns.type.NumberColumn({})
       },
       {
@@ -179,7 +179,7 @@
       {
         field: 'check',
         caption: 'check',
-        width: 120,
+        width: 200,
         columnType: 'check',
         action: 'check',
         style: {
@@ -193,7 +193,7 @@
       {
         field: 'sel',
         caption: '下拉选择',
-        width: 260,
+        width: 200,
         columnType: new kakaGrid.columns.type.MenuColumn({ options }),
         style: {
           appearance: 'none'
@@ -219,7 +219,7 @@
     },
     borderMode: 'grid-border' //'grid-border',
   })
-  grid.records = [...records, ...records, ...records, ...records, ...records]
+  grid.records = [records[0]]
 </script>
 </body>
 </html>

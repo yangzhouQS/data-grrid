@@ -26,6 +26,9 @@ export interface ThemeDefine {
     borderColor: ColorsPropertyDefine;
     frozenRowsBorderColor: ColorsPropertyDefine;
     highlightBorderColor: ColorsPropertyDefine; // 高亮边框
+    // grid border
+    gridBorderColor?: string
+    gridBorderWidth?: number
     checkbox: {
         uncheckBgColor?: ColorPropertyDefine;
         checkBgColor?: ColorPropertyDefine;

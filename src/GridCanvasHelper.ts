@@ -103,7 +103,9 @@ function getGridThemeFont<T>(
     return font
 }
 
-function getThemeColor<R, T extends ColorPropertyDefine | ColorsPropertyDefine | string>(grid: ListGridAPI<R>, ...names: string[]): T {
+function getThemeColor<R, T extends ColorPropertyDefine | ColorsPropertyDefine | string>(
+    grid: ListGridAPI<R>, ...names: string[]
+): T {
     const gridThemeColor = getChainSafe(grid.theme, ...names)
     if (gridThemeColor == null) {
         // use default theme
@@ -695,6 +697,15 @@ class ThemeResolver<T> implements RequiredThemeDefine {
 
     get highlightBorderColor(): ColorsPropertyDefine {
         return getThemeColor(this._grid, 'highlightBorderColor')
+    }
+
+    // grid border
+    public get gridBorderColor(): string {
+        return getThemeColor(this._grid, 'gridBorderColor')
+    }
+
+    public get gridBorderWidth(): number {
+        return getThemeColor(this._grid, 'gridBorderWidth') as unknown as number
     }
 
     get checkbox(): RequiredThemeDefine['checkbox'] {

@@ -832,6 +832,7 @@ export interface ListGridConstructorOptions<T> extends DrawGridConstructorOption
  * ListGrid
  */
 export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
+
     protected [_]: ListGridProtected<T>
 
     static get EVENT_TYPE(): typeof LG_EVENT_TYPE {
@@ -1166,7 +1167,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
      * @param  {number} row The row index.
      * @return {*} The field object.
      */
-    getField(col: number, row: number): FieldDef<T> |  undefined {
+    getField(col: number, row: number): FieldDef<T> | undefined {
         return this[_].layoutMap.getBody(col, row ?? this[_].layoutMap.headerRowCount).field as FieldDef<T>
     }
 
@@ -1566,5 +1567,13 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
 
     fireListeners<TYPE extends keyof ListGridEventHandlersEventMap<T>>(type: TYPE, ...event: ListGridEventHandlersEventMap<T>[TYPE]): ListGridEventHandlersReturnMap[TYPE][] {
         return super.fireListeners(type as any, ...event)
+    }
+
+    protected getDefaultBorderColor(): string {
+        return this[_].gridCanvasHelper.theme.gridBorderColor
+    }
+
+    protected getDefaultBorderWidth(): number {
+        return this[_].gridCanvasHelper.theme.gridBorderWidth
     }
 }

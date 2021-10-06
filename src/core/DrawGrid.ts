@@ -19,7 +19,7 @@ import * as style from '../internal/style'
 import type {
     AfterSelectedCellEvent,
     AnyFunction,
-    BeforeSelectedCellEvent,
+    BeforeSelectedCellEvent, BorderMode,
     CellAddress,
     CellContext,
     CellRange, CellSelection,
@@ -237,7 +237,7 @@ function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
     }
 }
 
-// 绘制列
+// 绘制格子
 function _drawCell(
     this: DrawGrid,
     ctx: CanvasRenderingContext2D,
@@ -252,9 +252,18 @@ function _drawCell(
     skipAbsoluteLeft: number,
     drawLayers: DrawLayers
 ): void {
-    const rect = new Rect(absoluteLeft - visibleRect.left, absoluteTop - visibleRect.top, width, height)
+    const x: number = absoluteLeft - visibleRect.left
+    const y: number = absoluteTop - visibleRect.top
+    // console.log(`(${ x },${ y } === [${ width },${ height }])`)
+    // console.log(`(${ row }-${ col })`)
+    const rect = new Rect(x, y, width, height)
 
-    const drawRect = Rect.bounds(Math.max(absoluteLeft, skipAbsoluteLeft) - visibleRect.left, Math.max(absoluteTop, skipAbsoluteTop) - visibleRect.top, rect.right, rect.bottom)
+    const drawRect = Rect.bounds(
+        Math.max(absoluteLeft, skipAbsoluteLeft) - visibleRect.left,
+        Math.max(absoluteTop, skipAbsoluteTop) - visibleRect.top,
+        rect.right,
+        rect.bottom
+    )
 
     if (drawRect.height > 0 && drawRect.width > 0) {
         ctx.save()
@@ -263,11 +272,14 @@ function _drawCell(
             if (cellDrawing) {
                 cellDrawing.cancel()
             }
-            const dcContext = new DrawCellContext(col, row, ctx, rect, drawRect, !!cellDrawing, this[_].selection, drawLayers)
+            const dcContext = new DrawCellContext(
+                col, row, ctx, rect, drawRect, !!cellDrawing,
+                this[_].selection, drawLayers
+            )
             const p = this.onDrawCell(col, row, dcContext)
             if (isPromise(p)) {
                 // 延迟绘制
-                _putCellDrawing(this, col, row, dcContext)
+                _putCellDrawing.call(this, col, row, dcContext)
 
                 const pCol = col
                 dcContext._delayMode(this, () => {
@@ -364,6 +376,7 @@ function _drawRow(
     }
 
     let absoluteLeft = initCol.left
+
     for (let { col } = initCol; col < colCount; col++) {
         const width = _getColWidth(grid, col)
         _drawCell.call(grid, ctx, col, absoluteLeft, width, row, absoluteTop, height, visibleRect, skipAbsoluteTop, skipAbsoluteLeft, drawLayers)
@@ -386,14 +399,19 @@ function _getInitContext(this: DrawGrid): CanvasRenderingContext2D {
 /**
  * 初始化绘制
  * @param grid
- * @param drawRect
+ * @param drawRect 绘制区域
  */
 function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
+    const ctx = _getInitContext.call(grid)
+    if (!ctx) {
+        return
+    }
     const visibleRect = _getVisibleRect(grid)
     const { rowCount } = grid[_]
-    const ctx = _getInitContext.call(grid)
 
-    const initRow = _getTargetRowAt.call(grid, Math.max(visibleRect.top, drawRect.top)) || {
+    const initRow = _getTargetRowAt.call(
+        grid, Math.max(visibleRect.top, drawRect.top)
+    ) || {
         top: _getRowsHeight.call(grid, 0, rowCount - 1),
         row: rowCount
     }
@@ -413,6 +431,7 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
         const outerTop = absoluteTop - visibleRect.top
         // 在画布高度之外绘制
         if (row >= rowCount - 1 && grid[_].canvas.height > absoluteTop - visibleRect.top) {
+            ctx.clearRect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
             if (grid.underlayBackgroundColor === 'transparent') {
                 ctx.clearRect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
             } else {
@@ -427,26 +446,35 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
     }
 
     const drawGridBorder = () => {
-        // 所有单元格宽度
-        let w = _getColsWidth(grid, 0, grid[_].colCount - 1)
-        let h = _getRowsHeight.call(grid, 0, rowCount - 1) - visibleRect.top
-        const width = Math.min(grid.canvas.width, w)
-        const height = Math.min(grid.canvas.height, h)
-        ctx.save()
-        try {
-            ctx.beginPath()
-            ctx.lineWidth = 1 || 0
-            ctx.strokeStyle = 'red' // , this.borderColor || 'transparent'
-            ctx.rect(
-                0 + ctx.lineWidth / 2,
-                0 + ctx.lineWidth / 2,
-                width - ctx.lineWidth,
-                height - ctx.lineWidth
-            )
-            ctx.stroke()
-        } finally {
-            ctx.restore()
+        const isContent = grid.borderMode === 'content-border'
+        const isGrid = grid.borderMode === 'grid-border'
+        if (isContent || isGrid) {
+            let width = grid[_].canvas.width
+            let height = grid[_].canvas.height
+            if (isContent) {
+                // 所有单元格宽度
+                let w = _getColsWidth(grid, 0, grid[_].colCount - 1)
+                let h = _getRowsHeight.call(grid, 0, rowCount - 1) - visibleRect.top
+                width = Math.min(grid.canvas.width, w)
+                height = Math.min(grid.canvas.height, h)
+            }
+            ctx.save()
+            try {
+                ctx.beginPath()
+                ctx.lineWidth = 1 || 0
+                ctx.strokeStyle = grid.borderColor || 'transparent'
+                ctx.rect(
+                    0 + ctx.lineWidth / 2,
+                    0 + ctx.lineWidth / 2,
+                    width - ctx.lineWidth,
+                    height - ctx.lineWidth
+                )
+                ctx.stroke()
+            } finally {
+                ctx.restore()
+            }
         }
+
     }
     let skipAbsoluteTop = 0
     if (initFrozenRow) {
@@ -454,7 +482,9 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
         const count = grid[_].frozenRowCount
         for (let { row } = initFrozenRow; row < count; row++) {
             const height = _getRowHeight.call(grid, row)
-            _drawRow(grid, ctx, initFrozenCol, initCol, drawRight, row, absoluteTop, height, visibleRect, 0, drawLayers)
+            _drawRow(grid, ctx, initFrozenCol, initCol, drawRight, row, absoluteTop,
+                height, visibleRect, 0, drawLayers
+            )
             absoluteTop += height
             if (drawBottom <= absoluteTop) {
                 //描画範囲外（終了）
@@ -1790,6 +1820,7 @@ class ColumnResizer extends BaseMouseDownMover {
 
         const rect = _getVisibleRect(this._grid)
         rect.left = this._invalidateAbsoluteLeft
+        debugger
         _invalidateRect(this._grid, rect)
 
         this._grid.fireListeners(DG_EVENT_TYPE.RESIZE_COLUMN, {
@@ -2889,7 +2920,7 @@ class DrawCellContext implements CellContext {
 }
 
 
-interface DrawGridProtected {
+export interface DrawGridProtected {
     element: HTMLElement;
     scrollable: Scrollable;
     handler: EventHandler;
@@ -2905,6 +2936,9 @@ interface DrawGridProtected {
     defaultColWidth: string | number;
     font?: string;
     underlayBackgroundColor?: string;
+    borderColor: string
+    borderWidth: number
+    borderMode: BorderMode
     keyboardOptions?: DrawGridKeyboardOptions;
     disableColumnResize?: boolean;
 
@@ -2946,8 +2980,6 @@ interface DrawGridProtected {
     singleSelection?: boolean;
 }
 
-export { DrawGridProtected }
-
 export interface DrawGridConstructorOptions {
     rowCount?: number;
     colCount?: number;
@@ -2963,6 +2995,9 @@ export interface DrawGridConstructorOptions {
     defaultColWidth?: string | number;
     font?: string;
     underlayBackgroundColor?: string;
+    borderMode?: BorderMode
+    borderColor?: string
+    borderWidth?: number
     keyboardOptions?: DrawGridKeyboardOptions;
     /**
      * Canvas parent element
@@ -2999,7 +3034,11 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
             keyboardOptions,
             parentElement,
             disableColumnResize,
-            singleSelection
+            singleSelection,
+            //
+            borderColor = '',
+            borderWidth = 0,
+            borderMode = 'none'
         } = options
         const protectedSpace = (this[_] = {} as DrawGridProtected)
         style.initDocument()
@@ -3023,6 +3062,10 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
         protectedSpace.colCount = colCount
         protectedSpace.frozenColCount = frozenColCount
         protectedSpace.frozenRowCount = frozenRowCount
+
+        protectedSpace.borderMode = borderMode
+        protectedSpace.borderColor = borderColor
+        protectedSpace.borderWidth = borderWidth
 
         protectedSpace.defaultRowHeight = defaultRowHeight
         protectedSpace.defaultColWidth = defaultColWidth
@@ -3237,6 +3280,30 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
         this[_].underlayBackgroundColor = underlayBackgroundColor
     }
 
+    public get borderColor(): string {
+        return this[_].borderColor || this.getDefaultBorderColor()
+    }
+
+    public set borderColor(borderColor) {
+        this[_].borderColor = borderColor
+    }
+
+    public get borderWidth(): number {
+        return this[_].borderWidth || this.getDefaultBorderWidth()
+    }
+
+    public set borderWidth(borderWidth) {
+        this[_].borderWidth = borderWidth
+    }
+
+    public get borderMode(): BorderMode {
+        return this[_].borderMode || this.getDefaultBorderMode()
+    }
+
+    public set borderMode(borderMode) {
+        this[_].borderMode = borderMode
+    }
+
     get keyboardOptions(): DrawGridKeyboardOptions | null {
         return this[_].keyboardOptions ?? null
     }
@@ -3281,6 +3348,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     public resize() {
         if (this.getElement().offsetParent) {
+            debugger
             // 只在元素可见时刷新
             this.updateSize()
             this.updateScroll()
@@ -3902,6 +3970,10 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
         return range
     }
 
+    protected getDefaultBorderMode(): BorderMode {
+        return 'none'
+    }
+
     protected getDefaultRowHeight() {
         return 40
     }
@@ -3935,9 +4007,6 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     }
 
     public _getMouseRelativePoint(e: Event | MouseEvent) {
-        if (!e) {
-            debugger
-        }
         const abstractPos = _getMouseAbstractPoint(this, e as MouseEvent)
         if (abstractPos) {
             return {
@@ -3948,4 +4017,10 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
             return null
         }
     }
+
+    protected abstract getDefaultBorderColor(): string
+
+    protected abstract getDefaultBorderWidth(): number
+
+
 }

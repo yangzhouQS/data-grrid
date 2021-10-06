@@ -95,7 +95,7 @@ const grid = new dataGrid.ListGrid({
                 { field: 'age', caption: '年龄', width: 200 }
             ]
         },
-        {
+        /*{
             field: 'text',
             caption: 'text',
             width: 200,
@@ -106,7 +106,7 @@ const grid = new dataGrid.ListGrid({
                 lineHeight: 20,
                 textOverflow: 'ellipsis'
             }
-        },
+        },*/
         {
             field: 'percent',
             caption: 'percent',
@@ -174,18 +174,23 @@ const grid = new dataGrid.ListGrid({
             }
         }
     ],
-    headerRowHeight: 40, // header行高
+    headerRowHeight: 20, // header行高
     defaultRowHeight: 50,
     hiddenHeader: true,
     readonly: true,
+    borderColor: '#444', // gird边框线颜色
+    borderMode: 'grid-border', // gridBorder模式
     // frozenColCount: 1, // 固定列
     theme: {
         borderColor: 'green',
         highlightBorderColor: '#2373c8',
         highlightBgColor: '#84de8e',
-        selectionBgColor: '#c19797'
+        selectionBgColor: '#c19797',
+        // underlayBackgroundColor: '#00f178', // 未绘制区域背景
+        underlayBackgroundColor: '#00f178' // 未绘制区域背景
         // frozenRowsBorderColor: 'red'
     }
 })
-grid.records = [ ...records, ...records, ...records, ...records, ...records ]
+// grid.records = [ ...records, ...records, ...records, ...records, ...records ]
+grid.records = [records[0]]
 

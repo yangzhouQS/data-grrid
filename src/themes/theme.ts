@@ -1,10 +1,15 @@
-import type { ColorPropertyDefine, ColorsPropertyDefine, PartialThemeDefine, RequiredThemeDefine, StylePropertyFunctionArg, ThemeDefine } from '../ts-types'
+import type {
+    ColorPropertyDefine, ColorsPropertyDefine, PartialThemeDefine,
+    RequiredThemeDefine, StylePropertyFunctionArg, ThemeDefine
+} from '../ts-types'
 import { getChainSafe } from '../internal/utils'
 import { getThemeSymbol } from '../internal/symbolManager'
 //private symbol
 const _ = getThemeSymbol()
 
-function getProp<T extends ColorPropertyDefine | ColorsPropertyDefine>(obj: PartialThemeDefine, superObj: ThemeDefine, names: string[], defNames?: string[]): T {
+function getProp<T extends ColorPropertyDefine | ColorsPropertyDefine>(
+    obj: PartialThemeDefine, superObj: ThemeDefine, names: string[], defNames?: string[]
+): T {
     return getChainSafe(obj, ...names) || getChainSafe(superObj, ...names) || (defNames && getChainSafe(obj, ...defNames)) || (defNames && getChainSafe(superObj, ...defNames))
 }
 
@@ -23,6 +28,7 @@ export class Theme implements RequiredThemeDefine {
     private _header: RequiredThemeDefine['header'] | null = null
 
     private _messages: RequiredThemeDefine['messages'] | null = null
+
     private _tree: RequiredThemeDefine['tree'] | null = null
 
     constructor(obj: ThemeDefine);
@@ -45,7 +51,7 @@ export class Theme implements RequiredThemeDefine {
     public get frozenRowsFont(): string {
         const obj = this[_].obj
         const superTheme = this[_].superTheme
-        return getProp(obj, superTheme, ['frozenRowsFont'])
+        return getProp(obj, superTheme, [ 'frozenRowsFont' ])
     }
 
     get underlayBackgroundColor(): string {
@@ -109,6 +115,19 @@ export class Theme implements RequiredThemeDefine {
     get highlightBorderColor(): ColorsPropertyDefine {
         const { obj, superTheme } = this[_]
         return getProp(obj, superTheme, [ 'highlightBorderColor' ], [ 'borderColor' ])
+    }
+
+    // grid border
+    public get gridBorderColor(): string {
+        const obj = this[_].obj
+        const superTheme = this[_].superTheme
+        return getProp(obj, superTheme, [ 'gridBorderColor' ])
+    }
+
+    public get gridBorderWidth(): number {
+        const obj = this[_].obj
+        const superTheme = this[_].superTheme
+        return getProp(obj, superTheme, [ 'gridBorderWidth' ]) as unknown as number
     }
 
     get checkbox(): RequiredThemeDefine['checkbox'] {
@@ -205,25 +224,25 @@ export class Theme implements RequiredThemeDefine {
             this._tree ||
             (this._tree = {
                 get lineColor(): ColorPropertyDefine {
-                    return getProp(obj, superTheme, ['tree', 'lineColor'])
+                    return getProp(obj, superTheme, [ 'tree', 'lineColor' ])
                 },
                 get buttonColor(): ColorPropertyDefine {
-                    return getProp(obj, superTheme, ['tree', 'buttonColor'], ['color'])
+                    return getProp(obj, superTheme, [ 'tree', 'buttonColor' ], [ 'color' ])
                 },
                 get buttonBgColor(): ColorPropertyDefine {
                     return getProp(
                         obj,
                         superTheme,
-                        ['tree', 'buttonBgColor'],
-                        ['defaultBgColor']
+                        [ 'tree', 'buttonBgColor' ],
+                        [ 'defaultBgColor' ]
                     )
                 },
                 get buttonBorderColor(): ColorPropertyDefine {
-                    return getProp(obj, superTheme, ['tree', 'buttonBorderColor'])
+                    return getProp(obj, superTheme, [ 'tree', 'buttonBorderColor' ])
                 },
                 get linkColor(): ColorPropertyDefine {
-                    return getProp(obj, superTheme, ['tree', 'linkColor'])
-                },
+                    return getProp(obj, superTheme, [ 'tree', 'linkColor' ])
+                }
             })
         )
     }

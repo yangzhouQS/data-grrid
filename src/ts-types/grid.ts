@@ -20,3 +20,4 @@ export interface FieldAssessor<T> {
 
 export type FieldDef<T> = keyof T | FieldGetter<T> | FieldAssessor<T>;
 export type FieldData = MaybePromiseOrUndef<any>;
+export type BorderMode = 'none' | 'content-border' | 'grid-border'
