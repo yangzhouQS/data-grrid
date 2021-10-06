@@ -1,9 +1,11 @@
 import * as dataGrid from '../src/main'
 import './styles/index.css'
 import { records } from './data.js'
+import { TreeDataHelper } from './treeDataHelper/treeDataHelper'
 
-
+const parentKey = TreeDataHelper.getParentKeySet(records, 'parentId')
 const cachedDataSource = dataGrid.data.CachedDataSource.ofArray(records)
+console.log(cachedDataSource)
 const treeDataSource = new dataGrid.data.TreeDataSource(cachedDataSource, {
     keyField: 'id',
     parentKeyField: 'parentId',
@@ -16,7 +18,9 @@ const treeDataSource = new dataGrid.data.TreeDataSource(cachedDataSource, {
     getChildren: function (rec, all) {
         // 返回当前记录（rec）的子节点记录数组
         // all为false表示只返回一级子节点；为true则表示返回全部的子节点
-        return []
+        if (!parentKey.includes(rec.parentId)) {
+            return Promise.resolve([])
+        }
     }
 })
 
@@ -82,9 +86,9 @@ const grid = new dataGrid.ListGrid({
         borderColor: 'green',
         highlightBorderColor: '#2373c8',
         highlightBgColor: '#84de8e',
-        selectionBgColor: '#c19797',
+        selectionBgColor: '#c19797'
         // frozenRowsBorderColor: 'red'
     }
 })
 
-grid.dataSource.expandAll() // 展开全部
+// grid.dataSource.expandAll() // 展开全部
