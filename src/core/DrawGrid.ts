@@ -52,7 +52,6 @@ const _ = getDrawGridSymbol()
 let instances: { [key: number]: DrawGrid } = {}
 
 function _vibrate(e: TouchEvent | MouseEvent): void {
-
     if (navigator.vibrate && isTouchEvent(e)) {
         navigator.vibrate(50)
     }
@@ -111,7 +110,8 @@ function _getTargetRowAt(this: DrawGrid, absoluteY: number): { row: number; top:
 }
 
 
-function _getTargetColAt(grid: DrawGrid, absoluteX: number): { left: number; col: number; } | null {
+function _getTargetColAt(grid: DrawGrid, absoluteX: number):
+    { left: number; col: number; } | null {
     let left = 0
     const { colCount } = grid[_]
     for (let col = 0; col < colCount; col++) {
@@ -339,7 +339,6 @@ function _drawRow(
                  * width    要清除的矩形的宽度，以像素计。
                  * height    要清除的矩形的高度，以像素计。
                  */
-                console.log(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
                 ctx.clearRect(
                     outerLeft,
                     absoluteTop - visibleRect.top,

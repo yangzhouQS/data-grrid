@@ -1029,11 +1029,11 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
      * @override
      */
     get underlayBackgroundColor(): string {
-        return 'transparent'
-        // return (
-        //       super.underlayBackgroundColor ||
-        //       this[_].gridCanvasHelper.theme.underlayBackgroundColor
-        //   )
+        // return 'transparent'
+        return (
+            super.underlayBackgroundColor ||
+            this[_].gridCanvasHelper.theme.underlayBackgroundColor
+        )
     }
 
     /**
