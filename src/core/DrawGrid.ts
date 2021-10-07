@@ -254,8 +254,6 @@ function _drawCell(
 ): void {
     const x: number = absoluteLeft - visibleRect.left
     const y: number = absoluteTop - visibleRect.top
-    // console.log(`(${ x },${ y } === [${ width },${ height }])`)
-    // console.log(`(${ row }-${ col })`)
     const rect = new Rect(x, y, width, height)
 
     const drawRect = Rect.bounds(
@@ -328,7 +326,6 @@ function _drawRow(
     const drawOuter = (col: number, absoluteLeft: number): void => {
         const canvasWidth = grid[_].canvas.width // 画布总宽度
         const outerLeft = absoluteLeft - visibleRect.left // 列总宽度 - 可视区域左侧距离画布左侧距离
-        // console.log(`canvasWidth=${canvasWidth}, absoluteLeft=${absoluteLeft},visibleRect.left=${visibleRect.left}, outerLeft=${outerLeft}, grid.underlayBackgroundColor`)
         // 擦除画布计算之外区域
         if (col >= colCount - 1 && canvasWidth > absoluteLeft - visibleRect.left) {
             ctx.clearRect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
@@ -3759,7 +3756,6 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
             count++
             absoluteLeft = right
         }
-        console.log(count)
         return count
     }
 
