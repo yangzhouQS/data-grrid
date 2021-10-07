@@ -180,7 +180,7 @@ const grid = new dataGrid.ListGrid({
     readonly: true,
     borderColor: '#444', // gird边框线颜色
     borderMode: 'none', // gridBorder模式
-    // frozenColCount: 1, // 固定列
+    frozenColCount: 1, // 固定列
     theme: {
         // borderColor: 'green',
         // highlightBorderColor: '#2373c8',

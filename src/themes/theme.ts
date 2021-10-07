@@ -101,7 +101,7 @@ export class Theme implements RequiredThemeDefine {
         }
     }
 
-    // border
+    // border, 表格线颜色
     get borderColor(): ColorsPropertyDefine {
         const { obj, superTheme } = this[_]
         return getProp(obj, superTheme, [ 'borderColor' ])

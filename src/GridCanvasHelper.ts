@@ -922,6 +922,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         }
     }
 
+    // 多列头绘制
     drawBorderWithClip(context: CellContext, draw: (ctx: CanvasRenderingContext2D) => void): void {
         const drawRect = context.getDrawRect()
         if (!drawRect) {
@@ -931,6 +932,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         const ctx = context.getContext()
         ctx.save()
         try {
+            // 绘制圆形的结束线帽
+            /**
+             * butt    默认。向线条的每个末端添加平直的边缘。
+             * round    向线条的每个末端添加圆形线帽。
+             * square    向线条的每个末端添加正方形线帽。
+             */
+            ctx.lineCap = 'square'
             //罫線用clip
             ctx.beginPath()
             let clipLeft = drawRect.left
@@ -1129,7 +1137,11 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         })
     }
 
-    fillCell(context: CellContext, { fillColor = this.theme.defaultBgColor }: { fillColor?: ColorPropertyDefine } = {}): void {
+    fillCell(
+        context: CellContext,
+        { fillColor = this.theme.defaultBgColor, selectionColor }:
+            { fillColor?: ColorPropertyDefine, selectionColor?: ColorPropertyDefine } = {}
+    ): void {
         const rect = context.getRect()
 
         this.drawWithClip(context, (ctx) => {
@@ -1140,6 +1152,10 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
             ctx.clearRect(rect.left, rect.top, rect.width, rect.height)
             ctx.rect(rect.left, rect.top, rect.width, rect.height)
             ctx.fill()
+            if (selectionColor) {
+                ctx.fillStyle = getColor(selectionColor, col, row, this._grid, ctx)
+                ctx.fill()
+            }
         })
     }
 
@@ -1188,23 +1204,47 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         return this.theme.defaultBgColor
     }
 
+    /**
+     * 表格线绘制
+     * @param context
+     * @param borderColor
+     * @param lineWidth
+     */
     border(context: CellContext, { borderColor = this.theme.borderColor, lineWidth = 1 }: { borderColor?: ColorsPropertyDefine; lineWidth?: number } = {}): void {
         const rect = context.getRect()
 
         this.drawBorderWithClip(context, (ctx) => {
             const { col, row } = context
             const borderColors = getColor(borderColor, col, row, this._grid, ctx)
+            let { left, top, width, height } = rect
 
+            if (row === 0) {
+                top += lineWidth
+                height -= lineWidth
+            }
+
+            if (col === 0) {
+                left += lineWidth
+                width -= lineWidth
+            }
             if (lineWidth === 1) {
                 ctx.lineWidth = 1
-                strokeRect(ctx, borderColors, rect.left - 0.5, rect.top - 0.5, rect.width, rect.height)
+                // strokeRect(ctx, borderColors, rect.left - 0.5, rect.top - 0.5, rect.width, rect.height)
+                strokeRect(ctx, borderColors, left - 0.5, top - 0.5, width, height)
             } else if (lineWidth === 2) {
                 ctx.lineWidth = 2
-                strokeRect(ctx, borderColors, rect.left, rect.top, rect.width - 1, rect.height - 1)
+                // strokeRect(ctx, borderColors, rect.left, rect.top, rect.width - 1, rect.height - 1)
+                strokeRect(ctx, borderColors, left, top, width - 1, height - 1)
             } else {
                 ctx.lineWidth = lineWidth
                 const startOffset = lineWidth / 2 - 1
-                strokeRect(ctx, borderColors, rect.left + startOffset, rect.top + startOffset, rect.width - lineWidth + 1, rect.height - lineWidth + 1)
+                // strokeRect(ctx, borderColors, rect.left + startOffset, rect.top + startOffset, rect.width - lineWidth + 1, rect.height - lineWidth + 1)
+                strokeRect(ctx, borderColors,
+                    left + startOffset,
+                    top + startOffset,
+                    width - lineWidth + 1,
+                    height - lineWidth + 1
+                )
             }
         })
     }
