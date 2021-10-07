@@ -182,15 +182,15 @@ const grid = new dataGrid.ListGrid({
     borderMode: 'none', // gridBorder模式
     // frozenColCount: 1, // 固定列
     theme: {
-        borderColor: 'green',
-        highlightBorderColor: '#2373c8',
-        highlightBgColor: '#84de8e',
-        selectionBgColor: '#c19797',
+        // borderColor: 'green',
+        // highlightBorderColor: '#2373c8',
+        // highlightBgColor: '#84de8e',
+        // selectionBgColor: '#c19797',
         // underlayBackgroundColor: '#00f178', // 未绘制区域背景
         // underlayBackgroundColor: '#00f178' // 未绘制区域背景
         // frozenRowsBorderColor: 'red'
     }
 })
 // grid.records = [ ...records, ...records, ...records, ...records, ...records ]
-grid.records = [records[0]]
+grid.records = [ ...records ]
 

@@ -324,7 +324,7 @@ function _drawRow(
 ): void {
     const { colCount } = grid[_]
 
-    // 绘制数据区域以外的绘图
+    // 绘制数据区域以外的绘图 ===. 最右侧区域
     const drawOuter = (col: number, absoluteLeft: number): void => {
         const canvasWidth = grid[_].canvas.width // 画布总宽度
         const outerLeft = absoluteLeft - visibleRect.left // 列总宽度 - 可视区域左侧距离画布左侧距离
@@ -428,9 +428,10 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 
     const drawLayers = new DrawLayers()
 
+
+    // 在画布高度之外绘制 === > 超出高度绘制
     const drawOuter = (row: number, absoluteTop: number): void => {
         const outerTop = absoluteTop - visibleRect.top
-        // 在画布高度之外绘制
         if (row >= rowCount - 1 && grid[_].canvas.height > absoluteTop - visibleRect.top) {
             ctx.clearRect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop)
             if (grid.underlayBackgroundColor === 'transparent') {
@@ -446,6 +447,7 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
         }
     }
 
+    // 绘制grid外边框线
     const drawGridBorder = () => {
         const isContent = grid.borderMode === 'content-border'
         const isGrid = grid.borderMode === 'grid-border'
@@ -3757,6 +3759,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
             count++
             absoluteLeft = right
         }
+        console.log(count)
         return count
     }
 
