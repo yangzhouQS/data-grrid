@@ -11,10 +11,11 @@ export class Scrollable {
     private _width: number
     private _endPointElement: HTMLDivElement
     private _p = 1
+    private _canvas: HTMLCanvasElement
 
-    constructor() {
+    constructor(canvas: HTMLCanvasElement) {
         this._handler = new EventHandler()
-
+        this._canvas = canvas
         this._scrollable = document.createElement('div')
         this._scrollable.classList.add('grid-scrollable')
         this._height = 0
@@ -85,8 +86,8 @@ export class Scrollable {
 
     private _update(): void {
         let domHeight
+        const sbSize = getScrollBarSize()
         if (this._height > MAX_SCROLL) {
-            const sbSize = getScrollBarSize()
             const { offsetHeight } = this._scrollable
             const vScrollRange = MAX_SCROLL - offsetHeight + sbSize
             const rScrollRange = this._height - offsetHeight + sbSize
@@ -97,12 +98,21 @@ export class Scrollable {
             domHeight = this._height
         }
 
-        const doWidth = this._width
+        const domWidth = this._width
         // TODO: windows 下横纵滚动条都存在时，显示多余空白问题
+        const top = domHeight > this._canvas.height ? domHeight : domHeight - sbSize
+        const left = domWidth > this._canvas.width ? domWidth : domWidth - sbSize
 
-        this._endPointElement.style.top = `${ domHeight.toFixed() }px`
-        this._endPointElement.style.left = `${ doWidth.toFixed() }px`
+        this._endPointElement.style.top = `${ top.toFixed() }px`
+        this._endPointElement.style.left = `${ left.toFixed() }px`
         // TODO 不让滚动条位置超出范围
-
+        const maxScrollTop = Math.max(0, top - this._canvas.height)
+        if (this._scrollable.scrollTop > maxScrollTop) {
+            this._scrollable.scrollTop = maxScrollTop
+        }
+        const maxScrollLeft = Math.max(0, left - this._canvas.width)
+        if (this._scrollable.scrollLeft > maxScrollLeft) {
+            this._scrollable.scrollLeft = maxScrollLeft
+        }
     }
 }

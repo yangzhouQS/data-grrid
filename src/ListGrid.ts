@@ -869,8 +869,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
 
         this.invalidate()
         protectedSpace.handler.on(window, 'resize', () => this.resize())
-
-        // this[_] = protectedSpace
     }
 
     /**
@@ -1388,7 +1386,10 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
             return undefined
         }
 
-        return _onDrawValue(this, cellValue, context, { col, row }, style, draw)
+        return _onDrawValue(
+            this, cellValue,
+            context, { col, row }, style, draw
+        )
     }
 
     doGetCellValue(

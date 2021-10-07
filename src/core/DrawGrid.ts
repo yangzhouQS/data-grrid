@@ -331,6 +331,7 @@ function _drawRow(
         // console.log(`canvasWidth=${canvasWidth}, absoluteLeft=${absoluteLeft},visibleRect.left=${visibleRect.left}, outerLeft=${outerLeft}, grid.underlayBackgroundColor`)
         // 擦除画布计算之外区域
         if (col >= colCount - 1 && canvasWidth > absoluteLeft - visibleRect.left) {
+            ctx.clearRect(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
             if (grid.underlayBackgroundColor === 'transparent') {
                 /**
                  * x    要清除的矩形左上角的 x 坐标。
@@ -338,6 +339,7 @@ function _drawRow(
                  * width    要清除的矩形的宽度，以像素计。
                  * height    要清除的矩形的高度，以像素计。
                  */
+                console.log(outerLeft, absoluteTop - visibleRect.top, canvasWidth - outerLeft, height)
                 ctx.clearRect(
                     outerLeft,
                     absoluteTop - visibleRect.top,
@@ -844,6 +846,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
     const lastTop = grid[_].scroll.top
     const moveX = grid[_].scrollable.scrollLeft - lastLeft
     const moveY = grid[_].scrollable.scrollTop - lastTop
+
 
     // 保存下次计算用信息
     grid[_].scroll = {
@@ -1820,7 +1823,6 @@ class ColumnResizer extends BaseMouseDownMover {
 
         const rect = _getVisibleRect(this._grid)
         rect.left = this._invalidateAbsoluteLeft
-        debugger
         _invalidateRect(this._grid, rect)
 
         this._grid.fireListeners(DG_EVENT_TYPE.RESIZE_COLUMN, {
@@ -3044,16 +3046,17 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
         style.initDocument()
         // 装载canvas画布容器
         // protectedSpace.element = createRootElement()
+        // protectedSpace.canvas = hiDPI.transform(document.createElement('canvas'))
         protectedSpace.element = createRoot(parentElement)
-        protectedSpace.scrollable = new Scrollable()
+        protectedSpace.canvas = createDom(this, protectedSpace.element)
+        protectedSpace.scrollable = new Scrollable(protectedSpace.canvas)
         protectedSpace.handler = new EventHandler()
         protectedSpace.selection = new Selection(this, (range: CellRange) => {
             return this.updateSelectionRange(range)
         })
         protectedSpace.focusControl = new FocusControl(this, protectedSpace.scrollable.getElement(), protectedSpace.scrollable)
 
-        // protectedSpace.canvas = hiDPI.transform(document.createElement('canvas'))
-        protectedSpace.canvas = createDom(this, protectedSpace.element)
+
         protectedSpace.context = protectedSpace.canvas.getContext('2d', {
             alpha: false
         })!
@@ -3348,7 +3351,6 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     public resize() {
         if (this.getElement().offsetParent) {
-            debugger
             // 只在元素可见时刷新
             this.updateSize()
             this.updateScroll()
@@ -4021,6 +4023,4 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     protected abstract getDefaultBorderColor(): string
 
     protected abstract getDefaultBorderWidth(): number
-
-
 }

@@ -11537,6 +11537,7 @@
         this[_$2].canvas.width > absoluteLeft - visibleRect.left) {
         const outerLeft = absoluteLeft - visibleRect.left;
         if (this.underlayBackgroundColor === 'transparent') {
+          console.log((outerLeft, absoluteTop - visibleRect.top, this[_$2].canvas.width - outerLeft, height))
           ctx.clearRect(outerLeft, absoluteTop - visibleRect.top, this[_$2].canvas.width - outerLeft, height);
         } else {
           ctx.save();
@@ -12669,8 +12670,8 @@
       const protectedSpace = (this[_$2] = {});
       style$2.initDocument();
       protectedSpace.element = createRootElement();
-      console.log(`w=${parentElement.clientWidth} h=${parentElement.clientHeight}`)
-      console.log(`w=${parentElement.offsetWidth} h=${parentElement.offsetHeight}`)
+      console.log(`w=${ parentElement.clientWidth } h=${ parentElement.clientHeight }`)
+      console.log(`w=${ parentElement.offsetWidth } h=${ parentElement.offsetHeight }`)
       protectedSpace.canvas = hiDPI.transform(document.createElement('canvas'));
       protectedSpace.context = protectedSpace.canvas.getContext('2d', {
         alpha: false
@@ -13832,6 +13833,7 @@
             this[_$2].canvas.height > absoluteTop - visibleRect.top) {
             const outerTop = absoluteTop - visibleRect.top;
             if (this.underlayBackgroundColor === 'transparent') {
+              console.log((0, outerTop, this[_$2].canvas.width, this[_$2].canvas.height - outerTop))
               ctx.clearRect(0, outerTop, this[_$2].canvas.width, this[_$2].canvas.height - outerTop);
             } else {
               ctx.save();

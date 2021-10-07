@@ -174,7 +174,7 @@ const grid = new dataGrid.ListGrid({
             }
         }
     ],
-    headerRowHeight: 20, // header行高
+    headerRowHeight: 40, // header行高
     defaultRowHeight: 50,
     hiddenHeader: true,
     readonly: true,
