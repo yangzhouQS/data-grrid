@@ -4,6 +4,7 @@ import { CanToggle, DrawColumnCallback, MultilineText, Toggled, TransformRecord 
 export interface BaseColumnOption {
     fadeinWhenCallbackInPromise?: boolean | null;
     transformRecord?: TransformRecord
+    _transformCopy?: TransformRecord
     hidden?: boolean | ((record: any) => boolean)
 }
 

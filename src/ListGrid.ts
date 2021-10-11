@@ -27,7 +27,7 @@ import type {
   SelectedCellEvent,
   SetPasteValueTestData,
   SortState,
-  ThemeDefine
+  ThemeDefine, TransformRecord
 } from './ts-types'
 import {
   ColumnDefine,
@@ -1360,6 +1360,13 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     return this.getCellRange(col, row)
   }
 
+  /**
+   * 选择复制单元格内容
+   * @param col
+   * @param row
+   * @param range
+   * @protected
+   */
   protected getCopyCellValue(col: number, row: number, range?: CellRange): string {
     const cellRange = _getCellRange(this, col, row)
     const startCol = range ? Math.max(range.start.col, cellRange.start.col) : cellRange.start.col
@@ -1368,10 +1375,25 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       return ''
     }
 
-    const value = _getCellValue(this, col, row)
-
+    let value = _getCellValue(this, col, row)
+    const { layoutMap } = this[_]
+    console.log(row, this[_].layoutMap.headerRowCount)
+    if (row >= this[_].layoutMap.headerRowCount) {
+      const columnType = layoutMap.getBody(col, row).columnType
+      value = columnType.getCopyCellValue(value, this, { col, row }) ?? value
+      const transformCopy = columnType.transformCopy as TransformRecord
+      if (transformCopy) {
+        value = transformCopy && transformCopy({
+          value: value,
+          cell: { col, row },
+          displayValue: '',
+          grid: this as ListGrid<T>
+        })
+      }
+    }
+    return value
     if (row < this[_].layoutMap.headerRowCount) {
-      return value
+      return `${ value }`
     }
 
     const columnData = this[_].layoutMap.getBody(col, row)
