@@ -11,10 +11,8 @@ export interface BaseActionOption {
 }
 
 export type ActionListener = (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     record: any,
     cell: CellAddress & {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         grid: ListGridAPI<any>;
     }
 ) => void;
