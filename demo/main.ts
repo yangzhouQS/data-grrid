@@ -79,7 +79,7 @@ const grid = new dataGrid.ListGrid({
     ],
     headerRowHeight: 40, // header行高
     defaultRowHeight: 50,
-    hiddenHeader: true,
+    // hiddenHeader: true,// 隐藏列头
     readonly: true,
     // frozenColCount: 1, // 固定列
     theme: {

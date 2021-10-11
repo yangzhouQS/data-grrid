@@ -189,6 +189,7 @@ export class Theme implements RequiredThemeDefine {
 
     get header(): RequiredThemeDefine['header'] {
         const { obj, superTheme } = this[_]
+        console.log(superTheme)
         return (
             this._header ||
             (this._header = {

@@ -10,7 +10,6 @@ export class Header<T> extends BaseHeader<T> {
 
 	drawInternal(value: string, context: CellContext, style: Style, helper: GridCanvasHelperAPI, _grid: ListGridAPI<T>, { drawCellBase }: DrawCellInfo<T>): void {
 		const { textAlign, textBaseline, color, font, bgColor, textOverflow } = style
-
 		if (bgColor) {
 			drawCellBase({
 				bgColor
