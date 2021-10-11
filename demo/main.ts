@@ -10,15 +10,15 @@ const treeDataSource = new dataGrid.data.TreeDataSource(cachedDataSource, {
     keyField: 'id',
     parentKeyField: 'parentId',
     // expandedKeys: [30], // 默认展开的节点 keyField 值数组
-    hasChildren: function (rec) { // <- 此方法会频繁触发
+    /*hasChildren: function (rec) { // <- 此方法会频繁触发
         // 返回当前记录（rec）是否有字节点
-        return !rec.isCheck
-    },
+        return !rec.isCheck && parentKey.includes(rec.id)
+    },*/
     // <- 此方法只有当rec有子节点且treeDataSource找不到子节点数据时才触发
     getChildren: function (rec, all) {
         // 返回当前记录（rec）的子节点记录数组
         // all为false表示只返回一级子节点；为true则表示返回全部的子节点
-        if (!parentKey.includes(rec.parentId)) {
+        if (!parentKey.includes(rec.id)) {
             return Promise.resolve([])
         }
     }
@@ -83,7 +83,7 @@ const grid = new dataGrid.ListGrid({
     readonly: true,
     // frozenColCount: 1, // 固定列
     theme: {
-        borderColor: 'green',
+        borderColor: '#e3e3e3',
         highlightBorderColor: '#2373c8',
         highlightBgColor: '#84de8e',
         selectionBgColor: '#c19797'
