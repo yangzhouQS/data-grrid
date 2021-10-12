@@ -1383,7 +1383,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       value = columnType.getCopyCellValue(value, this, { col, row }) ?? value
       const transformCopy = columnType.transformCopy as TransformRecord
       if (transformCopy) {
-        value = transformCopy && transformCopy({
+        value = transformCopy({
           value: value,
           cell: { col, row },
           displayValue: '',

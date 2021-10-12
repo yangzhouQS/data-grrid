@@ -514,7 +514,7 @@ interface IRecordParams<T, V> {
   grid: ListGridAPI<T>
 }
 
-export type TransformRecord = (params: IRecordParams<any, unknown>) => any
+export type TransformRecord = <T, V>(params: IRecordParams<T, V>) => V
 
 export interface AttachCellStyle {
   innerBox?: 'none' | 'dashed'

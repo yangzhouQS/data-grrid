@@ -120,7 +120,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     /**
      * 复制数据转换
      */
-    this._transformCopy = option._transformCopy || option.transformRecord
+    this._transformCopy = option.transformCopy || option.transformRecord
 
     this._hidden = option.hidden
 
