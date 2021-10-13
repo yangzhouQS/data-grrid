@@ -1,231 +1,230 @@
 import type { AnyFunction, ColorDef, MaybePromise, MaybePromiseOrUndef, RectProps } from './base'
 import type {
-    AnyListener,
-    DrawGridEventHandlersEventMap,
-    DrawGridEventHandlersReturnMap,
-    EventListenerId,
-    ListGridEventHandlersEventMap,
-    ListGridEventHandlersReturnMap
+  AnyListener,
+  DrawGridEventHandlersEventMap,
+  DrawGridEventHandlersReturnMap,
+  EventListenerId,
+  ListGridEventHandlersEventMap,
+  ListGridEventHandlersReturnMap
 } from './events'
 import type { CellAddress, CellRange, FieldData, FieldDef } from './grid'
 import type { ColorPropertyDefine, ColorsPropertyDefine, FontPropertyDefine, LineClamp, TextOverflow } from './define'
 import type { RequiredThemeDefine } from './plugin'
 import type { SimpleColumnIconOption } from '../ts-types-internal'
-import { Rect } from '../internal/Rect'
 
 export type LayoutObjectId = number | string | symbol;
 
 export interface DrawGridKeyboardOptions {
-    moveCellOnTab?: boolean;
-    moveCellOnEnter?: boolean;
-    deleteCellValueOnDel?: boolean;
-    selectAllOnCtrlA?: boolean;
+  moveCellOnTab?: boolean;
+  moveCellOnEnter?: boolean;
+  deleteCellValueOnDel?: boolean;
+  selectAllOnCtrlA?: boolean;
 }
 
 export interface DrawGridAPI {
-    font?: string;
-    rowCount: number;
-    colCount: number;
-    frozenRowCount: number;
-    frozenColCount: number;
-    defaultRowHeight: number;
-    defaultColWidth: string | number;
-    underlayBackgroundColor?: string;
-    keyboardOptions: DrawGridKeyboardOptions | null;
-    readonly selection: Selection;
-    readonly canvas: HTMLCanvasElement;
-    readonly visibleRowCount: number;
-    readonly visibleColCount: number;
-    readonly topRow: number;
-    readonly leftCol: number;
-    scrollLeft: number;
-    scrollTop: number;
+  font?: string;
+  rowCount: number;
+  colCount: number;
+  frozenRowCount: number;
+  frozenColCount: number;
+  defaultRowHeight: number;
+  defaultColWidth: string | number;
+  underlayBackgroundColor?: string;
+  keyboardOptions: DrawGridKeyboardOptions | null;
+  readonly selection: Selection;
+  readonly canvas: HTMLCanvasElement;
+  readonly visibleRowCount: number;
+  readonly visibleColCount: number;
+  readonly topRow: number;
+  readonly leftCol: number;
+  scrollLeft: number;
+  scrollTop: number;
 
-    getElement(): HTMLElement;
+  getElement(): HTMLElement;
 
-    focus(): void;
+  focus(): void;
 
-    hasFocusGrid(): boolean;
+  hasFocusGrid(): boolean;
 
-    listen<TYPE extends keyof DrawGridEventHandlersEventMap>(type: TYPE, listener: (...event: DrawGridEventHandlersEventMap[TYPE]) => DrawGridEventHandlersReturnMap[TYPE]): EventListenerId;
+  listen<TYPE extends keyof DrawGridEventHandlersEventMap>(type: TYPE, listener: (...event: DrawGridEventHandlersEventMap[TYPE]) => DrawGridEventHandlersReturnMap[TYPE]): EventListenerId;
 
-    listen(type: string, listener: AnyListener): EventListenerId;
+  listen(type: string, listener: AnyListener): EventListenerId;
 
-    configure(name: 'fadeinWhenCallbackInPromise', value?: boolean): boolean;
+  configure(name: 'fadeinWhenCallbackInPromise', value?: boolean): boolean;
 
-    updateSize(): void;
+  updateSize(): void;
 
-    updateScroll(): boolean;
+  updateScroll(): boolean;
 
-    invalidate(): void;
+  invalidate(): void;
 
-    invalidateCell(col: number, row: number): void;
+  invalidateCell(col: number, row: number): void;
 
-    invalidateGridRect(startCol: number, startRow: number, endCol?: number, endRow?: number): void;
+  invalidateGridRect(startCol: number, startRow: number, endCol?: number, endRow?: number): void;
 
-    invalidateCellRange(cellRange: CellRange): void;
+  invalidateCellRange(cellRange: CellRange): void;
 
-    getRowHeight(row: number): number;
+  getRowHeight(row: number): number;
 
-    setRowHeight(row: number, height: number): void;
+  setRowHeight(row: number, height: number): void;
 
-    getColWidth(col: number): number;
+  getColWidth(col: number): number;
 
-    setColWidth(col: number, width: number): void;
+  setColWidth(col: number, width: number): void;
 
-    getMaxColWidth(col: number): string | number | undefined;
+  getMaxColWidth(col: number): string | number | undefined;
 
-    setMaxColWidth(col: number, maxwidth: string | number): void;
+  setMaxColWidth(col: number, maxwidth: string | number): void;
 
-    getMinColWidth(col: number): string | number | undefined;
+  getMinColWidth(col: number): string | number | undefined;
 
-    setMinColWidth(col: number, minwidth: string | number): void;
+  setMinColWidth(col: number, minwidth: string | number): void;
 
-    getCellRect(col: number, row: number): RectProps;
+  getCellRect(col: number, row: number): RectProps;
 
-    getCellRelativeRect(col: number, row: number): RectProps;
+  getCellRelativeRect(col: number, row: number): RectProps;
 
-    getCellsRect(startCol: number, startRow: number, endCol: number, endRow: number): RectProps;
+  getCellsRect(startCol: number, startRow: number, endCol: number, endRow: number): RectProps;
 
-    getCellRangeRect(cellRange: CellRange): RectProps;
+  getCellRangeRect(cellRange: CellRange): RectProps;
 
-    isFrozenCell(
-        col: number,
-        row: number
-    ): {
-        row: boolean;
-        col: boolean;
-    } | null;
+  isFrozenCell(
+    col: number,
+    row: number
+  ): {
+    row: boolean;
+    col: boolean;
+  } | null;
 
-    getRowAt(absoluteY: number): number;
+  getRowAt(absoluteY: number): number;
 
-    getColAt(absoluteX: number): number;
+  getColAt(absoluteX: number): number;
 
-    getCellAt(absoluteX: number, absoluteY: number): CellAddress;
+  getCellAt(absoluteX: number, absoluteY: number): CellAddress;
 
-    makeVisibleCell(col: number, row: number): void;
+  makeVisibleCell(col: number, row: number): void;
 
-    setFocusCursor(col: number, row: number): void;
+  setFocusCursor(col: number, row: number): void;
 
-    focusCell(col: number, row: number): void;
+  focusCell(col: number, row: number): void;
 
-    getCellOverflowText(col: number, row: number): string | null;
+  getCellOverflowText(col: number, row: number): string | null;
 
-    setCellOverflowText(col: number, row: number, overflowText: false | string): void;
+  setCellOverflowText(col: number, row: number, overflowText: false | string): void;
 
-    getAttachCellsArea(range: CellRange): {
-        element: HTMLElement;
-        rect: RectProps;
-    };
+  getAttachCellsArea(range: CellRange): {
+    element: HTMLElement;
+    rect: RectProps;
+  };
 
-    onKeyDownMove(evt: KeyboardEvent): void;
+  onKeyDownMove(evt: KeyboardEvent): void;
 
-    dispose(): void;
+  dispose(): void;
 
-    addDisposable(disposable: { dispose(): void }): void;
+  addDisposable(disposable: { dispose(): void }): void;
 
-    _getMouseRelativePoint(e: Event): { x: number; y: number } | null
+  _getMouseRelativePoint(e: Event): { x: number; y: number } | null
 }
 
 export interface DataSourceAPI<T> {
-    length: number;
+  length: number;
 
-    get(index: number): MaybePromiseOrUndef<T>;
+  get(index: number): MaybePromiseOrUndef<T>;
 
-    getField<F extends FieldDef<T>>(index: number, field: F): FieldData;
+  getField<F extends FieldDef<T>>(index: number, field: F): FieldData;
 
-    hasField(index: number, field: FieldDef<T>): boolean;
+  hasField(index: number, field: FieldDef<T>): boolean;
 
-    setField<F extends FieldDef<T>>(
-        index: number,
-        field: F,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        value: any
-    ): MaybePromise<boolean>;
+  setField<F extends FieldDef<T>>(
+    index: number,
+    field: F,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any
+  ): MaybePromise<boolean>;
 
-    sort(field: FieldDef<T>, order: 'desc' | 'asc'): MaybePromise<void>;
+  sort(field: FieldDef<T>, order: 'desc' | 'asc'): MaybePromise<void>;
 
-    dataSource: DataSourceAPI<T>;
+  dataSource: DataSourceAPI<T>;
 }
 
 export interface SortState {
-    col: number;
-    row: number;
-    order: 'asc' | 'desc' | undefined;
+  col: number;
+  row: number;
+  order: 'asc' | 'desc' | undefined;
 }
 
 export type HeaderValues = Map<any, any>;
 
 export interface ListGridSpanBodyOptions {
-    startCol: number
-    endCol: number
+  startCol: number
+  endCol: number
 }
 
 export interface ListGridAPI<T> extends DrawGridAPI {
-    records: T[] | null;
-    dataSource: DataSourceAPI<T>;
-    theme: RequiredThemeDefine | null;
-    sortState: SortState | null;
-    headerValues: HeaderValues;
-    recordRowCount: number;
-    disabled: boolean | ((getValue: T) => boolean);
-    readonly: boolean | ((getValue: T) => boolean);
-    spanBodyOptions: ListGridSpanBodyOptions | null
+  records: T[] | null;
+  dataSource: DataSourceAPI<T>;
+  theme: RequiredThemeDefine | null;
+  sortState: SortState | null;
+  headerValues: HeaderValues;
+  recordRowCount: number;
+  disabled: boolean | ((getValue: T) => boolean);
+  readonly: boolean | ((getValue: T) => boolean);
+  spanBodyOptions: ListGridSpanBodyOptions | null
 
-    listen<TYPE extends keyof ListGridEventHandlersEventMap<T>>(type: TYPE, listener: (...event: ListGridEventHandlersEventMap<T>[TYPE]) => ListGridEventHandlersReturnMap[TYPE]): EventListenerId;
+  listen<TYPE extends keyof ListGridEventHandlersEventMap<T>>(type: TYPE, listener: (...event: ListGridEventHandlersEventMap<T>[TYPE]) => ListGridEventHandlersReturnMap[TYPE]): EventListenerId;
 
-    getField(col: number, row: number): FieldDef<T> | undefined;
+  getField(col: number, row: number): FieldDef<T> | undefined;
 
-    getRowRecord(row: number): MaybePromiseOrUndef<T>;
+  getRowRecord(row: number): MaybePromiseOrUndef<T>;
 
-    getRecordIndexByRow(row: number): number;
+  getRecordIndexByRow(row: number): number;
 
-    getRecordStartRowByRecordIndex(index: number): number;
+  getRecordStartRowByRecordIndex(index: number): number;
 
-    getHeaderField(col: number, row: number): any | undefined;
+  getHeaderField(col: number, row: number): any | undefined;
 
-    getHeaderValue(col: number, row: number): any | undefined;
+  getHeaderValue(col: number, row: number): any | undefined;
 
-    setHeaderValue(col: number, row: number, newValue: any): void;
+  setHeaderValue(col: number, row: number, newValue: any): void;
 
-    getCellRange(col: number, row: number): CellRange;
+  getCellRange(col: number, row: number): CellRange;
 
-    getCellRangeByField(field: FieldDef<T>, index: number): CellRange | null;
+  getCellRangeByField(field: FieldDef<T>, index: number): CellRange | null;
 
-    focusGridCell(field: FieldDef<T>, index: number): void;
+  focusGridCell(field: FieldDef<T>, index: number): void;
 
-    makeVisibleGridCell(field: FieldDef<T>, index: number): void;
+  makeVisibleGridCell(field: FieldDef<T>, index: number): void;
 
-    getGridCanvasHelper(): GridCanvasHelperAPI;
+  getGridCanvasHelper(): GridCanvasHelperAPI;
 
-    selectCellRange(
-        startCol: number,
-        startRow: number,
-        endCol: number,
-        endRow: number
-    ): void
+  selectCellRange(
+    startCol: number,
+    startRow: number,
+    endCol: number,
+    endRow: number
+  ): void
 
-    doChangeValue(
-        col: number,
-        row: number,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        changeValueCallback: (before: any) => any
-    ): MaybePromise<boolean>;
+  doChangeValue(
+    col: number,
+    row: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    changeValueCallback: (before: any) => any
+  ): MaybePromise<boolean>;
 
-    doGetCellValue(
-        col: number,
-        row: number,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        valueCallback: (value: any) => void
-    ): boolean;
+  doGetCellValue(
+    col: number,
+    row: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    valueCallback: (value: any) => void
+  ): boolean;
 
-    doSetPasteValue(text: string): void;
+  doSetPasteValue(text: string): void;
 
-    doSetPasteValue(text: string, test: (data: SetPasteValueTestData<T>) => boolean): void;
+  doSetPasteValue(text: string, test: (data: SetPasteValueTestData<T>) => boolean): void;
 
-    getLayoutCellId(col: number, row: number): LayoutObjectId;
+  getLayoutCellId(col: number, row: number): LayoutObjectId;
 
-    getColumnType(col: number, row: number): ColumnTypeAPI;
+  getColumnType(col: number, row: number): ColumnTypeAPI;
 }
 
 export interface ColumnTypeAPI {
@@ -233,292 +232,292 @@ export interface ColumnTypeAPI {
 
 
 export type SetPasteValueTestData<T> = CellAddress & {
-    grid: ListGridAPI<T>;
-    record: T;
-    value: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    oldValue: any;
+  grid: ListGridAPI<T>;
+  record: T;
+  value: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  oldValue: any;
 };
 
 export interface InlineAPI {
-    width(arg: { ctx: CanvasRenderingContext2D }): number;
+  width(arg: { ctx: CanvasRenderingContext2D }): number;
 
-    font(): string | null;
+  font(): string | null;
 
-    color(): ColorDef | null;
+  color(): ColorDef | null;
 
-    canDraw(): boolean;
+  canDraw(): boolean;
 
-    onReady(callback: AnyFunction): void;
+  onReady(callback: AnyFunction): void;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    draw(opt: any): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  draw(opt: any): void;
 
-    canBreak(): boolean;
+  canBreak(): boolean;
 }
 
 type ColorsDef = ColorDef | (ColorDef | null)[];
 
 export interface GridCanvasHelperAPI {
-    theme: RequiredThemeDefine;
+  theme: RequiredThemeDefine;
 
-    text(
-        text: string | (InlineAPI | string)[],
-        context: CellContext,
-        option: {
-            padding?: number | string | (number | string)[];
-            offset?: number;
-            color?: ColorPropertyDefine;
-            textAlign?: CanvasTextAlign;
-            textBaseline?: CanvasTextBaseline;
-            font?: FontPropertyDefine;
-            textOverflow?: TextOverflow;
-            icons?: SimpleColumnIconOption[];
-        }
-    ): void;
+  text(
+    text: string | (InlineAPI | string)[],
+    context: CellContext,
+    option: {
+      padding?: number | string | (number | string)[];
+      offset?: number;
+      color?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+      font?: FontPropertyDefine;
+      textOverflow?: TextOverflow;
+      icons?: SimpleColumnIconOption[];
+    }
+  ): void;
 
-    getTextRect(
-        value: string,
-        context: CellContext,
-        option: {
-            font?: FontPropertyDefine
-            icons?: SimpleColumnIconOption[]
-            padding?: number | string | (number | string)[]
-            textAlign?: CanvasTextAlign
-            textBaseline?: CanvasTextBaseline
-            textOverflow?: TextOverflow
-        }
-    ): RectProps
+  getTextRect(
+    value: string,
+    context: CellContext,
+    option: {
+      font?: FontPropertyDefine
+      icons?: SimpleColumnIconOption[]
+      padding?: number | string | (number | string)[]
+      textAlign?: CanvasTextAlign
+      textBaseline?: CanvasTextBaseline
+      textOverflow?: TextOverflow
+    }
+  ): RectProps
 
-    button(
-        caption: string,
-        context: CellContext,
-        option: {
-            bgColor?: ColorPropertyDefine;
-            padding?: number | string | (number | string)[];
-            offset?: number;
-            color?: ColorPropertyDefine;
-            textAlign?: CanvasTextAlign;
-            textBaseline?: CanvasTextBaseline;
-            shadow?: {
-                color?: string;
-                blur?: number;
-                offsetX?: number;
-                offsetY?: number;
-                offset?: { x?: number; y?: number };
-            };
-            font?: FontPropertyDefine;
-            textOverflow?: TextOverflow;
-            icons?: SimpleColumnIconOption[];
-        }
-    ): void;
+  button(
+    caption: string,
+    context: CellContext,
+    option: {
+      bgColor?: ColorPropertyDefine;
+      padding?: number | string | (number | string)[];
+      offset?: number;
+      color?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+      shadow?: {
+        color?: string;
+        blur?: number;
+        offsetX?: number;
+        offsetY?: number;
+        offset?: { x?: number; y?: number };
+      };
+      font?: FontPropertyDefine;
+      textOverflow?: TextOverflow;
+      icons?: SimpleColumnIconOption[];
+    }
+  ): void;
 
-    checkbox(
-        check: boolean,
-        context: CellContext,
-        option: {
-            animElapsedTime?: number;
-            uncheckBgColor?: ColorPropertyDefine;
-            checkBgColor?: ColorPropertyDefine;
-            borderColor?: ColorPropertyDefine;
-            textAlign?: CanvasTextAlign;
-            textBaseline?: CanvasTextBaseline;
-        }
-    ): void;
+  checkbox(
+    check: boolean,
+    context: CellContext,
+    option: {
+      animElapsedTime?: number;
+      uncheckBgColor?: ColorPropertyDefine;
+      checkBgColor?: ColorPropertyDefine;
+      borderColor?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+    }
+  ): void;
 
-    radioButton(
-        check: boolean,
-        context: CellContext,
-        option: {
-            animElapsedTime?: number;
-            bgColor?: ColorPropertyDefine;
-            checkColor?: ColorPropertyDefine;
-            uncheckBorderColor?: ColorPropertyDefine;
-            checkBorderColor?: ColorPropertyDefine;
-            uncheckBgColor?: ColorPropertyDefine;
-            checkBgColor?: ColorPropertyDefine;
-            textAlign?: CanvasTextAlign;
-            textBaseline?: CanvasTextBaseline;
-        }
-    ): void;
+  radioButton(
+    check: boolean,
+    context: CellContext,
+    option: {
+      animElapsedTime?: number;
+      bgColor?: ColorPropertyDefine;
+      checkColor?: ColorPropertyDefine;
+      uncheckBorderColor?: ColorPropertyDefine;
+      checkBorderColor?: ColorPropertyDefine;
+      uncheckBgColor?: ColorPropertyDefine;
+      checkBgColor?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+    }
+  ): void;
 
-    multilineText(
-        multilines: string[],
-        context: CellContext,
-        option: {
-            padding?: number | string | (number | string)[];
-            offset?: number;
-            color?: ColorPropertyDefine;
-            textAlign?: CanvasTextAlign;
-            textBaseline?: CanvasTextBaseline;
-            font?: FontPropertyDefine;
-            lineHeight?: string | number;
-            autoWrapText?: boolean;
-            lineClamp?: LineClamp;
-            textOverflow?: TextOverflow;
-            icons?: SimpleColumnIconOption[];
-        }
-    ): void;
+  multilineText(
+    multilines: string[],
+    context: CellContext,
+    option: {
+      padding?: number | string | (number | string)[];
+      offset?: number;
+      color?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+      font?: FontPropertyDefine;
+      lineHeight?: string | number;
+      autoWrapText?: boolean;
+      lineClamp?: LineClamp;
+      textOverflow?: TextOverflow;
+      icons?: SimpleColumnIconOption[];
+    }
+  ): void;
 
-    getColor(color: ColorPropertyDefine, col: number, row: number, ctx: CanvasRenderingContext2D): ColorDef;
+  getColor(color: ColorPropertyDefine, col: number, row: number, ctx: CanvasRenderingContext2D): ColorDef;
 
-    getColor(color: ColorsPropertyDefine, col: number, row: number, ctx: CanvasRenderingContext2D): ColorsDef;
+  getColor(color: ColorsPropertyDefine, col: number, row: number, ctx: CanvasRenderingContext2D): ColorsDef;
 
-    toBoxPixelArray(value: number | string | (number | string)[], context: CellContext, font: string | undefined): [ number, number, number, number ];
+  toBoxPixelArray(value: number | string | (number | string)[], context: CellContext, font: string | undefined): [ number, number, number, number ];
 
-    fillRectWithState(rect: RectProps, context: CellContext, option: { fillColor?: ColorPropertyDefine }): void;
+  fillRectWithState(rect: RectProps, context: CellContext, option: { fillColor?: ColorPropertyDefine }): void;
 
-    drawBorderWithClip(context: CellContext, draw: (ctx: CanvasRenderingContext2D) => void): void;
+  drawBorderWithClip(context: CellContext, draw: (ctx: CanvasRenderingContext2D) => void): void;
 
-    drawWithClip(context: CellContext, draw: (ctx: CanvasRenderingContext2D) => void): void;
+  drawWithClip(context: CellContext, draw: (ctx: CanvasRenderingContext2D) => void): void;
 
-    testFontLoad(font: string | undefined, value: string, context: CellContext): boolean;
+  testFontLoad(font: string | undefined, value: string, context: CellContext): boolean;
 
-    buildCheckBoxInline(
-        check: boolean,
-        context: CellContext,
-        option: {
-            animElapsedTime?: number;
-            uncheckBgColor?: ColorPropertyDefine;
-            checkBgColor?: ColorPropertyDefine;
-            borderColor?: ColorPropertyDefine;
-            textAlign?: CanvasTextAlign;
-            textBaseline?: CanvasTextBaseline;
-        }
-    ): InlineAPI;
+  buildCheckBoxInline(
+    check: boolean,
+    context: CellContext,
+    option: {
+      animElapsedTime?: number;
+      uncheckBgColor?: ColorPropertyDefine;
+      checkBgColor?: ColorPropertyDefine;
+      borderColor?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+    }
+  ): InlineAPI;
 
-    tree(
-        value: string,
-        context: CellContext,
-        option: {
-            font?: string
-            offset?: number
-            color?: ColorPropertyDefine
-            lineColor?: ColorPropertyDefine
-            buttonColor?: ColorPropertyDefine
-            buttonBgColor?: ColorPropertyDefine
-            buttonBorderColor?: ColorPropertyDefine
-            icons?: SimpleColumnIconOption[]
-            padding?: number | string | (number | string)[]
-            textAlign?: CanvasTextAlign
-            textBaseline?: CanvasTextBaseline
-            textOverflow?: TextOverflow
-            treeInfo?: TreeInfo
-            treeNodeSpace?: number
-            isMultilineText?: boolean
-            autoWrapText?: boolean
-            lineHeight?: string | number
-            lineClamp?: LineClamp
-        }
-    ): void
+  tree(
+    value: string,
+    context: CellContext,
+    option: {
+      font?: string
+      offset?: number
+      color?: ColorPropertyDefine
+      lineColor?: ColorPropertyDefine
+      buttonColor?: ColorPropertyDefine
+      buttonBgColor?: ColorPropertyDefine
+      buttonBorderColor?: ColorPropertyDefine
+      icons?: SimpleColumnIconOption[]
+      padding?: number | string | (number | string)[]
+      textAlign?: CanvasTextAlign
+      textBaseline?: CanvasTextBaseline
+      textOverflow?: TextOverflow
+      treeInfo?: TreeInfo
+      treeNodeSpace?: number
+      isMultilineText?: boolean
+      autoWrapText?: boolean
+      lineHeight?: string | number
+      lineClamp?: LineClamp
+    }
+  ): void
 
-    attachArea(rect: RectProps, context: CellContext): void
+  attachArea(rect: RectProps, context: CellContext): void
 }
 
 export interface CellSelection {
-    border: {
-        bottom: boolean
-        left: boolean
-        right: boolean
-        top: boolean
-    }
-    dragged: boolean
-    select: CellAddress
-    range: CellRange
+  border: {
+    bottom: boolean
+    left: boolean
+    right: boolean
+    top: boolean
+  }
+  dragged: boolean
+  select: CellAddress
+  range: CellRange
 }
 
 export interface CellContext {
-    readonly col: number;
-    readonly row: number;
+  readonly col: number;
+  readonly row: number;
 
-    getContext(): CanvasRenderingContext2D;
+  getContext(): CanvasRenderingContext2D;
 
-    toCurrentContext(): CellContext;
+  toCurrentContext(): CellContext;
 
-    getDrawRect(): RectProps | null;
+  getDrawRect(): RectProps | null;
 
-    getRect(): RectProps;
+  getRect(): RectProps;
 
-    // 选中区域
-    getSelection(): CellSelection; // { select: CellAddress; range: CellRange };
+  // 选中区域
+  getSelection(): CellSelection; // { select: CellAddress; range: CellRange };
 
-    setRectFilter(rectFilter: (base: RectProps) => RectProps): void;
+  setRectFilter(rectFilter: (base: RectProps) => RectProps): void;
 }
 
 export interface Selection {
-    select: CellAddress;
-    range: CellRange;
+  select: CellAddress;
+  range: CellRange;
 }
 
 // =============== 新添加
 
 export interface CellSelection {
-    border: {
-        bottom: boolean
-        left: boolean
-        right: boolean
-        top: boolean
-    }
-    dragged: boolean
-    select: CellAddress
-    range: CellRange
+  border: {
+    bottom: boolean
+    left: boolean
+    right: boolean
+    top: boolean
+  }
+  dragged: boolean
+  select: CellAddress
+  range: CellRange
 }
 
 export interface CellContext {
-    readonly col: number
-    readonly row: number
-    range: CellRange
+  readonly col: number
+  readonly row: number
+  range: CellRange
 
-    getContext(): CanvasRenderingContext2D
+  getContext(): CanvasRenderingContext2D
 
-    toCurrentContext(): CellContext
+  toCurrentContext(): CellContext
 
-    getDrawRect(): RectProps | null
+  getDrawRect(): RectProps | null
 
-    getRect(): RectProps
+  getRect(): RectProps
 
-    getSelection(): CellSelection
+  getSelection(): CellSelection
 
-    setRectFilter(rectFilter: (base: RectProps) => RectProps): void
+  setRectFilter(rectFilter: (base: RectProps) => RectProps): void
 }
 
 export interface Selection {
-    select: CellAddress
-    range: CellRange
+  select: CellAddress
+  range: CellRange
 }
 
 export type DrawColumnCallback = <T>(
-    value: any,
-    ctx: CanvasRenderingContext2D,
-    info: {
-        grid: ListGridAPI<T>
-        record: unknown
-        rect: RectProps
-        col: number
-        row: number
-        selection: CellSelection
-    }
+  value: any,
+  ctx: CanvasRenderingContext2D,
+  info: {
+    grid: ListGridAPI<T>
+    record: unknown
+    rect: RectProps
+    col: number
+    row: number
+    selection: CellSelection
+  }
 ) => boolean
 
 export type DrawHeaderCallback = <T>(
-    value: any,
-    ctx: CanvasRenderingContext2D,
-    info: {
-        grid: ListGridAPI<T>
-    }
+  value: any,
+  ctx: CanvasRenderingContext2D,
+  info: {
+    grid: ListGridAPI<T>
+  }
 ) => boolean
 
 interface IRecordParams<T, V> {
-    value: V,
-    displayValue: V,
-    cell: CellAddress,
-    grid: ListGridAPI<T>
+  value: V,
+  displayValue: V,
+  cell: CellAddress,
+  grid: ListGridAPI<T>
 }
 
-export type TransformRecord = <T, V>(params: IRecordParams<T, V>) => V
+export type TransformRecord = <T, V>(params: IRecordParams<T, V>) => V | any
 
 export interface AttachCellStyle {
-    innerBox?: 'none' | 'dashed'
+  innerBox?: 'none' | 'dashed'
 }
 
 export type ToggledType = 'expand' | 'expandAll' | 'collapse' | 'collapseAll'
@@ -530,32 +529,27 @@ export type CellStyle = AttachCellStyle | (<T>(record: T) => AttachCellStyle)
 export type MultilineText = boolean | (<T>(record: T) => boolean)
 
 export interface TreeInfo {
-    expanded: boolean
-    isLast: boolean
-    isLeaf: boolean
-    key: any
-    level: number
-    levelLast: boolean[]
-    parentKey: any
+  expanded: boolean
+  isLast: boolean
+  isLeaf: boolean
+  key: any
+  level: number
+  levelLast: boolean[]
+  parentKey: any
 }
 
 export type CanToggle = (e: {
-    col: number
-    row: number
-    type: CanToggleType
-    treeInfo: TreeInfo
-    event: Event
+  col: number
+  row: number
+  type: CanToggleType
+  treeInfo: TreeInfo
+  event: Event
 }) => boolean
 
 export type Toggled = (e: {
-    col: number
-    row: number
-    type: ToggledType
-    treeInfo: TreeInfo
-    event: Event
+  col: number
+  row: number
+  type: ToggledType
+  treeInfo: TreeInfo
+  event: Event
 }) => void
-
-export interface IFirstBorderMap {
-    position: 'top' | 'left'
-    rect: Rect
-}

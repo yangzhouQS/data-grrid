@@ -177,6 +177,7 @@ function glyphToJSON(
 	offsetX += Math.round((size - contentSize.width) / 2)
 	offsetY += Math.round((size - contentSize.height) / 2)
 
+
 	const d = elementToPaths(glyph)
 
 	return buildObject({
@@ -204,6 +205,7 @@ function svgToJSON(svgCode: string) {
 		if (el.nodeType !== ELEMENT_NODE) {
 			continue
 		}
+
 		d += elementToPaths(el as Element)
 	}
 	return buildObject({
@@ -226,6 +228,7 @@ const svgToIcon = (
 	if (opt.glyphName || opt.unicode) {
 		return glyphToJSON(svgCode, opt)
 	} else {
+
 		return svgToJSON(svgCode)
 	}
 }
