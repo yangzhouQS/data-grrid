@@ -15,7 +15,7 @@ import type {
     EventListenerId,
     FieldData,
     FieldDef,
-    HeaderValues,
+    HeaderValues, IFirstBorderMap,
     LayoutObjectId,
     ListGridAPI,
     ListGridEventHandlersEventMap,
@@ -550,6 +550,7 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
         }
     }
     const { headerRowHeight } = grid[_]
+    console.log('头部行数', layoutMap.headerRowCount)
     for (let row = 0; row < layoutMap.headerRowCount; row++) {
         const height = Array.isArray(headerRowHeight) ? headerRowHeight[row] : headerRowHeight
         if (height && height > 0) {
@@ -860,12 +861,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
         return LG_EVENT_TYPE
     }
 
-    private _firstBorderMap: Map<string, Rect>
+    private _firstBorderMap: Map<string, IFirstBorderMap>
 
     constructor(options: ListGridConstructorOptions<T> = {}) {
         super(omit(options, [ 'colCount', 'rowCount', 'frozenRowCount' ]))
         this[_] = {} as any
-        this._firstBorderMap = new Map<string, Rect>()
+        this._firstBorderMap = new Map<string, IFirstBorderMap>()
         const protectedSpace = this[_]
         protectedSpace.disabled = options.disabled || false
         protectedSpace.readonly = options.readonly || false
@@ -901,36 +902,69 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
      * @param e
      */
     drawFirstBorderCell(e: MouseCellEvent): void {
-        const firstBorderMap = this.firstBorderMap
+        const firstBorderMap = this.firstBorderMap // 点击过的缓存
+        const { layoutMap } = this[_]
+
         const { col, row } = e
         const keyStr = `${ col }-${ row }`
         const ctx = this._getInitContext()
         const helper = this[_].gridCanvasHelper
-        const rect: Rect = this.getCellRect(0, row)
+        console.log(col, row)
+        const leftRect: Rect = this.getCellRect(0, row)
+        const topRect: Rect = this.getCellRect(col, layoutMap.headerRowCount)
         const borderColor = helper.theme.borderColor as string || '#f2f2f2f2'
         const highlightBorderColor = helper.theme.highlightBorderColor as string || '#f2f2f2f2'
         if (firstBorderMap.size > 0) {
-            for (const [ , oldRect ] of firstBorderMap) {
-                ctx.save()
-                ctx.lineWidth = 5
-                ctx.strokeStyle = borderColor
-                ctx.beginPath()
-                ctx.moveTo(oldRect.left - 0.5, oldRect.top)
-                ctx.lineTo(oldRect.left - 0.5, oldRect.bottom)
-                ctx.stroke()
-                ctx.restore()
+            for (const [ , { position, rect } ] of firstBorderMap) {
+
+                if (position === 'left') {
+                    ctx.save()
+                    ctx.strokeStyle = borderColor
+                    ctx.lineWidth = 1
+                    ctx.beginPath()
+                    ctx.moveTo(rect.left, rect.top)
+                    ctx.lineTo(rect.left, rect.bottom)
+                    ctx.stroke()
+                    ctx.restore()
+                }
+
+
+                if (position === 'top') {
+                    ctx.save()
+                    ctx.strokeStyle = borderColor
+                    ctx.lineWidth = 1
+                    ctx.beginPath()
+                    ctx.moveTo(rect.left, rect.top)
+                    ctx.lineTo(rect.left, rect.bottom)
+                    ctx.stroke()
+                    ctx.restore()
+                }
+
             }
             firstBorderMap.clear()
         }
-        ctx.save()
-        ctx.lineWidth = 4
-        ctx.strokeStyle = highlightBorderColor
-        ctx.beginPath()
-        ctx.moveTo(rect.left - 0.5, rect.top)
-        ctx.lineTo(rect.left - 0.5, rect.bottom)
-        ctx.stroke()
-        ctx.restore()
-        firstBorderMap.set(keyStr, rect)
+        if (row >= layoutMap.headerRowCount) {
+            // ========= 设置左侧
+            ctx.save()
+            ctx.lineWidth = 1
+            ctx.strokeStyle = highlightBorderColor
+            ctx.beginPath()
+            ctx.moveTo(leftRect.left, leftRect.top)
+            ctx.lineTo(leftRect.left, leftRect.bottom)
+            ctx.stroke()
+            ctx.restore()
+
+            // ============ 设置顶部
+            ctx.lineWidth = 1
+            ctx.strokeStyle = highlightBorderColor
+            ctx.beginPath()
+            ctx.moveTo(topRect.left, topRect.top - 0.5)
+            ctx.lineTo(topRect.right, topRect.top - 0.5)
+            ctx.stroke()
+            // ============= 设置缓存
+            firstBorderMap.set(keyStr + 'left', { rect: leftRect, position: 'left' })
+            firstBorderMap.set(keyStr + 'top', { rect: topRect, position: 'top' })
+        }
     }
 
     /**
@@ -992,7 +1026,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
         return this[_].layout
     }
 
-    get firstBorderMap(): Map<string, Rect> {
+    get firstBorderMap(): Map<string, IFirstBorderMap> {
         return this._firstBorderMap
     }
 
