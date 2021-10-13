@@ -29,7 +29,8 @@ const EVENT_TYPE = {
 type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
 
 
-function getValue<V>(value: MaybePromiseOrCallOrUndef<V, []>, setPromiseBack: PromiseBack<V>): MaybePromiseOrUndef<V> {
+function getValue<V>(value: MaybePromiseOrCallOrUndef<V, []>, setPromiseBack: PromiseBack<V>):
+    MaybePromiseOrUndef<V> {
     const maybePromiseValue = getOrApply(value)
     if (isPromise(maybePromiseValue)) {
         const promiseValue = maybePromiseValue.then((r: V | undefined) => {
