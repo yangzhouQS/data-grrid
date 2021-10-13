@@ -59,6 +59,21 @@ const records = [
         value: -1234567890.666666
     }
 ]
+const lookupZones = [ { 'id': 1, 'name': 'UTC+1', 'value': '1', 'label': 'UTC+1' }, { 'id': 2, 'name': 'UTC+2', 'value': '2', 'label': 'UTC+2' }, {
+    'id': 3, 'name': 'UTC+3', 'value': '3', 'label': 'UTC+3'
+}, { 'id': 4, 'name': 'UTC+4', 'value': '4', 'label': 'UTC+4' }, { 'id': 5, 'name': 'UTC+5', 'value': '5', 'label': 'UTC+5' }, { 'id': 6, 'name': 'UTC+6', 'value': '6', 'label': 'UTC+6' }, {
+    'id': 7, 'name': 'UTC+7', 'value': '7', 'label': 'UTC+7'
+}, { 'id': 8, 'name': 'UTC+8', 'value': '8', 'label': 'UTC+8' }, { 'id': 9, 'name': 'UTC+9', 'value': '9', 'label': 'UTC+9' }, {
+    'id': 10, 'name': 'UTC+10', 'value': '10', 'label': 'UTC+10'
+}, { 'id': 11, 'name': 'UTC+11', 'value': '11', 'label': 'UTC+11' }, { 'id': 12, 'name': 'UTC+12', 'value': '12', 'label': 'UTC+12' }, {
+    'id': -1, 'name': 'UTC-1', 'value': '-1', 'label': 'UTC-1'
+}, { 'id': -2, 'name': 'UTC-2', 'value': '-2', 'label': 'UTC-2' }, { 'id': -3, 'name': 'UTC-3', 'value': '-3', 'label': 'UTC-3' }, {
+    'id': -4, 'name': 'UTC-4', 'value': '-4', 'label': 'UTC-4'
+}, { 'id': -5, 'name': 'UTC-5', 'value': '-5', 'label': 'UTC-5' }, { 'id': -6, 'name': 'UTC-6', 'value': '-6', 'label': 'UTC-6' }, {
+    'id': -7, 'name': 'UTC-7', 'value': '-7', 'label': 'UTC-7'
+}, { 'id': -8, 'name': 'UTC-8', 'value': '-8', 'label': 'UTC-8' }, { 'id': -9, 'name': 'UTC-9', 'value': '-9', 'label': 'UTC-9' }, {
+    'id': -10, 'name': 'UTC-10', 'value': '-10', 'label': 'UTC-10'
+}, { 'id': -11, 'name': 'UTC-11', 'value': '-11', 'label': 'UTC-11' }, { 'id': -12, 'name': 'UTC-12', 'value': '-12', 'label': 'UTC-12' } ]
 const options = [
     { value: '', label: 'Empty' },
     { value: '1', label: 'Option 1' },
@@ -74,8 +89,8 @@ const grid = new dataGrid.ListGrid({
     header: [
         {
             caption: '序号',
-            width: 200,
-            columnType: new dataGrid.columns.type.Column<any>({
+            width: 80,
+            columnType: new dataGrid.columns.type.Column({
                 transformRecord({ value, displayValue, cell, grid }) {
                     return cell.row - grid.frozenRowCount + 1
                 }
@@ -84,7 +99,18 @@ const grid = new dataGrid.ListGrid({
                 textAlign: 'center'
             }
         },
-        { field: 'id', caption: 'ID', width: 200 },
+        { field: 'id', caption: 'ID', width: 100 },
+        {
+            field: 'email',
+            caption: 'OPTIONS',
+            width: 280,
+            columnType: new dataGrid.columns.type.MenuColumn({
+                options: [ { value: '', label: 'Choose your option' }, ...lookupZones ]
+            }),
+            action: new dataGrid.columns.action.InlineMenuEditor({
+                options: [ { value: '', label: 'Empty' }, ...lookupZones ]
+            })
+        },
         {
             caption: '基本信息',
             headerStyle: {
@@ -176,7 +202,7 @@ const grid = new dataGrid.ListGrid({
     ],
     headerRowHeight: 40, // header行高
     defaultRowHeight: 50,
-    hiddenHeader: true,
+    // hiddenHeader: true,
     readonly: true,
     borderColor: '#444', // gird边框线颜色
     borderMode: 'none', // gridBorder模式

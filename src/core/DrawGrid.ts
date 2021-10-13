@@ -3656,7 +3656,10 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
      * @param {number} endRow index of the ending row, of the cell
      * @return {void}
      */
-    invalidateGridRect(startCol: number, startRow: number, endCol = startCol, endRow = startRow): void {
+    invalidateGridRect(
+        startCol: number, startRow: number,
+        endCol = startCol, endRow = startRow
+    ): void {
         const offset = this.getOffsetInvalidateCells()
         if (offset > 0) {
             startCol -= offset

@@ -10,7 +10,7 @@ module.exports = {
   mode: 'development',
   devtool: 'cheap-module-source-map',
   entry: {
-    dataGrid: './demo/main'
+    dataGrid: './demo/_main'
   },
   output: {
     filename: 'dataGrid.js',
