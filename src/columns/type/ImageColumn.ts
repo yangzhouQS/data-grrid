@@ -50,7 +50,6 @@ export class ImageColumn<T> extends BaseColumn<T, HTMLImageElement> {
   }
 
   drawInternal(value: HTMLImageElement, context: CellContext, style: ImageStyle, helper: GridCanvasHelperAPI, _grid: ListGridAPI<T>, { drawCellBase }: DrawCellInfo<T>): void {
-    debugger
     if (value) {
       const { textAlign, textBaseline, margin, bgColor } = style
       if (bgColor) {

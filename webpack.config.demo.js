@@ -1,6 +1,8 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -11,13 +13,24 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   entry: {
     dataGrid: './demo/_main'
+    // dataGrid: './src/main'
   },
   output: {
     filename: 'dataGrid.js',
     libraryTarget: 'umd'
   },
   optimization: {
-    minimize: false
+    minimize: false,
+    /* minimizer: [
+       new TerserPlugin({ extractComments: false }),
+       new OptimizeCSSAssetsPlugin({
+         cssProcessorOptions: {
+           map: {
+             inline: false
+           }
+         }
+       })
+     ]*/
   },
   resolve: {
     extensions: ['.js', '.ts', '.json'],

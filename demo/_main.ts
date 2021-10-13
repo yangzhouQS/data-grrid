@@ -5,7 +5,7 @@ const records = [
   {
     id: 1,
     name: 'liuMing',
-    imgSrc: 'baidu.png',
+    imgSrc: 'https://fanyi-cdn.cdn.bcebos.com/static/translation/img/header/logo_e835568.png',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     percent: '80%',
     value2: 18,
@@ -20,7 +20,7 @@ const records = [
   {
     id: 2,
     name: 'tom',
-    imgSrc: 'baidu.png',
+    imgSrc: 'https://fanyi-cdn.cdn.bcebos.com/static/translation/img/header/logo_e835568.png',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     percent: '80%',
     value2: 18,
@@ -35,7 +35,7 @@ const records = [
   {
     id: 3,
     name: 'sam',
-    imgSrc: 'baidu.png',
+    imgSrc: 'https://fanyi-cdn.cdn.bcebos.com/static/translation/img/header/logo_e835568.png',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     percent: '80%',
     value2: 18,
@@ -50,7 +50,7 @@ const records = [
   {
     id: 4,
     name: 'lisa',
-    imgSrc: 'baidu.png',
+    imgSrc: 'https://fanyi-cdn.cdn.bcebos.com/static/translation/img/header/logo_e835568.png',
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     percent: '80%',
     value2: 18,
@@ -150,8 +150,12 @@ const grid = new dataGrid.ListGrid({
       caption: "图片",
       field: "imgSrc",
       width: 150,
-      columnType: new dataGrid.columns.type.ImageColumn({
-      })
+      columnType: 'image',
+      style: (rec) => {
+        return {
+          imageSizing: 'keep-aspect-ratio'
+        }
+      },
     },
     {
       field: 'email',
