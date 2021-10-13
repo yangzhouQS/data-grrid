@@ -42,7 +42,7 @@ import { MessageHandler, hasMessage } from './columns/message/MessageHandler'
 import { cellEquals, event, getOrApply, isDef, isPromise, obj, omit, then } from './internal/utils'
 import type { BaseColumn } from './columns/type/BaseColumn'
 import { BaseStyle } from './columns/style'
-import type { ColumnData } from './list-grid/layout-map/api'
+import type { ColumnData } from './list-grid/layout-map'
 import type { DrawCellInfo } from './ts-types-internal'
 import { DrawGrid } from './core/DrawGrid'
 import { GridCanvasHelper } from './GridCanvasHelper'
@@ -56,7 +56,8 @@ import { getListGridSymbol } from './internal/symbolManager'
 import { parsePasteRangeBoxValues } from './internal/paste-utils'
 import { EventHandler } from './internal/EventHandler'
 import { LayoutMap } from './list-grid/layout-map/LayoutMap'
-
+import { DG_EVENT_TYPE } from './core/DG_EVENT_TYPE'
+import { MouseCellEvent } from './ts-types'
 
 const _ = getListGridSymbol()
 
@@ -340,6 +341,7 @@ function _onDrawValue<T>(
 ): MaybePromise<void> {
     const helper = grid[_].gridCanvasHelper
 
+    // 设置填充单元格背景
     const drawCellBg = ({ bgColor }: { bgColor?: ColorPropertyDefine } = {}): void => {
         const fillOpt = {
             fillColor: bgColor
@@ -365,7 +367,6 @@ function _onDrawValue<T>(
                 }
             })
         }
-
         _borderWithState(grid, helper, context)
     }
 
@@ -403,13 +404,19 @@ function _onDrawValue<T>(
     return draw(cellValue, info, context, grid)
 }
 
-
+/**
+ * 激活状态单元格边框绘制
+ * @param grid
+ * @param helper
+ * @param context
+ */
 function _borderWithState<T>(grid: ListGrid<T>, helper: GridCanvasHelper<T>, context: CellContext): void {
     const { col, row } = context
     const sel = grid.selection.select
     const { layoutMap } = grid[_]
 
     const rect = context.getRect()
+
     const option: { borderColor?: ColorsPropertyDefine; lineWidth?: number } = {}
 
     const selRecordIndex = layoutMap.getRecordIndexByRow(sel.row)
@@ -853,9 +860,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
         return LG_EVENT_TYPE
     }
 
+    private _firstBorderMap: Map<string, Rect>
+
     constructor(options: ListGridConstructorOptions<T> = {}) {
         super(omit(options, [ 'colCount', 'rowCount', 'frozenRowCount' ]))
         this[_] = {} as any
+        this._firstBorderMap = new Map<string, Rect>()
         const protectedSpace = this[_]
         protectedSpace.disabled = options.disabled || false
         protectedSpace.readonly = options.readonly || false
@@ -883,6 +893,44 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
 
         this.invalidate()
         protectedSpace.handler.on(window, 'resize', () => this.resize())
+        protectedSpace.handler.on(this, DG_EVENT_TYPE.CLICK_CELL, this.drawFirstBorderCell)
+    }
+
+    /**
+     * 首行和首列设置标识
+     * @param e
+     */
+    drawFirstBorderCell(e: MouseCellEvent): void {
+        const firstBorderMap = this.firstBorderMap
+        const { col, row } = e
+        const keyStr = `${ col }-${ row }`
+        const ctx = this._getInitContext()
+        const helper = this[_].gridCanvasHelper
+        const rect: Rect = this.getCellRect(0, row)
+        const borderColor = helper.theme.borderColor as string || '#f2f2f2f2'
+        const highlightBorderColor = helper.theme.highlightBorderColor as string || '#f2f2f2f2'
+        if (firstBorderMap.size > 0) {
+            for (const [ , oldRect ] of firstBorderMap) {
+                ctx.save()
+                ctx.lineWidth = 5
+                ctx.strokeStyle = borderColor
+                ctx.beginPath()
+                ctx.moveTo(oldRect.left - 0.5, oldRect.top)
+                ctx.lineTo(oldRect.left - 0.5, oldRect.bottom)
+                ctx.stroke()
+                ctx.restore()
+            }
+            firstBorderMap.clear()
+        }
+        ctx.save()
+        ctx.lineWidth = 4
+        ctx.strokeStyle = highlightBorderColor
+        ctx.beginPath()
+        ctx.moveTo(rect.left - 0.5, rect.top)
+        ctx.lineTo(rect.left - 0.5, rect.bottom)
+        ctx.stroke()
+        ctx.restore()
+        firstBorderMap.set(keyStr, rect)
     }
 
     /**
@@ -942,6 +990,10 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
      */
     get layout(): LayoutDefine<T> {
         return this[_].layout
+    }
+
+    get firstBorderMap(): Map<string, Rect> {
+        return this._firstBorderMap
     }
 
     /**
@@ -1055,7 +1107,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
      * @override
      */
     set underlayBackgroundColor(underlayBackgroundColor: string) {
-        // super.underlayBackgroundColor = underlayBackgroundColor
+        super.underlayBackgroundColor = underlayBackgroundColor
     }
 
     /**
@@ -1602,7 +1654,8 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
         return { start, end }
     }
 
-    fireListeners<TYPE extends keyof ListGridEventHandlersEventMap<T>>(type: TYPE, ...event: ListGridEventHandlersEventMap<T>[TYPE]): ListGridEventHandlersReturnMap[TYPE][] {
+    fireListeners<TYPE extends keyof ListGridEventHandlersEventMap<T>>
+    (type: TYPE, ...event: ListGridEventHandlersEventMap<T>[TYPE]): ListGridEventHandlersReturnMap[TYPE][] {
         return super.fireListeners(type as any, ...event)
     }
 

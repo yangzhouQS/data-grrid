@@ -110,8 +110,7 @@ function _getTargetRowAt(this: DrawGrid, absoluteY: number): { row: number; top:
 }
 
 
-function _getTargetColAt(grid: DrawGrid, absoluteX: number):
-    { left: number; col: number; } | null {
+function _getTargetColAt(grid: DrawGrid, absoluteX: number): { left: number; col: number; } | null {
     let left = 0
     const { colCount } = grid[_]
     for (let col = 0; col < colCount; col++) {
@@ -215,6 +214,7 @@ function _getCellDrawing(grid: DrawGrid, col: number, row: number): DrawCellCont
     if (!grid[_].drawCells[row]) {
         return null
     }
+    console.log(grid[_].drawCells)
     return grid[_].drawCells[row][col]
 }
 
@@ -1135,6 +1135,7 @@ function _getMouseAbstractPoint(grid: DrawGrid, evt: TouchEvent | MouseEvent): {
 
 /**
  * 事件处理系统
+ * TODO 事件处理系统
  * @return void
  */
 function _bindEvents(this: DrawGrid): void {
@@ -1174,8 +1175,11 @@ function _bindEvents(this: DrawGrid): void {
         }
         return limit.max !== limit.min
     }
+    /**
+     * 按下鼠标按键
+     * 可以获取点击单元格信息
+     */
     handler.on(element, 'mousedown', (e) => {
-
         const eventArgsSet = getCellEventArgsSet(e)
         const { abstractPos, eventArgs } = eventArgsSet
         if (!abstractPos) {
@@ -1199,6 +1203,7 @@ function _bindEvents(this: DrawGrid): void {
             grid[_].cellSelector.start(e)
         }
     })
+    
     handler.on(element, 'mouseup', (e) => {
         if (!grid.hasListeners(DG_EVENT_TYPE.MOUSEUP_CELL)) {
             return
@@ -1211,6 +1216,7 @@ function _bindEvents(this: DrawGrid): void {
     let doubleTapBefore: (CellAddress & { event: TouchEvent | MouseEvent }) | null | undefined = null
     // let longTouchId: NodeJS.Timeout | null = null;
     let longTouchId: number = 0
+    // 手指按下
     handler.on(element, 'touchstart', (e) => {
         if (!doubleTapBefore) {
             doubleTapBefore = getCellEventArgsSet(e).eventArgs
@@ -1316,9 +1322,15 @@ function _bindEvents(this: DrawGrid): void {
     }
 
     const scrollElement = scrollable.getElement()
+
+    /**
+     * 鼠标移入画布触发一次
+     * 经过被选元素和被选元素的子元素时
+     */
     handler.on(scrollElement, 'mouseover', (_e: MouseEvent): void => {
         isMouseover = true
     })
+    
     handler.on(scrollElement, 'mouseout', (_e: MouseEvent): void => {
         isMouseover = false
         onMouseoutCell()
@@ -1328,8 +1340,12 @@ function _bindEvents(this: DrawGrid): void {
         onMouseleaveCell()
     })
 
+    /**
+     * 鼠标在画布内移动
+     */
     handler.on(element, 'mousemove', (e) => {
         const eventArgsSet = getCellEventArgsSet(e)
+        // console.log(eventArgsSet.cell)
         const { abstractPos, eventArgs } = eventArgsSet
         if (eventArgs) {
             const beforeMouseCell = mouseEnterCell

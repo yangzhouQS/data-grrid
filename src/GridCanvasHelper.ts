@@ -1223,6 +1223,8 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
                 height -= lineWidth
             }
 
+
+
             if (col === 0) {
                 left += lineWidth
                 width -= lineWidth

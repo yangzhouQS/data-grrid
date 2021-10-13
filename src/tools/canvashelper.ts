@@ -1,4 +1,6 @@
-import { calcBasePosition, calcStartPosition, getFontSize } from '../internal/canvases'
+import {
+    calcBasePosition, calcStartPosition, getFontSize
+} from '../internal/canvases'
 import type { ColorDef } from '../ts-types'
 import type { PaddingOption } from '../internal/canvases'
 

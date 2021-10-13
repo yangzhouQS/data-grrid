@@ -206,14 +206,13 @@ const grid = new dataGrid.ListGrid({
     readonly: true,
     borderColor: '#444', // gird边框线颜色
     borderMode: 'none', // gridBorder模式
-    frozenColCount: 1, // 固定列
+    // frozenColCount: 1, // 固定列
     theme: {
         // borderColor: 'green',
-        // highlightBorderColor: '#2373c8',
+        // highlightBorderColor: '#c407ef',
         // highlightBgColor: '#84de8e',
-        // selectionBgColor: '#c19797',
-        // underlayBackgroundColor: '#00f178', // 未绘制区域背景
-        // underlayBackgroundColor: '#00f178' // 未绘制区域背景
+        selectionBgColor: '#c19797',
+        underlayBackgroundColor: '#00f178', // 未绘制区域背景
         // frozenRowsBorderColor: 'red'
     }
 })
