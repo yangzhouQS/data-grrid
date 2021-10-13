@@ -2,6 +2,7 @@ import type { ColumnMenuItemOptions } from '../define'
 import { CanToggle, DrawColumnCallback, MultilineText, Toggled, TransformRecord } from '../grid-engine'
 
 export interface BaseColumnOption {
+  // 用Promise的callback淡入淡出显示
   fadeinWhenCallbackInPromise?: boolean | null;
   transformRecord?: TransformRecord
   transformCopy?: TransformRecord

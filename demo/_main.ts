@@ -150,6 +150,8 @@ const grid = new dataGrid.ListGrid({
       caption: "图片",
       field: "imgSrc",
       width: 150,
+      columnType: new dataGrid.columns.type.ImageColumn({
+      })
     },
     {
       field: 'email',

@@ -22,7 +22,6 @@ yarn-error.log*
 
 # Project exclude paths
 /dist-ts/
-./dist/*
-./demo/*
 yarn.lock
 demo
+dist

@@ -124,7 +124,8 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
 
     this._hidden = option.hidden
 
-    //Promiseのcallbackでフェードイン表示する
+    // Promiseのcallbackでフェードイン表示する
+    // 用Promise的callback淡入淡出显示
     this._fadeinWhenCallbackInPromise = option.fadeinWhenCallbackInPromise || false
   }
 

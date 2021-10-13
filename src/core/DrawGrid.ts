@@ -214,7 +214,6 @@ function _getCellDrawing(grid: DrawGrid, col: number, row: number): DrawCellCont
   if (!grid[_].drawCells[row]) {
     return null
   }
-  console.log(grid[_].drawCells)
   return grid[_].drawCells[row][col]
 }
 
@@ -225,7 +224,6 @@ function _putCellDrawing(grid: DrawGrid, col: number, row: number, context: Draw
   }
   grid[_].drawCells[row][col] = context
 }
-
 
 function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
   if (!grid[_].drawCells[row]) {
@@ -277,7 +275,7 @@ function _drawCell(
       const p = this.onDrawCell(col, row, dcContext)
       if (isPromise(p)) {
         // 延迟绘制
-        _putCellDrawing.call(this, col, row, dcContext)
+        _putCellDrawing.call(this, this, col, row, dcContext)
 
         const pCol = col
         dcContext._delayMode(this, () => {
