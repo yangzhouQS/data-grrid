@@ -8,6 +8,7 @@ import { InlineMenuElement } from './internal/InlineMenuElement'
 import { MenuColumn } from '../type'
 import { getInlineMenuEditorStateId } from '../../internal/symbolManager'
 import { normalizeToFn } from '../../internal/menu-items'
+import { KEY_ENTER, KEY_F2 } from '../../core/internal/KEY_CODE'
 
 const _ = getInlineMenuEditorStateId()
 
@@ -56,9 +57,6 @@ function detachMenu(gridFocus?: boolean): void {
         globalElement.detach(gridFocus)
     }
 }
-
-const KEY_ENTER = 13
-const KEY_F2 = 113
 
 export class InlineMenuEditor<T> extends Editor<T> {
     private _classList?: string | string[]

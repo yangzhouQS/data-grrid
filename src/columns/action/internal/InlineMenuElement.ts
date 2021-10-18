@@ -4,12 +4,6 @@ import { EventHandler } from '../../../internal/EventHandler'
 import type { Rect } from '../../../internal/Rect'
 import { event } from '../../../internal/utils'
 
-const KEY_TAB = 9
-const KEY_ENTER = 13
-const KEY_UP = 38
-const KEY_DOWN = 40
-const KEY_ESC = 27
-
 const CLASSNAME = 'data-grid__inline-menu'
 const ITEM_CLASSNAME = `${ CLASSNAME }__menu-item`
 const HIDDEN_CLASSNAME = `${ CLASSNAME }--hidden`
@@ -28,6 +22,7 @@ function findItemParents(target: HTMLElement | null): HTMLElement | null {
 }
 
 import './InlineMenuElement.css'
+import { KEY_DOWN, KEY_ENTER, KEY_ESC, KEY_TAB, KEY_UP } from '../../../core/internal/KEY_CODE'
 
 function createMenuElement(): HTMLUListElement {
     // require("@/columns/action/internal/InlineMenuElement.css");

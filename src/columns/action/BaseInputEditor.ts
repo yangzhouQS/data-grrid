@@ -3,9 +3,7 @@ import { cellEquals, event } from '../../internal/utils'
 import { isDisabledRecord, isReadOnlyRecord } from './action-utils'
 import { DG_EVENT_TYPE } from '../../core/DG_EVENT_TYPE'
 import { Editor } from './Editor'
-
-const KEY_ENTER = 13
-const KEY_F2 = 113
+import { KEY_ENTER, KEY_F2 } from '../../core/internal/KEY_CODE'
 
 export abstract class BaseInputEditor<T> extends Editor<T> {
 	constructor(option: EditorOption = {}) {

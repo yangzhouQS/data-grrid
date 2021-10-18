@@ -4,11 +4,9 @@ import { createElement } from '../../../internal/dom'
 import { event } from '../../../internal/utils'
 import { setInputValue } from './input-value-handler'
 
-const KEY_TAB = 9
-const KEY_ENTER = 13
-
 const CLASSNAME = 'data-grid__inline-input'
 import './InlineInputElement.css'
+import { KEY_ENTER, KEY_TAB } from '../../../core/internal/KEY_CODE'
 
 function createInputElement(): HTMLInputElement {
 	// require('@/columns/action/internal/InlineInputElement.css')

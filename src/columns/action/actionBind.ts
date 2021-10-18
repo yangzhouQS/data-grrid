@@ -1,9 +1,7 @@
 import type { CellAddress, EventListenerId, LayoutObjectId, ListGridAPI } from '../../ts-types'
 import { event, isPromise } from '../../internal/utils'
 import { DG_EVENT_TYPE } from '../../core/DG_EVENT_TYPE'
-
-const KEY_ENTER = 13
-const KEY_SPACE = 32
+import { KEY_ENTER, KEY_SPACE } from '../../core/internal/KEY_CODE'
 
 export function bindCellClickAction<T>(
 		grid: ListGridAPI<T>,

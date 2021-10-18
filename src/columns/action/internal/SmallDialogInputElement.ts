@@ -9,9 +9,6 @@ const INPUT_CLASSNAME = `${ CLASSNAME }__input`
 const HIDDEN_CLASSNAME = `${ CLASSNAME }--hidden`
 const SHOWN_CLASSNAME = `${ CLASSNAME }--shown`
 
-const KEY_ENTER = 13
-const KEY_ESC = 27
-
 function _focus(input: HTMLInputElement, handler: EventHandler): void {
 	const focus = (): void => {
 		input.focus()
@@ -42,6 +39,7 @@ function _focus(input: HTMLInputElement, handler: EventHandler): void {
 }
 
 import './SmallDialogInputElement.css'
+import { KEY_ENTER, KEY_ESC } from '../../../core/internal/KEY_CODE'
 
 function createDialogElement(): HTMLDivElement {
 	// require('@/columns/action/internal/SmallDialogInputElement.css')
