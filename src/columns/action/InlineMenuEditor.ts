@@ -138,7 +138,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
                 })
             }),
             grid.listen(DG_EVENT_TYPE.KEYDOWN, (e) => {
-                if (e.keyCode !== KEY_F2 && e.keyCode !== KEY_ENTER) {
+                if ((e.keyCode !== KEY_F2 && e.keyCode !== KEY_ENTER) || (e.keyCode === KEY_ENTER) && e.event.shiftKey) {
                     return
                 }
                 const sel = grid.selection.select
@@ -161,7 +161,6 @@ export class InlineMenuEditor<T> extends Editor<T> {
             grid.listen(DG_EVENT_TYPE.SCROLL, () => {
                 detachMenu(true)
             }),
-
             // mouse move
             grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, (e) => {
                 if (!isTarget(e.col, e.row)) {
