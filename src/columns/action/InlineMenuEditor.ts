@@ -20,11 +20,15 @@ function getState<T>(grid: GridInternal<T>): InputEditorState {
     return state
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 let globalElement: InlineMenuElement<any> | null = null
 let bindGridCount = 0
 
-function attachMenu<T>(grid: ListGridAPI<T>, cell: CellAddress, editor: InlineMenuEditor<T>, value: string, record: T | undefined): void {
+function attachMenu<T>(grid: ListGridAPI<T>,
+                       cell: CellAddress,
+                       editor: InlineMenuEditor<T>,
+                       value: string, record: T | undefined
+): void {
     const state = getState(grid)
     if (!globalElement) {
         globalElement = new InlineMenuElement()
@@ -105,6 +109,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
     }
 
     bindGridEvent(grid: ListGridAPI<T>, cellId: LayoutObjectId): EventListenerId[] {
+        console.log('open')
         const open = (cell: CellAddress): boolean => {
             if (isReadOnlyRecord(this.readOnly, grid, cell.row) || isDisabledRecord(this.disabled, grid, cell.row)) {
                 return false
@@ -128,6 +133,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
                 if (!isTarget(cell.col, cell.row)) {
                     return
                 }
+                console.log('click - open')
                 open({
                     col: cell.col,
                     row: cell.row
@@ -278,7 +284,7 @@ function _textToOptionValue(value: string, options: SimpleColumnMenuItemOption[]
     return undefined
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 function normalizePasteValueStr(value: any): string {
     if (value == null) {
         return ''
@@ -286,12 +292,11 @@ function normalizePasteValueStr(value: any): string {
     return `${ value }`.trim()
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function hasOptions(columnType: ColumnTypeAPI): columnType is MenuColumn<any> {
     if (columnType instanceof MenuColumn) {
         return true
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     if (Array.isArray((columnType as any).options)) {
         return true
     }
